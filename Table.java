@@ -21,9 +21,15 @@ public class Table {
     }
     public static Table mostReservedTable(java.util.Date StartDate, java.util.Date EndDate){
         int max=0;
-        for(int i=1;i<50;i++){
-            if(Tables.get(i).reservations.size()>Tables.get(max).reservations.size())
-                max=i;
+        for(int i=1;i<Tables.size();i++){
+           int x=0;
+   //xkzlvbkjzxvbzxjlv        for(int j=0;j<Tables.get(i)).reservations.size();j++){
+   
+           if(Tables.get(i)).reservations.get(x)
+                   
+                   }
+         //   if(Tables.get(i).reservations.size()>Tables.get(max).reservations.size())
+           //     max=i;
             
         }
         return Tables.get(max);
