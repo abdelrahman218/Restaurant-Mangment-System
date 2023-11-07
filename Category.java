@@ -7,6 +7,4 @@
  *
  * @author Omar
  */
-public class Table {
-    
-}
+enum Category {Standard,Couple,Family,Private};
