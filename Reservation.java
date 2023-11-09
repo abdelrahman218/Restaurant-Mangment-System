@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.lang.IndexOutOfBoundsException;
 import java.text.ParseException;
 import java.time.format.DateTimeParseException;
-import java.util.concurrent.BrokenBarrierException;
+import java.lang.IndexOutOfBoundsException;
 
 public class Reservation {
     private static int idGenerator=0;
@@ -33,6 +33,7 @@ public class Reservation {
     private Date date;
     private LocalTime startTime;
     private LocalTime endTime;
+    //Constructor
     public Reservation(){
        reservationNum=++idGenerator;
        date=new Date();
@@ -40,6 +41,7 @@ public class Reservation {
        startTime=LocalTime.MIDNIGHT;
        endTime=LocalTime.MIDNIGHT;
     }
+    //Setters
     public void setTableNum(){
         boolean check=true;
         Scanner take=new Scanner(System.in);
@@ -121,21 +123,37 @@ public class Reservation {
         }
         take.close();
     }
-    public void setRating(byte guestRating) throws BrokenBarrierException{
+    public void setRating(byte guestRating) throws IndexOutOfBoundsException{
         if(guestRating>=0 && guestRating<=10){
             rating=guestRating;
         }
         else{
-            throw new BrokenBarrierException("Rating must be (0->10)");
+            throw new IndexOutOfBoundsException("Rating must be (0->10)");
         }
     }
+    
+    //Functions
+    public void takeOrder(int menuId,ArrayList<Menu> menues){
+
+        calculatePayment();
+    }
+    private void calculatePayment(){
+        price+=reserved.getCost();
+        for(int i=0;i<order.size();i++){
+            price+=order.get(i).getPrice();
+        }
+        price*=1.14; //taxes
+    }
+
+    //Getters
     public int getReservationNumber(){return reservationNum;}
     public Date getDate(){return date;}
     public LocalTime getStartTime(){return startTime;}
     public LocalTime getEndTime(){return endTime;}
+    public double getPrice(){return price;}
     @Override
     public String toString(){
         return("Reservation No.: "+reservationNum+", Table No.: "+tableNum+", No. of Guests: "+numOfGuests+
-        ", Cost: "+price+", Date: "+date+", From: "+startTime+" To: "+endTime+", Guests rating: "+rating);
+        ", Date: "+date+", From: "+startTime+" To: "+endTime+", Order: "+order.toString()+", Cost: "+price+", Guests rating: "+rating);
     }
 }

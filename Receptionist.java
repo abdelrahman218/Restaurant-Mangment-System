@@ -26,6 +26,7 @@ public class Receptionist extends Person{
         r.setDate();
         r.setStartTime();
         r.setEndTime();
+        revenue+=r.getPrice();
         System.out.println("Reservation is made successfully.");
         System.out.println("Reservation details: ");
         System.out.println(r.toString());

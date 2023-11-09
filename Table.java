@@ -1,34 +1,60 @@
+package system;
+import java.util.ArrayList;
+import system.Category;
 public class Table {
-    static Table Tables[]=new Table[50];
+    private static ArrayList<Table> Tables=new ArrayList<>();
+    private ArrayList<Reservation> reservations=new ArrayList<>();
     private double Revenue;
-    protected Category Categ;
-    protected int NoOfSeats;
+    private Category Categ;
+    private int NoOfSeats;
     private double Cost;
-    private int TotalNoOfReservations;
-    Table(String Category, int NoOfSeats){
+    public Table(int NoOfSeats){
+        reservations=null;
         Revenue =0;
-        Cost = 0;
-        TotalNoOfReservations=0;
+        Cost = 100;
+        this.NoOfSeats=NoOfSeats;
+        this.Categ=Category.Standard;
+        Tables.add(this);
+    }
+    public static void AddReservation(Reservation data,int tableNum){
+       Tables.get(tableNum).reservations.add(data);
+       
     }
     public static Table mostReservedTable(java.util.Date StartDate, java.util.Date EndDate){
         int max=0;
         for(int i=1;i<50;i++){
-            if(Tables[i].TotalNoOfReservations>Tables[max].TotalNoOfReservations)
+            if(Tables.get(i).reservations.size()>Tables.get(max).reservations.size())
                 max=i;
             
         }
-        return Tables[max];
+        return Tables.get(max);
     }
     public static Table highestRevenue(java.util.Date StartDate, java.util.Date EndDate){
          int max=0;
         for(int i=1;i<50;i++){
-            if(Tables[i].Revenue>Tables[max].Revenue)
+            if(Tables.get(i).Revenue>Tables.get(max).Revenue)
                 max=i;
             
         }
-        return Tables[max];
+        return Tables.get(max);
     }
     public void addToRevenue(){
         Revenue+=Cost;
+    } 
+    public static Table getTable(int tableNum){
+        return Tables.get(tableNum);
+    }
+    public int getNoOfSeats(){
+    return NoOfSeats;
+    }
+    public double getCost(){
+        return Cost;
+    } 
+    public Category getcateg(){
+        return Categ;
+    }
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
     }
 }
