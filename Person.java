@@ -4,10 +4,10 @@ public abstract class Person {
     private String Name;
     private String Address;
     private String DateOfBirth;
-    private long PhoneNum;
+    private String PhoneNum;
     private String Email;
 
-    public Person(String Name, String Address, String DateOfBirth, long PhoneNum, String Email) {
+    public Person(String Name, String Address, String DateOfBirth, String PhoneNum, String Email) {
         this.Name = Name;
         this.Address = Address;
         this.DateOfBirth = DateOfBirth;
@@ -27,7 +27,7 @@ public abstract class Person {
         this.DateOfBirth = DateOfBirth;
     }
 
-    public void setPhoneNum(int PhoneNum) {
+    public void setPhoneNum(String PhoneNum) {
         this.PhoneNum = PhoneNum;
     }
 
@@ -47,7 +47,7 @@ public abstract class Person {
         return DateOfBirth;
     }
 
-    public long getPhoneNum() {
+    public String getPhoneNum() {
         return PhoneNum;
     }
 
