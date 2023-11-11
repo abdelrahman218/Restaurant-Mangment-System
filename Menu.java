@@ -1,29 +1,38 @@
 package system;
+
 import java.util.Date;
 import java.util.ArrayList;
 
 public class Menu {
 
-    private static ArrayList<Meal> Menu;
-
-    public Menu(ArrayList<Meal> Menu) {
-        this.Menu = Menu;
+    private static ArrayList<Menu> Menues =new ArrayList<>(50);
+    public ArrayList<Meal>Meals=new ArrayList<>(50);
+    public Category Categ;
+    public Menu(ArrayList<Menu> Menu) {
+        this.Menues = Menu;
+        
     }
-
+    Menu(){
+        this.Categ=Category.Standard;
+    }
+    
+    public void finalize (){}
+    
     public void addMeal(Meal meal) {
-        Menu.add(meal);
+        
+        Meals.add(meal);
     }
 
     public void removeMeal(Meal meal) {
-        Menu.remove(meal);
+        Meals.remove(meal);
     }
-    public static ArrayList<Meal> getlist(){
-        return Menu;
+    public static ArrayList<Menu> getlist(){
+        return Menues;
     }
     public Meal mostOrderedMeal(Date startDate, Date endDate) {
         Meal mostOrdered = null;
-        for (int i = 0; i < Menu.size(); i++) {
-            Meal meal = Menu.get(i);
+        for (int i = 0; i < Meals.size(); i++) {
+            Meal meal = Meals.get(i);
             if (meal.getNoOfOrders() > mostOrdered.getNoOfOrders()) {
                 mostOrdered = meal;
             }

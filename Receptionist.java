@@ -8,6 +8,7 @@ import java.util.ArrayList;
 //Self-Defined Classes
 import system.Reservation;
 import system.Table;
+import user.Guest;
 
 //Exeception Classes
 import java.util.InputMismatchException;
@@ -20,12 +21,30 @@ public class Receptionist extends Person{
         reservations=new ArrayList<>();
     }
     public void createReservation(){
+        boolean check=true;
         Reservation r=new Reservation();
-        r.setTableNum();
-        r.setNumOfGuests();
-        r.setDate();
-        r.setStartTime();
-        r.setEndTime();
+        while(check){
+            r.setTableNum();
+            r.setNumOfGuests();
+            if(r.checkNoOfGuests()){
+                check=false;
+            }else{
+                System.out.println("Invalid number of guest for current table");
+            }
+        }
+        check=true;
+        while(check){
+            r.setDate();
+            r.setStartTime();
+            r.setEndTime();
+            if(!r.isReserved()){
+                check=false;
+            }
+            else{
+                System.out.println("Table isn't available at specified Time");
+            }
+        }
+        r.takeOrder();
         revenue+=r.getPrice();
         System.out.println("Reservation is made successfully.");
         System.out.println("Reservation details: ");
@@ -94,6 +113,6 @@ public class Receptionist extends Person{
                 }
             }
         }
-
+        get.close();
     }
 }

@@ -1,6 +1,8 @@
 package Employees;
 
 public abstract class Person {
+    private int ID;
+    private static int idGenerator=0;
     private String Name;
     private String Address;
     private String DateOfBirth;
@@ -13,6 +15,7 @@ public abstract class Person {
         this.DateOfBirth = DateOfBirth;
         this.PhoneNum = PhoneNum;
         this.Email = Email;
+        ID=++idGenerator;
     }
 
     public void setName(String Name) {
@@ -53,6 +56,9 @@ public abstract class Person {
 
     public String getEmail() {
         return Email;
+    }
+    public int getId(){
+        return ID;
     }
     
 }
