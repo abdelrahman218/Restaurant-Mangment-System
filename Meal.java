@@ -1,3 +1,4 @@
+package system;
 
 public class Meal {
 
@@ -12,7 +13,7 @@ public class Meal {
         this.type = type;
     }
 
-    protected String getName() {
+    public String getName() {
         return Name;
     }
 

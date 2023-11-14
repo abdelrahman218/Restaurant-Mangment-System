@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 //Data Structures
 import java.util.ArrayList;
+import java.util.Collections;
 
 //Self-Defined Classes
 import system.Reservation;
@@ -13,16 +14,18 @@ import user.Guest;
 //Exeception Classes
 import java.util.InputMismatchException;
 
-public class Receptionist extends Person{
-    private ArrayList<Reservation> reservations;
+public class Receptionist extends Person implements Comparable<Receptionist>{
+    private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
     public Receptionist(String name,String address,String dateOfBirth,String Phone,String Email){
         super(name,address,dateOfBirth,Phone,Email);
-        reservations=new ArrayList<>();
+        receptionists.add(this);
     }
     public void createReservation(){
         boolean check=true;
         Reservation r=new Reservation();
+        r.setReceptionistId(getId());
+        r.setGuestId();
         while(check){
             r.setTableNum();
             r.setNumOfGuests();
@@ -49,7 +52,6 @@ public class Receptionist extends Person{
         System.out.println("Reservation is made successfully.");
         System.out.println("Reservation details: ");
         System.out.println(r.toString());
-        reservations.add(r);
     }
     public void cancelReservation(){
         boolean check=true;
@@ -65,6 +67,7 @@ public class Receptionist extends Person{
                 System.out.println("Invalid Input Type [integer input is required]");
             }
         }
+        ArrayList<Reservation> reservations=Reservation.search(this);
         for(int i=0;i<reservations.size();i++){
             if(reservations.get(i).getReservationNumber()==reservationNum){
                 reservations.remove(i);
@@ -74,7 +77,7 @@ public class Receptionist extends Person{
         }
         System.out.println("Reservation is not found!");
     }
-    public void selectGuestPref(int guestId,Guest[] guests){
+    public void selectGuestPref(){
         Scanner get=new Scanner(System.in);
         boolean check=true;
         int key=0;
@@ -114,5 +117,26 @@ public class Receptionist extends Person{
             }
         }
         get.close();
+    }
+    public static Receptionist search(int id){
+        Collections.sort(receptionists);
+        int first=0;
+        int last=receptionists.size()-1;
+        int mid;
+        while(first<=last){
+            mid=(int)((first+last)/2);
+            if(id>receptionists.get(mid).getId())
+            first=mid+1;
+            else if(id<receptionists.get(mid).getId())
+            last=mid-1;
+            else return receptionists.get(mid);
+        }
+        return null;    
+    }
+    @Override
+    public int compareTo(Receptionist right){
+        if(getId()>right.getId())return 1;
+        else if(getId()<right.getId())return -1;
+        else return 0;
     }
 }
