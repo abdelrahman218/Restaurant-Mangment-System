@@ -1,6 +1,11 @@
 package system;
 //Stream Classes
 import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 //Data Structures
 import java.util.ArrayList;
@@ -22,12 +27,14 @@ import java.lang.IndexOutOfBoundsException;
 import java.text.ParseException;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
+import java.io.IOException;
+import java.lang.ClassNotFoundException;
 import java.lang.IndexOutOfBoundsException;
 
 //Collections Class
 import java.util.Collections;
 
-public class Reservation implements Comparable<Reservation>{
+public class Reservation implements Comparable<Reservation>,Serializable{
     //Static member variables
     private static ArrayList<Reservation> history=new ArrayList<>();
     private static int idGenerator=0;
@@ -57,9 +64,8 @@ public class Reservation implements Comparable<Reservation>{
     
     //Setters
     public void setReceptionistId(int id){receptionistId=id;}
-    public void setGuestId(){
+    public void setGuestId(Scanner take){
         boolean check=true;
-        Scanner take=new Scanner(System.in);
         while(check){
             System.out.print("Guest ID: ");
             guestId=take.nextInt();
@@ -73,11 +79,9 @@ public class Reservation implements Comparable<Reservation>{
             }
             
         }
-        take.close();
     }
-    public void setTableNum(){
+    public void setTableNum(Scanner take){
         boolean check=true;
-        Scanner take=new Scanner(System.in);
         while(check){
             System.out.print("Table number: ");
             tableNum=take.nextInt();
@@ -89,11 +93,9 @@ public class Reservation implements Comparable<Reservation>{
                 System.out.println("Table not found!");
             }
         }
-        take.close();
     }
-    public void setNumOfGuests(){
+    public void setNumOfGuests(Scanner take){
         boolean check=true;
-        Scanner take=new Scanner(System.in);
         while(check){
             System.out.print("Number of Guests: ");
             try{
@@ -105,11 +107,9 @@ public class Reservation implements Comparable<Reservation>{
             }
             System.out.print("\n");
         }
-        take.close();
     }
-    public void setDate(){
+    public void setDate(Scanner take){
         boolean check=true;
-        Scanner take=new Scanner(System.in);
         while(check){
             System.out.print("Date (dd/mm/yyyy): ");
             String input=take.next();
@@ -122,11 +122,9 @@ public class Reservation implements Comparable<Reservation>{
                 System.out.println("----------Invalid Date input-------------");
             }
         }
-        take.close();
     }
-    public void setStartTime(){
+    public void setStartTime(Scanner take){
         boolean check=true;
-        Scanner take=new Scanner(System.in);
         while(check){
             System.out.print("Start Time: ");
             String input=take.next();
@@ -138,11 +136,9 @@ public class Reservation implements Comparable<Reservation>{
                 System.out.println("----------Invalid Time input-------------");
             }
         }
-        take.close();
     }
-    public void setEndTime(){
+    public void setEndTime(Scanner take){
         boolean check=true;
-        Scanner take=new Scanner(System.in);
         while(check){
             System.out.print("End Time: ");
             String input=take.next();
@@ -154,7 +150,6 @@ public class Reservation implements Comparable<Reservation>{
                 System.out.println("----------Invalid Time input-------------");
             }
         }
-        take.close();
     }
     public void setRating(byte guestRating) throws IndexOutOfBoundsException{
         if(guestRating>=0 && guestRating<=10){
@@ -166,11 +161,10 @@ public class Reservation implements Comparable<Reservation>{
     }
     
     //Functions
-    public void takeOrder(){
+    public void takeOrder(Scanner get){
         boolean check=true;
         int menuId=-1;
         ArrayList<Menu> menues=Menu.getlist();
-        Scanner get=new Scanner(System.in);
         for(int i=0;i<menues.size();i++){
             System.out.println(""+(i+1)+menues.get(i).Categ.toString());
         }
@@ -210,13 +204,12 @@ public class Reservation implements Comparable<Reservation>{
             order.add(current.Meals.get(i-1).getName());
             System.out.println("item is added successfully");
         }
-        get.close();
         calculatePayment();
     }
     private void calculatePayment(){
         price+=Table.getTable(tableNum).getCost();
         for(int i=0;i<order.size();i++){
-            price+=order.get(i).getPrice();
+            //price+=order.get(i).getPrice();
         }
         price*=1.14; //taxes
     }
@@ -274,7 +267,38 @@ public class Reservation implements Comparable<Reservation>{
         }
         return result;
     }
-    
+    //Reading & Writing in binary files methods
+    public static void getRecord(){
+        try{
+            FileInputStream f=new FileInputStream("Reservations archive.dat");
+            ObjectInputStream in=new ObjectInputStream(f);
+            int size=in.readInt();
+            for(int i=0;i<size;i++){
+                history.add((Reservation)in.readObject());
+            }    
+            in.close();
+            f.close();
+        }catch(IOException e){
+            System.out.println("Error happened reading the file: Reservation archive");
+        }catch(ClassNotFoundException e){
+            System.out.println("Error in class Reservation reading compatiability");
+        }
+    }
+    public static void saveRecords(){
+        try{
+            FileOutputStream f=new FileOutputStream("Reservations archive.dat");
+            ObjectOutputStream out=new ObjectOutputStream(f);
+            out.writeInt(history.size());
+            for(int i=0;i<history.size();i++){
+                out.writeObject(history.get(i));
+            }    
+            out.close();
+            f.close();
+        }catch(IOException e){
+            System.out.println("Error happened writing in the file: Reservation archive");
+        }
+    }
+
     //Overriden object functions
     @Override
     public String toString(){

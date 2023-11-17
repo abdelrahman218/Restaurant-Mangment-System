@@ -1,6 +1,11 @@
 package Employees;
 //Stream Classes
 import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 //Data Structures
 import java.util.ArrayList;
@@ -8,27 +13,28 @@ import java.util.Collections;
 
 //Self-Defined Classes
 import system.Reservation;
-import system.Table;
 import user.Guest;
 
 //Exeception Classes
 import java.util.InputMismatchException;
+import java.io.IOException;
+import java.lang.ClassNotFoundException;
 
-public class Receptionist extends Person implements Comparable<Receptionist>{
+public class Receptionist extends Person implements Comparable<Receptionist>,Serializable{
     private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
     public Receptionist(String name,String address,String dateOfBirth,String Phone,String Email){
         super(name,address,dateOfBirth,Phone,Email);
         receptionists.add(this);
     }
-    public void createReservation(){
+    public void createReservation(Scanner take){
         boolean check=true;
         Reservation r=new Reservation();
         r.setReceptionistId(getId());
-        r.setGuestId();
+        r.setGuestId(take);
         while(check){
-            r.setTableNum();
-            r.setNumOfGuests();
+            r.setTableNum(take);
+            r.setNumOfGuests(take);
             if(r.checkNoOfGuests()){
                 check=false;
             }else{
@@ -37,9 +43,9 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
         }
         check=true;
         while(check){
-            r.setDate();
-            r.setStartTime();
-            r.setEndTime();
+            r.setDate(take);
+            r.setStartTime(take);
+            r.setEndTime(take);
             if(!r.isReserved()){
                 check=false;
             }
@@ -47,22 +53,20 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
                 System.out.println("Table isn't available at specified Time");
             }
         }
-        r.takeOrder();
+        r.takeOrder(take);
         revenue+=r.getPrice();
         System.out.println("Reservation is made successfully.");
         System.out.println("Reservation details: ");
         System.out.println(r.toString());
     }
-    public void cancelReservation(){
+    public void cancelReservation(Scanner take){
         boolean check=true;
         int reservationNum=-1;
-        Scanner take=new Scanner(System.in);
         while(check){
             System.out.println("Enter Reservation Number to be deleted: ");
             try{
                 reservationNum=take.nextInt();
                 check=false;
-                take.close();
             }catch(InputMismatchException e){
                 System.out.println("Invalid Input Type [integer input is required]");
             }
@@ -77,8 +81,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
         }
         System.out.println("Reservation is not found!");
     }
-    public void selectGuestPref(){
-        Scanner get=new Scanner(System.in);
+    public void selectGuestPref(Scanner get){
         boolean check=true;
         int key=0;
         while(check){
@@ -116,7 +119,6 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
                 }
             }
         }
-        get.close();
     }
     public static Receptionist search(int id){
         Collections.sort(receptionists);
@@ -132,6 +134,37 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
             else return receptionists.get(mid);
         }
         return null;    
+    }
+    //Reading & Writing in binary files methods
+    public static void getRecord(){
+        try{
+            FileInputStream f=new FileInputStream("Receptionist archive.dat");
+            ObjectInputStream in=new ObjectInputStream(f);
+            int size=in.readInt();
+            for(int i=0;i<size;i++){
+                receptionists.add((Receptionist)in.readObject());
+            }    
+            in.close();
+            f.close();
+        }catch(IOException e){
+            System.out.println("Error happened reading the file: Receptionist archive");
+        }catch(ClassNotFoundException e){
+            System.out.println("Error in class Receptionist reading compatiability");
+        }
+    }
+    public static void saveRecords(){
+        try{
+            FileOutputStream f=new FileOutputStream("Receptionist archive.dat");
+            ObjectOutputStream out=new ObjectOutputStream(f);
+            out.writeInt(receptionists.size());
+            for(int i=0;i<receptionists.size();i++){
+                out.writeObject(receptionists.get(i));
+            }    
+            out.close();
+            f.close();
+        }catch(IOException e){
+            System.out.println("Error happened writing in the file: Receptionist archive");
+        }
     }
     @Override
     public int compareTo(Receptionist right){
