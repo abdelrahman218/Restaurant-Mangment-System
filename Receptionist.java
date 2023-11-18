@@ -23,10 +23,12 @@ import java.lang.ClassNotFoundException;
 public class Receptionist extends Person implements Comparable<Receptionist>,Serializable{
     private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
+    private double reservationcount;
     public Receptionist(String name,String address,String dateOfBirth,String Phone,String Email){
         super(name,address,dateOfBirth,Phone,Email);
         receptionists.add(this);
     }
+    //Reservation Related functions
     public void createReservation(Scanner take){
         boolean check=true;
         Reservation r=new Reservation();
@@ -55,7 +57,9 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         }
         r.takeOrder(take);
         revenue+=r.getPrice();
+        reservationcount++;
         System.out.println("Reservation is made successfully.");
+        System.out.println("------------------------------------");
         System.out.println("Reservation details: ");
         System.out.println(r.toString());
     }
@@ -76,11 +80,13 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             if(reservations.get(i).getReservationNumber()==reservationNum){
                 reservations.remove(i);
                 System.out.println("Reservation is deleted successfully");
+                reservationcount--;
                 return;
             }
         }
         System.out.println("Reservation is not found!");
     }
+    //Guest Related function
     public void selectGuestPref(Scanner get){
         boolean check=true;
         int key=0;
@@ -120,6 +126,17 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             }
         }
     }
+    //Getter functions
+    public  static ArrayList<Receptionist> getList() {
+        return receptionists;
+    }
+    public double getRevenue() {
+        return revenue;
+    }
+    public double getReservationcount() {
+        return reservationcount;
+    }
+    //static search function
     public static Receptionist search(int id){
         Collections.sort(receptionists);
         int first=0;

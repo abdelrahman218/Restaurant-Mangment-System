@@ -67,9 +67,18 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public void setGuestId(Scanner take){
         boolean check=true;
         while(check){
-            System.out.print("Guest ID: ");
-            guestId=take.nextInt();
-            System.out.print("\n");
+            while(check){
+                System.out.print("Guest ID: ");
+                try{
+                    guestId=take.nextInt();
+                    check=false;
+                }catch(InputMismatchException e){ 
+                    System.out.println("Invalid input"); 
+                    take.next();
+                }
+                System.out.print("\n");
+            }
+            check=true;
             Guest temp=Guest.getGuest(guestId);
             if(temp!=null){
                 check=false;
@@ -83,9 +92,18 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public void setTableNum(Scanner take){
         boolean check=true;
         while(check){
-            System.out.print("Table number: ");
-            tableNum=take.nextInt();
-            System.out.print("\n");
+            while(check){
+                System.out.print("Table number: ");
+                try{
+                    tableNum=take.nextInt();
+                    check=false;
+                }catch(InputMismatchException e){ 
+                    System.out.println("Invalid input"); 
+                    take.next();
+                }
+                System.out.print("\n");
+            }
+            check=true;
             try{
                 Table.getTable(tableNum);
                 check=false;
@@ -166,7 +184,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         int menuId=-1;
         ArrayList<Menu> menues=Menu.getlist();
         for(int i=0;i<menues.size();i++){
-            System.out.println(""+(i+1)+menues.get(i).Categ.toString());
+            System.out.println(""+(i+1)+" "+menues.get(i).Categ.toString());
         }
         System.out.println("Enter Number of the menu you want:");
         while(check){
@@ -183,7 +201,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             }
         }
         check=true;
-        Menu current=menues.get(menuId);
+        Menu current=menues.get(menuId-1);
         System.out.println("Menu ELements:");
         for(int i=0;i<current.Meals.size();i++){
             System.out.println(""+(i+1)+current.Meals.get(i).getName());
@@ -201,7 +219,11 @@ public class Reservation implements Comparable<Reservation>,Serializable{
                 }
             }
             check=true;
-            order.add(current.Meals.get(i-1).getName());
+            try{
+                order.add(current.Meals.get(i-1).getMeal_ID());
+            }catch(IndexOutOfBoundsException e){
+                break;
+            }
             System.out.println("item is added successfully");
         }
         calculatePayment();
@@ -209,7 +231,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     private void calculatePayment(){
         price+=Table.getTable(tableNum).getCost();
         for(int i=0;i<order.size();i++){
-            //price+=order.get(i).getPrice();
+            price+=Meal.getMealById(order.get(i)).getPrice();
         }
         price*=1.14; //taxes
     }
@@ -226,7 +248,12 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public LocalTime getStartTime(){return startTime;}
     public LocalTime getEndTime(){return endTime;}
     public double getPrice(){return price;}
-
+    public  static ArrayList<Reservation> getList() { return history; }
+    public int getTableNum() { return tableNum; }
+    public int getReceptionistId() { return receptionistId; }
+    public int getGuestId() { return guestId; }
+    public int getNumOfGuests() { return numOfGuests; }
+    
     //static search functions
     public static Reservation search(int id){
         Collections.sort(history);
