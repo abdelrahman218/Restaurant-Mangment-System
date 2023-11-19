@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class Admin  {
 private String user= "";
 private String password="";
-Table[] Tables;
+
 
 public Admin(String username, String pass){
     user= username;
@@ -34,6 +34,8 @@ return (pass==password);
 public void addTable(int numofseats){
 
  Table table=new Table(numofseats);
+ ArrayList<Table>Tables=Table.getList();
+ Tables.add(table);
 }
 public void editTable(int tableNum,Category tableCategory,double newcost,int newnoseats){
     ArrayList<Table> Tables=Table.getList();
@@ -73,8 +75,9 @@ System.out.println("The table's cost"+Tables.get(tableNum).Cost);
 
 }
 public void addMenu(){
-Menu menu;
-
+Menu menu=new Menu();
+ArrayList<Menu>Menues=Menu.getlist();
+Menues.add(menu);
 }
 public void editMenu(int menuId,Category Menucategory,Meal fmeal,Meal tmeal){
 ArrayList<Menu>Menues=Menu.getlist();
@@ -108,7 +111,8 @@ System.out.println("This menu belongs to Table : "+Menues.get(menuId).Meals.get(
 }
 public void addUsers(String name, String Address, String DateOfBirth, String PhoneNum, String Email){
 Guest guest=new Guest(name,Address,DateOfBirth,PhoneNum,Email);
-
+ArrayList<Guest>guests=Guest.getList();
+guests.add(guest);
 
 }
 public void edit(int UserId,String Categorys){
