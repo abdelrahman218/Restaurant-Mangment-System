@@ -1,6 +1,7 @@
 package Employees;
 //Stream Classes
 import java.util.Scanner;
+import java.util.Locale.Category;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 //Self-Defined Classes
+import system.Meal;
 import system.Reservation;
 import user.Guest;
 
@@ -19,112 +21,55 @@ import user.Guest;
 import java.util.InputMismatchException;
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
+import java.text.ParseException;
+import javax.management.InvalidAttributeValueException;
 
 public class Receptionist extends Person implements Comparable<Receptionist>,Serializable{
     private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
-    private double reservationcount;
+    private double reservationsCount;
     public Receptionist(String name,String address,String dateOfBirth,String Phone,String Email){
         super(name,address,dateOfBirth,Phone,Email);
         receptionists.add(this);
     }
     //Reservation Related functions
-    public void createReservation(Scanner take){
-        boolean check=true;
+    public void createReservation(int guestId,int tableNum,int numOfGuests,String date,String start,String end,ArrayList<Meal>order)
+    throws InvalidAttributeValueException,ParseException{
         Reservation r=new Reservation();
-        r.setReceptionistId(getId());
-        r.setGuestId(take);
-        while(check){
-            r.setTableNum(take);
-            r.setNumOfGuests(take);
-            if(r.checkNoOfGuests()){
-                check=false;
-            }else{
-                System.out.println("Invalid number of guest for current table");
-            }
-        }
-        check=true;
-        while(check){
-            r.setDate(take);
-            r.setStartTime(take);
-            r.setEndTime(take);
-            if(!r.isReserved()){
-                check=false;
-            }
-            else{
-                System.out.println("Table isn't available at specified Time");
-            }
-        }
-        r.takeOrder(take);
-        revenue+=r.getPrice();
-        reservationcount++;
-        System.out.println("Reservation is made successfully.");
-        System.out.println("------------------------------------");
-        System.out.println("Reservation details: ");
-        System.out.println(r.toString());
-    }
-    public void cancelReservation(Scanner take){
-        boolean check=true;
-        int reservationNum=-1;
-        while(check){
-            System.out.println("Enter Reservation Number to be deleted: ");
+        try{
+            r.setReceptionistId(getId());
+            r.setTableNum(tableNum);
+            r.setNumOfGuests(numOfGuests);
             try{
-                reservationNum=take.nextInt();
-                check=false;
-            }catch(InputMismatchException e){
-                System.out.println("Invalid Input Type [integer input is required]");
+                r.setDate(date);
+            }catch(ParseException parse){
+                cancelReservation(r.getReservationNumber());
+                throw parse;
             }
+            r.setStartTime(start);
+            r.setEndTime(end);
+            r.takeOrder(order);
+        }catch(InvalidAttributeValueException e){
+            cancelReservation(r.getReservationNumber());
+            throw e;
         }
+        revenue+=r.getPrice();
+        reservationsCount++;
+    }
+    public void cancelReservation(int resId) throws InvalidAttributeValueException{
         ArrayList<Reservation> reservations=Reservation.search(this);
         for(int i=0;i<reservations.size();i++){
-            if(reservations.get(i).getReservationNumber()==reservationNum){
+            if(reservations.get(i).getReservationNumber()==resId){
                 reservations.remove(i);
-                System.out.println("Reservation is deleted successfully");
-                reservationcount--;
+                reservationsCount--;
                 return;
             }
         }
-        System.out.println("Reservation is not found!");
+        throw new InvalidAttributeValueException("Reservation not found.");
     }
     //Guest Related function
-    public void selectGuestPref(Scanner get){
-        boolean check=true;
-        int key=0;
-        while(check){
-            try{
-                System.out.print("Enter the ID of the Guest: ");
-                key=get.nextInt();
-                check=false;
-            }catch(InputMismatchException e){
-                System.out.println("Invalid Input [integer is required]");
-                get.next();
-            }
-        }
-        check=true;
-        Guest referenced= Guest.getGuest(key);
-        if(referenced==null){
-            System.out.println("Guest couldn't be found!");
-        }
-        else{
-            while(check){
-                try{
-                    System.out.println("1-Standard\n2-Couples\n3-Family\n4-Private");
-                    System.out.print("Enter Number of prefered category: ");
-                    key=(get.nextInt()-1);
-                    check=false;
-                }catch(InputMismatchException e){
-                    System.out.println("Invalid Input [integer is required]");
-                    get.next();
-                }
-                if(key<0||key>3){
-                    System.out.println("Invalid input [(1->4) is required]");
-                    check=true;
-                }
-                else{
-                    referenced.setPreferedCategory(key);
-                }
-            }
-        }
+    public void selectGuestPref(Guest keyGuest,Category preferred){
+        keyGuest.setPreferedCategory(preferred.ordinal());
     }
     //Getter functions
     public  static ArrayList<Receptionist> getList() {
@@ -133,8 +78,8 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
     public double getRevenue() {
         return revenue;
     }
-    public double getReservationcount() {
-        return reservationcount;
+    public double getreservationsCount() {
+        return reservationsCount;
     }
     //static search function
     public static Receptionist search(int id){
@@ -158,8 +103,9 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             FileInputStream f=new FileInputStream("Receptionist archive.dat");
             ObjectInputStream in=new ObjectInputStream(f);
             int size=in.readInt();
-            for(int i=0;i<size;i++){
+            while(size>0){
                 receptionists.add((Receptionist)in.readObject());
+                size--;
             }    
             in.close();
             f.close();
@@ -174,8 +120,10 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             FileOutputStream f=new FileOutputStream("Receptionist archive.dat");
             ObjectOutputStream out=new ObjectOutputStream(f);
             out.writeInt(receptionists.size());
-            for(int i=0;i<receptionists.size();i++){
+            int i=0;
+            while(i<receptionists.size()){
                 out.writeObject(receptionists.get(i));
+                i++;
             }    
             out.close();
             f.close();
