@@ -66,7 +66,7 @@ public class Table implements Serializable {
         }
     } 
     
-    private int ReservationsInSpecificTime(Date StartDate, Date EndDate){
+    public int ReservationsInSpecificTime(Date StartDate, Date EndDate){
         int count=0;
         ArrayList<Reservation> reservations=getReservations();
         for(int i=0;i<reservations.size();i++)
@@ -104,5 +104,14 @@ public class Table implements Serializable {
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+    public void setCateg(Category categ) {
+        Categ = categ;
+    }
+    public void setNoOfSeats(int noOfSeats) {
+        NoOfSeats = noOfSeats;
+    }
+    public void setCost(double cost) {
+        Cost = cost;
     }
 }
