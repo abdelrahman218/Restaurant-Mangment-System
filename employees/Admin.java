@@ -2,8 +2,49 @@ package employees;
 import java.util.ArrayList;
 import java.util.Date;
 import system.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 import user.Guest;
 public class Admin extends Person  {
+private static ArrayList<Admin>Admins=new ArrayList<>();
+public static void saveRecords(){
+    try{
+    FileOutputStream f=new FileOutputStream("Admin archive.dat");
+    ObjectOutputStream out=new ObjectOutputStream(f);
+    out.writeInt(Admins.size());
+            int i=0;
+            while(i<Admins.size()){
+                out.writeObject(Admins.get(i));
+                i++;
+            }    
+            out.close();
+            f.close();
+    }
+    catch(IOException e){
+        System.out.println("Error happened writing in the file: Admin archive");
+    }
+
+}
+public static void getRecord(){
+    try{
+        FileInputStream f=new FileInputStream("Admin archive.dat");
+        ObjectInputStream in=new ObjectInputStream(f);
+        int size=in.readInt();
+        while(size>0){
+            Admins.add((Admin)in.readObject());
+            size--;
+        }    
+        in.close();
+        f.close();
+    }catch(IOException e){
+        System.out.println("Error happened reading the file: Admin archive");
+    }catch(ClassNotFoundException e){
+        System.out.println("Error in class Admin reading compatiability");
+    }
+}
 public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
     super(Name,Address,DateOfBirth,PhoneNum,Email,UserName, Password);
 }
@@ -182,5 +223,14 @@ ArrayList<Reservation> G=r.search(guests);
     list+="The average cost of all reservations is : "+average+"\n";
 return list;
 }
+public static Admin search(String userName){
+    for(int i=0;i<Admins.size();i++){
+    if(Admins.get(i).getUserName()==userName){
+        return Admins.get(i);
+    }
+    }
+    return null;
+}
+
 }
 
