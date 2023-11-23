@@ -59,7 +59,12 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
     public void cancelReservation(int resId) throws InvalidAttributeValueException{
         ArrayList<Reservation> reservations=Reservation.search(this);
         for(int i=0;i<reservations.size();i++){
-            if(reservations.get(i).getReservationNumber()==resId){
+            Reservation temp=reservations.get(i);
+            if(temp.getReservationNumber()==resId){
+                ArrayList<Integer> order=temp.getOrder();
+                for(int j=0;j<temp.getOrder().size();j++){
+                    Meal.getMealById(order.get(j)).decrementOrders();
+                }
                 reservations.remove(i);
                 reservationsCount--;
                 Guest.getGuest(reservations.get(i).getGuestId()).decrementReservation();

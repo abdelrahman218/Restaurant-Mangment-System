@@ -133,6 +133,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         for(int i=0;i<orderOfMeals.size();i++){
             if(orderOfMeals.get(i)!=null){
                 order.add(orderOfMeals.get(i).getMeal_ID());
+                orderOfMeals.get(i).incrementedOrders();
             }
             else{
                 throw new NullPointerException("Meal pointer can't be equal null");
@@ -167,6 +168,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public Date getDate(){return date;}
     public LocalTime getStartTime(){return startTime;}
     public LocalTime getEndTime(){return endTime;}
+    public ArrayList<Integer> getOrder(){return order;}
     public double getPrice(){return price;}
     public  static ArrayList<Reservation> getList() { return history; }
     public int getTableNum() { return tableNum; }
