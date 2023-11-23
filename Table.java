@@ -1,4 +1,4 @@
-package System;
+package system;
 import java.util.ArrayList;
 import java.util.Date;
 import java.io.FileInputStream;
@@ -24,6 +24,7 @@ public class Table implements Serializable {
         this.Categ=Category.Standard;
     }
     public static Table getTable(int tableNum){return Tables.get(tableNum);}
+    public int getTableID(){return tableNum;}
     public int getNoOfSeats(){return NoOfSeats;}
     public double getCost(){return Cost;}
     public Category getcateg(){return Categ;}
