@@ -36,7 +36,12 @@ public abstract class Person{
         this.Email = Email;
     }
     public void setUserName(String UserName) {
+        if(checkUserName(UserName)==false){
         this.UserName = UserName;
+        }
+        else{
+            System.out.println("Username is already used");
+        }
     }
     public void setPassword(String Password) {
         this.Password = Password;
