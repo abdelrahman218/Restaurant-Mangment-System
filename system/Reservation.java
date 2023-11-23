@@ -167,8 +167,8 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public static ArrayList<Reservation>search(Table key){
         ArrayList<Reservation> result=new ArrayList<>();
         for(int i=0;i<history.size();i++){
-            //if(history.get(i).tableNum==key.getTableId())
-            //result.add(history.get(i));
+            if(history.get(i).tableNum==key.getTableID())
+            result.add(history.get(i));
         }
         return result;
     }
@@ -187,6 +187,18 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             result.add(history.get(i));
         }
         return result;
+    }
+    public static ArrayList<Reservation>search(Meal key){
+    ArrayList<Reservation> result=new ArrayList<>();
+    
+    for(int i=0;i<history.size();i++){
+        for(int j=0;j<history.get(i).order.size();j++){
+            if(history.get(i).order.get(j)==key.getMeal_ID()){
+                result.add(history.get(i));
+            }
+        }
+    }
+     return result;
     }
     //Reading & Writing in binary files methods
     public static void getRecord(){

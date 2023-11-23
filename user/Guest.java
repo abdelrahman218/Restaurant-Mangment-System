@@ -1,5 +1,4 @@
 package user;
-import java.util.Scanner;
 import java.util.ArrayList;
 import employees.Person;
 import system.Category;
@@ -11,21 +10,15 @@ public class Guest extends Person {
         super(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
         Guests.add(this);
     }
-    void ViewReservation(){
+     public String ViewReservation(){
+        String list="";
+        ArrayList<Reservation>R=Reservation.getList();
        for (int  i=0;i<Reservation.getList().size();i++){
-           System.out.println(Reservation.getList().get( i));
-                 
+           list+=R.get(i)+"\n";
         }
-    } 
-    
-    void RateBooking(int CurrentReservation){
-        for (int i=CurrentReservation;i<Reservation.getList().size();i++){
-            int[] Rate=new int[50];
-            Scanner x=new Scanner(System.in);
-            System.out.println("Please enter your rating for your current resrvation: ");
-            Rate[i]=x.nextInt();
-        }
+        return list;
     }
+    
     public void setPreferedCategory(int key){
         switch(key){
             case 0:
@@ -50,9 +43,14 @@ public class Guest extends Person {
             }
         }
         return null;
+    }
+    public static ArrayList getList(){
+     return Guests;
+
     }   
     @Override
     public String toString() {
-        return "Guest{" + "history=" + history + ", PreferredCategory=" + PreferredCategory + '}';
+        String history=ViewReservation();
+        return "Guest{history= " + history + ", PreferredCategory=" + PreferredCategory + '}';
     }
 }

@@ -15,13 +15,15 @@ public class App {
     }
     public static void main(String[] args){
         Scanner s= new Scanner(System.in);
-        ArrayList<String> test=new ArrayList<>();
-        drawMenu(test);
         ArrayList<Admin> Admins= new ArrayList<Admin>();
         Admin a1= new Admin("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","John_62","Johny#487");
         Admins.add(a1);
-        System.out.println("Choose your Role: ");
-        System.out.println("1- Admin\t2-Receptionist\t3-Guest\t4-Exit");
+        ArrayList<String> menuList= new ArrayList<>();
+        menuList.add("Admin");
+        menuList.add("Receptionist");
+        menuList.add("Guest");
+        menuList.add("Exit");
+        drawMenu(menuList);
         int x;
         while(true){
         x=s.nextInt();
@@ -31,18 +33,20 @@ public class App {
        else break;
        }
        switch(x){
-           case 1:menuAdmin(s);
+           case 1:menuAdmin(s,Admins);
            case 2:menuRec(s);
            case 3:menuGuest(s);
-           case 4:
+           case 4:System.exit(2); 
         }
-
         s.close();
     }
     public static void menuGuest(Scanner s){
         ArrayList<Guest> Guests = new ArrayList<Guest>();
         System.out.println("Choose your Action: ");
-        System.out.println("1- Sign up\t2-Log in");
+        ArrayList<String> menuList= new ArrayList<>();
+        menuList.add("Sign Up");
+        menuList.add("Log In");
+        menuList.add("back");
         int x;
        while(true){
        x=s.nextInt();
@@ -94,11 +98,29 @@ public class App {
        }
        s.close();
    }
-   public static void menuAdmin(Scanner s){
+   public static void menuAdmin(Scanner s,ArrayList<Admin> a){   
+        Admin currentAdmin=null;
         System.out.println("Enter UserName :  ");
-        s.next();
-        System.out.println("Enter password :  ");
-        s.next();
+        while(currentAdmin==null){
+            String data=s.next();
+            for(int i=0;i<a.size();i++){
+                if(a.get(i).getUserName()==data){
+                    currentAdmin=a.get(i);
+                }
 
+            }   
+            System.out.println("Admin not found");    
+        }
+        while(true){   
+            System.out.println("Enter password :  ");
+            String notdata=s.next();
+            if(currentAdmin.checkpassword(notdata)){
+                System.out.println("Welcome Mr/Mrs "+currentAdmin.getName());
+                break;
+            }
+            else{
+                System.out.println("Incorrect Password");
+            }
+        }
     }
 }
