@@ -38,13 +38,13 @@ import java.util.Collections;
 public class Reservation implements Comparable<Reservation>,Serializable{
     //Static array list which have all reservations
     private static ArrayList<Reservation> history=new ArrayList<>();
-
+    private static int idgenerator=0;
     //Object-related member variables 
     private int reservationNum;
     private int tableNum;
     private int receptionistId;
     private int guestId;
-    private ArrayList<String> order;
+    private ArrayList<Integer> order;
     private int numOfGuests;
     private double price;
     private byte rating;
@@ -54,7 +54,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
 
     //Constructor
     public Reservation(){
-       reservationNum=history.size()+1;
+       reservationNum=++idgenerator;
        date=new Date();
        order=new ArrayList<>();
        startTime=LocalTime.MIDNIGHT;
@@ -152,7 +152,18 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     private boolean isReserved(){
         return Table.getTable(tableNum).isReserved(date, startTime, endTime);
     }
-
+    private String orderNames(){
+        String orderList="[ ";
+        for(int i=0;i<order.size();i++){
+            orderList+=(Meal.getMealById(order.get(i)));
+            if(i!=order.size()-1){
+                orderList+=" , ";
+            }
+        }
+        orderList+=" ]";
+        return orderList;
+    }
+    
     //Getters
     public int getReservationNumber(){return reservationNum;}
     public Date getDate(){return date;}
@@ -184,8 +195,8 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public static ArrayList<Reservation>search(Table key){
         ArrayList<Reservation> result=new ArrayList<>();
         for(int i=0;i<history.size();i++){
-            //if(history.get(i).tableNum==key.getTableId())
-            //result.add(history.get(i));
+            if(history.get(i).tableNum==key.getTableID())
+            result.add(history.get(i));
         }
         return result;
     }
@@ -218,6 +229,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }catch(ClassNotFoundException e){
             System.out.println("Error in class Reservation reading compatiability");
         }
+        idgenerator=history.size();
     }
     public static void saveRecords(){
         try{
@@ -236,7 +248,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public String toString(){
         return("Receptionist Name: "+Receptionist.search(receptionistId).getName()+"\nGuest Name: "+Guest.getGuest(guestId).getName()
         +"\nReservation No.: "+reservationNum+"\nTable No.: "+tableNum+"\nNo. of Guests: "+numOfGuests+
-        "\nDate: "+date+"\nFrom: "+startTime+" To: "+endTime+"\nOrder: "+order.toString()+"\nCost: "+price+"\nGuests rating: "+rating);
+        "\nDate: "+date+"\nFrom: "+startTime+" To: "+endTime+"\nOrder: "+orderNames()+"\nCost: "+price+"\nGuests rating: "+rating);
     }
     @Override
     public int compareTo(Reservation right){

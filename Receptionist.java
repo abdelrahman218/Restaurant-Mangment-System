@@ -32,6 +32,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         super(name,address,dateOfBirth,Phone,Email);
         receptionists.add(this);
     }
+    
     //Reservation Related functions
     public void createReservation(int guestId,int tableNum,int numOfGuests,String date,String start,String end,ArrayList<Meal>order)
     throws InvalidAttributeValueException,ParseException{
@@ -67,10 +68,12 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         }
         throw new InvalidAttributeValueException("Reservation not found.");
     }
+    
     //Guest Related function
     public void selectGuestPref(Guest keyGuest,Category preferred){
         keyGuest.setPreferedCategory(preferred.ordinal());
     }
+    
     //Getter functions
     public  static ArrayList<Receptionist> getList() {
         return receptionists;
@@ -81,6 +84,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
     public double getreservationsCount() {
         return reservationsCount;
     }
+    
     //static search function
     public static Receptionist search(int id){
         Collections.sort(receptionists);
@@ -97,6 +101,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         }
         return null;    
     }
+    
     //Reading & Writing in binary files methods
     public static void getRecord(){
         try{
@@ -130,6 +135,12 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         }catch(IOException e){
             System.out.println("Error happened writing in the file: Receptionist archive");
         }
+    }
+    
+    //Overriden object functions
+    @Override
+    public String toString(){
+        return ("Receptionist Details:\n"+"Name: "+getName()+"\nID: "+getId()+"\nDate Of Birth: "+getDateOfBirth()+"\nAddress: "+getAddress()+"\nEmail: "+getEmail()+"\nPhone Number: "+getPhoneNum()+"\nRevenue: "+revenue+"\nNumber of Reservations: "+reservationsCount);
     }
     @Override
     public int compareTo(Receptionist right){
