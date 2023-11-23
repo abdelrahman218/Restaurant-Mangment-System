@@ -1,6 +1,5 @@
 package Employees;
 //Stream Classes
-import java.util.Scanner;
 import java.util.Locale.Category;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -18,7 +17,6 @@ import system.Reservation;
 import user.Guest;
 
 //Exeception Classes
-import java.util.InputMismatchException;
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
 import java.text.ParseException;
@@ -55,6 +53,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             throw e;
         }
         revenue+=r.getPrice();
+        Guest.getGuest(guestId).incrementReservation();
         reservationsCount++;
     }
     public void cancelReservation(int resId) throws InvalidAttributeValueException{
@@ -63,6 +62,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             if(reservations.get(i).getReservationNumber()==resId){
                 reservations.remove(i);
                 reservationsCount--;
+                Guest.getGuest(guestId).decrementReservation();
                 return;
             }
         }
