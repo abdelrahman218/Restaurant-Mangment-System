@@ -62,7 +62,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             if(reservations.get(i).getReservationNumber()==resId){
                 reservations.remove(i);
                 reservationsCount--;
-                Guest.getGuest(guestId).decrementReservation();
+                Guest.getGuest(reservations.get(i).getGuestId()).decrementReservation();
                 return;
             }
         }
