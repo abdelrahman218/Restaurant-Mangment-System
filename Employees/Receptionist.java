@@ -1,6 +1,5 @@
 package Employees;
 //Stream Classes
-import java.util.Locale.Category;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
@@ -15,6 +14,7 @@ import java.util.Collections;
 import system.Meal;
 import system.Reservation;
 import user.Guest;
+import system.Category;
 
 //Exeception Classes
 import java.io.IOException;
