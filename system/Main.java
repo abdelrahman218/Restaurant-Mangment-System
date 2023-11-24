@@ -102,6 +102,7 @@ public class Main {
         for(int i=0;i<a.size();i++){
             if(a.get(i).getUserName().equals(data)){
                 currentAdmin=a.get(i);
+                break;
             }
         }   
         System.out.println("Admin not found");    
