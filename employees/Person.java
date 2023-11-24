@@ -101,32 +101,27 @@ public class App {
 
     }
 
-    public static void loginReceptionist(Scanner s){
-          boolean check=true;
-        while (check) {
-            
-        
-    System.out.print("Enter your username : ");
-    String user=s.next();
-    System.out.println();
-    System.out.print("Enter you password : ");
-    String pass=s.next();
-    
-    for(int i=0;i<Receptionist.getList().size();i++){
-     if(((Receptionist.getList().get(i).getUserName()==user)&&(Receptionist.getList().get(i).checkpassword(pass)))){
-      check=false;
-     }
+   public static void loginReceptionist(Scanner s) {
+        boolean check = false;
+        while (!check) {
+            System.out.print("Enter your username : ");
+            String user = s.next();
+            System.out.println();
+            System.out.print("Enter you password : ");
+            String pass = s.next();
+            for (int i = 0; i < Receptionist.getList().size(); i++) {
+                if (Receptionist.getList().get(i).getUserName().equals(user) && Receptionist.getList().get(i).getPassword().equals(pass)) {
+                    check = true;
+                    break;
+                }
+            }
 
-    }
+            if (check == false) {
+                System.out.println("login failed,Try again");
+            }
         }
-        if(check==false){
         System.out.println("login success");
 
     }
-    else{
-        System.out.println("login failed,Try again");
-    }
-    }
-
 
 }
