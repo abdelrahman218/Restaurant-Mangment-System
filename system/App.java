@@ -10,18 +10,17 @@ import java.util.InputMismatchException;
 import employees.*;
 import user.Guest;
 public class App {
-    private static void drawMenu(ArrayList<String> list){
+    private static void drawMenu(String[] list){
         System.out.println("-------------------------------------------");
-        for(int i=1;i<=list.size();i++){
-            System.out.println(""+i+"- "+list.get(i-1));
+        for(int i=1;i<=list.length;i++){
+            System.out.println(""+i+"- "+list[i-1]);
         }
         System.out.println("-------------------------------------------");
-        System.out.println("Enter the Menu number you want to choose(1---->"+list.size()+")");
+        System.out.println("Enter the Menu number you want to choose(1---->"+list.length+")");
     }
     public static void main(String[] args) throws InvalidAttributeValueException, ParseException{
         Scanner s= new Scanner(System.in);
         ArrayList<String> test=new ArrayList<>();
-        drawMenu(test);
         new Receptionist("Abdo", "1211 Paris", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "A", "A");
         new Admin("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","John_62","Johny#487");
         System.out.println("Choose your Role: ");
@@ -105,7 +104,7 @@ public class App {
     while(currentAdmin==null){
         String data=s.next();
         for(int i=0;i<a.size();i++){
-            if(a.get(i).getUserName()==data){
+            if(a.get(i).getUserName().equals(data)){
                 currentAdmin=a.get(i);
             }
 
@@ -132,7 +131,7 @@ public class App {
          String user=s.next();
          System.out.println();
          for(int i=0;i<a.size();i++){
-         if(a.get(i).getUserName()==user){
+         if(a.get(i).getUserName().equals(user)){
          check=false;
          }
          }
@@ -162,7 +161,7 @@ public class App {
     ArrayList<Receptionist> Re=Receptionist.getList();     
     int index=0;
     for(int i=0;i<Re.size();i++){
-        if(Re.get(i).getName()==Name){
+        if(Re.get(i).getName().equals(Name)){
             index=i;
         }
    }
@@ -180,7 +179,10 @@ public class App {
      CreateReservation(s,index); 
      break; 
      case 2:
-     CancelReservation(s);
+     CancelReservation(s,index);
+     break;
+     case 3:
+     selecguestcateg(s,index);
      break;
     }
    }
@@ -216,12 +218,39 @@ public class App {
     Receptionist.getList().get(ind).createReservation(Gid, Tid, NoGuests, Date, Start, End, Me);;
     }
     catch(InputMismatchException e){
-     System.out.println("Incompatible type Entered");
+     System.out.println("Incompatible type Entered and Reservation couldn't be made");
+     return;
     }
 }
-
-public static void CancelReservation(Scanner s){
-
-
+   public static void CancelReservation(Scanner s,int ind) throws InvalidAttributeValueException{
+   System.out.println("Enter Reservation number to be deleted : ");
+   try {
+     Receptionist.getList().get(ind).cancelReservation(s.nextInt());
+   } catch (InvalidAttributeValueException e) {
+     System.out.println("Reservation couldn't be made ");
+     return;
+   }
+  
 }
+   public static void selecguestcateg(Scanner s,int ind){
+   System.out.println("Enter guest Name : ");
+   String n=s.next();
+   System.out.println("Enter The Category : ");
+   drawMenu(new String[]{"Standard","Couples","Family","Private"});
+   String categ=s.next();
+   ArrayList<Guest>G=Guest.getList();
+   for(int i=0;i<G.size();i++){
+    if(n==G.get(i).getName()){
+        if(categ.equalsIgnoreCase("Standard")){
+       // Receptionist.getList().get(ind).selectGuestPref(G.get(i), Category.Standard);
+     } 
+     }
+     }
+
+
+   }
+   
+
+
+
 }
