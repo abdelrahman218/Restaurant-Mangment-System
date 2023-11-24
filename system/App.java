@@ -18,33 +18,40 @@ public class App {
         System.out.println("-------------------------------------------");
         System.out.println("Enter the Menu number you want to choose(1---->"+list.length+")");
     }
+    private static int takeMenuIndex(Scanner take,int minValue,int maxValue){
+        int x=0;
+        boolean check=true;
+        while(check){
+            while(check){
+                try{
+                    x=take.nextInt();
+                    check=false;
+                }catch(InputMismatchException e){
+                    System.out.println("Invalid input (Integer is required)");
+                    take.next();
+                }
+            }
+            check=true;
+            if(x>maxValue||x<minValue){
+                System.out.println("Wrong Input!");
+            }
+            else check=false;
+        }
+        return x;
+    }
     public static void main(String[] args) throws InvalidAttributeValueException, ParseException{
         Scanner s= new Scanner(System.in);
         ArrayList<String> test=new ArrayList<>();
         new Receptionist("Abdo", "1211 Paris", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "A", "A");
-        new Admin("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","John_62","Johny#487");
-        System.out.println("Choose your Role: ");
-        System.out.println("----------------------------------");
-        System.out.println("1- Admin");
-        System.out.println("2-Receptionist");
-        System.out.println("3-Guest");
-        System.out.println("4-Exit");
-        System.out.println("----------------------------------");
-        int x;
-        while(true){
-        x=s.nextInt();
-        if(x>5&&x<0){
-          System.out.println("Wrong Input!");
-        }
-       else break;
-       }
-       switch(x){
-           case 1:menuAdmin(s,Admin.getAdmins());
-           case 2:menuRec(s,Receptionist.getList());
-           case 3:menuGuest(s);
-           case 4:System.exit(2);
-        }
-
+        new Admin("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","A","A");
+        drawMenu(new String[]{"Admins","Receptionist","Guest","Exit"});
+        int x=takeMenuIndex(s, 1, 4);
+        switch(x){
+            case 1:menuAdmin(s);
+            case 2:menuRec(s);
+            case 3:menuGuest(s);
+            case 4:System.exit(2);
+         }
         s.close();
     }
     public static void menuGuest(Scanner s){
@@ -84,13 +91,13 @@ public class App {
        Guest Data=new Guest(Name, Address, DateOfBirth, PhoneNum, Email, username, pass);
        return Data;
     }
-    public static void menuRec(Scanner s,ArrayList<Receptionist>a) throws InvalidAttributeValueException, ParseException{
+    public static void menuRec(Scanner s) throws InvalidAttributeValueException, ParseException{
         System.out.println("Choose your Action: ");
         System.out.println("1-Log in");
         System.out.println("2-exit");
         switch(s.nextInt()){
             case 1:
-            loginReceptionist(s,a);
+            loginReceptionist(s);
             break;
             case 2:
             System.exit(0);
@@ -98,40 +105,14 @@ public class App {
         }
        
     }
-   public static void menuAdmin(Scanner s,ArrayList<Admin> a){
-    Admin currentAdmin=null;
-    System.out.println("Enter UserName :  ");
-    while(currentAdmin==null){
-        String data=s.next();
-        for(int i=0;i<a.size();i++){
-            if(a.get(i).getUserName().equals(data)){
-                currentAdmin=a.get(i);
-            }
-
-        }   
-        System.out.println("Admin not found");    
-    }
-    while(true){   
-        System.out.println("Enter password :  ");
-        String notdata=s.next();
-        if(currentAdmin.checkpassword(notdata)){
-            System.out.println("Welcome Mr/Mrs "+currentAdmin.getName());
-            break;
-        }
-        else{
-            System.out.println("Incorrect Password");
-        }
-    }
-}
-
-    public static void loginReceptionist(Scanner s,ArrayList<Receptionist> a) throws InvalidAttributeValueException, ParseException{
-         boolean check=true;
+   public static void menuAdmin(Scanner s){
+    boolean check=true;
          while (check) {
          System.out.print("Enter your username : ");
          String user=s.next();
          System.out.println();
-         for(int i=0;i<a.size();i++){
-         if(a.get(i).getUserName().equals(user)){
+         for(int i=0;i<Admin.getAdmins().size();i++){
+         if(Admin.getAdmins().get(i).getUserName().equals(user)){
          check=false;
          }
          }
@@ -145,10 +126,42 @@ public class App {
          while(true){
          System.out.println("Enter password :  ");
          String notdata=s.next();
-         for(int i=0;i<a.size();i++){
-         if(a.get(i).checkpassword(notdata)){
-            System.out.println("Welcome Mr/Mrs "+a.get(i).getName());
-            Receptionistdetails(s, a.get(i).getName());;
+         for(int i=0;i<Admin.getAdmins().size();i++){
+         if(Admin.getAdmins().get(i).checkpassword(notdata)){
+            System.out.println("Welcome Mr/Mrs "+Admin.getAdmins().get(i).getName());
+          }
+         else{
+            System.out.println("Incorrect Password");
+             }
+         }
+         }
+}
+
+    public static void loginReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
+         boolean check=true;
+         while (check) {
+         System.out.print("Enter your username : ");
+         String user=s.next();
+         System.out.println();
+         for(int i=0;i<Receptionist.getList().size();i++){
+         if(Receptionist.getList().get(i).getUserName().equals(user)){
+         check=false;
+         }
+         }
+         if(check==false){
+         System.out.println("UserName Found");
+         }
+         else{
+         System.out.println("UserName Not Found,Try again");
+        }
+         }
+         while(true){
+         System.out.println("Enter password :  ");
+         String notdata=s.next();
+         for(int i=0;i<Receptionist.getList().size();i++){
+         if(Receptionist.getList().get(i).checkpassword(notdata)){
+            System.out.println("Welcome Mr/Mrs "+Receptionist.getList().get(i).getName());
+            Receptionistdetails(s, Receptionist.getList().get(i).getName());
           }
          else{
             System.out.println("Incorrect Password");
