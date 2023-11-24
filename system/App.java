@@ -171,22 +171,16 @@ public class App {
     }
 
    public static void Receptionistdetails(Scanner s,String Name) throws InvalidAttributeValueException, ParseException{
-    ArrayList<Receptionist> Re=Receptionist.getList();     
+    Receptionist.getRecord();
+    ArrayList<Receptionist> Re=Receptionist.getList();   
     int index=0;
     for(int i=0;i<Re.size();i++){
         if(Re.get(i).getName().equals(Name)){
             index=i;
         }
    }
-    
    System.out.println("Choose your Action: ");
-   System.out.println("1-Create Reservation");
-   System.out.println("2-Cancel Reservation");
-   System.out.println("3-Select Guest Category");
-   System.out.println("4-Get Revenue");
-   System.out.println("5-Get Number of Reservations done");
-   System.out.println("6-Get Receptionist ID");
-   System.out.println("");
+   drawMenu(new String[]{"Create Reservation","Cancel Reservation","Select Guest Category","Get Revenue","Get Number of Reservations done","Exist"});
    switch (s.nextInt()) {
     case 1:
      CreateReservation(s,index); 
@@ -196,6 +190,16 @@ public class App {
      break;
      case 3:
      selecguestcateg(s,index);
+     break;
+     case 4:
+      Revnue(index);
+     break;
+     case 5:
+     System.out.println("Number of Reservations are : "+Receptionist.getList().get(index).getreservationsCount());
+     break;
+     case 6:
+     Receptionist.saveRecords();
+     System.exit(2);
      break;
     }
    }
@@ -252,18 +256,33 @@ public class App {
    drawMenu(new String[]{"Standard","Couples","Family","Private"});
    String categ=s.next();
    ArrayList<Guest>G=Guest.getList();
+   Category c;
    for(int i=0;i<G.size();i++){
     if(n==G.get(i).getName()){
         if(categ.equalsIgnoreCase("Standard")){
-       // Receptionist.getList().get(ind).selectGuestPref(G.get(i), Category.Standard);
+            c= Category.Standard;
+       Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
      } 
+     else if(categ.equalsIgnoreCase("Private")){
+        c=Category.Private;
+        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
+     }
+     else if(categ.equalsIgnoreCase("Family")){
+        c=Category.Family;
+        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
+     }
+     else if(categ.equalsIgnoreCase("Couples")){
+        c=Category.Couples;
+        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
      }
      }
-
-
-   }
-   
-
+     }
+     return;
+   }   
+public static void Revnue(int index){
+   System.out.println( "The Revenue is : "+Receptionist.getList().get(index).getRevenue());
+   return;
+}
 
 
 }
