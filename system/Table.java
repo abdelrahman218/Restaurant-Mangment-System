@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.time.LocalTime;
 public class Table implements Serializable {
     private static ArrayList<Table> Tables;
-    private static int idGenerator=1;
+    private static int idGenerator=0;
     private int tableNum;
     private double Revenue;
     private Category Categ;
@@ -18,7 +18,7 @@ public class Table implements Serializable {
     private double Cost;
     public Table(){
         Revenue =0;
-        tableNum=idGenerator++;
+        tableNum=Tables.size()+(++idGenerator);
         Cost = 100;
         this.NoOfSeats=4;
         this.Categ=Category.Standard;
@@ -42,6 +42,7 @@ public class Table implements Serializable {
     public int getNoOfSeats(){return NoOfSeats;}
     public double getCost(){return Cost;}
     public Category getcateg(){return Categ;}
+     public double getRevenue() {return Revenue;}
     public static ArrayList<Table> getlist() {return Tables;}
     public static Table mostReservedTable(Date StartDate, Date EndDate){
         int max=0;
@@ -118,5 +119,8 @@ public class Table implements Serializable {
     public void setCost(double cost) {
         Cost = cost;
     }
-    
+    @Override
+    public String toString(){
+        return ("Table Details:\n"+"Table Number: "+getTableID()+"\nNumber of seats: "+getNoOfSeats()+"\nCost: "+getCost()+"\nCategory: "+getcateg()+"\nRevenue: "+getRevenue());
+    }
 }

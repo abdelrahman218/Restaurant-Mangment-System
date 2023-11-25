@@ -63,11 +63,16 @@ public abstract class Person{
         return UserName;
     }
     public String getPassword() {
-        return Password;
+    String encp="";
+     int j=2;
+     for(int i=0;i<Password.length();i++){
+     encp+=(char)(Password.charAt(i)-j);
+     }
+        return encp;
     }
     public boolean checkpassword(String password){
-    encreptPassword(password);
-    if(Password==password){
+    String check=encreptPassword(password);
+    if(Password.equals(check)){
     return true;
     }else{
     return false;

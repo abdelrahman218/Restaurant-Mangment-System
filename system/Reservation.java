@@ -1,19 +1,24 @@
 package system;
+//Stream Classes
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
 //Data Structures
 import java.util.ArrayList;
 import java.util.Date;
 import java.time.LocalTime;
+
 //Self-Defined Classes
 import system.Reservation;
 import user.Guest;
 import employees.Receptionist;
+
 //Formater Classes
 import java.text.SimpleDateFormat;
+
 //Exeception Classes
 import java.lang.IndexOutOfBoundsException;
 import java.text.ParseException;
@@ -22,11 +27,14 @@ import java.io.IOException;
 import java.lang.ClassNotFoundException;
 import javax.management.InvalidAttributeValueException;
 import java.lang.NullPointerException;
+
 //Collections Class
 import java.util.Collections;
+
 public class Reservation implements Comparable<Reservation>,Serializable{
     //Static array list which have all reservations
     private static ArrayList<Reservation> history=new ArrayList<>();
+    private static int idgenerator=0;
     //Object-related member variables 
     private int reservationNum;
     private int tableNum;
@@ -39,15 +47,17 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     private Date date;
     private LocalTime startTime;
     private LocalTime endTime;
+
     //Constructor
     public Reservation(){
-       reservationNum=history.size()+1;
+       reservationNum=++idgenerator;
        date=new Date();
        order=new ArrayList<>();
        startTime=LocalTime.MIDNIGHT;
        endTime=LocalTime.MIDNIGHT;
        history.add(this);
     }
+    
     //Setters
     public void setReceptionistId(int id)throws InvalidAttributeValueException{
         Receptionist temp=Receptionist.search(id);
@@ -115,11 +125,13 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             throw new InvalidAttributeValueException("Rating must be (0->10)");
         }
     }
+    
     //Functions
     public void takeOrder(ArrayList<Meal> orderOfMeals) throws NullPointerException{
         for(int i=0;i<orderOfMeals.size();i++){
             if(orderOfMeals.get(i)!=null){
                 order.add(orderOfMeals.get(i).getMeal_ID());
+                orderOfMeals.get(i).incrementedOrders();
             }
             else{
                 throw new NullPointerException("Meal pointer can't be equal null");
@@ -137,17 +149,31 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     private boolean isReserved(){
         return Table.getTable(tableNum).isReserved(date, startTime, endTime);
     }
+    private String orderNames(){
+        String orderList="[ ";
+        for(int i=0;i<order.size();i++){
+            orderList+=(Meal.getMealById(order.get(i)));
+            if(i!=order.size()-1){
+                orderList+=" , ";
+            }
+        }
+        orderList+=" ]";
+        return orderList;
+    }
+    
     //Getters
     public int getReservationNumber(){return reservationNum;}
     public Date getDate(){return date;}
     public LocalTime getStartTime(){return startTime;}
     public LocalTime getEndTime(){return endTime;}
+    public ArrayList<Integer> getOrder(){return order;}
     public double getPrice(){return price;}
     public  static ArrayList<Reservation> getList() { return history; }
     public int getTableNum() { return tableNum; }
     public int getReceptionistId() { return receptionistId; }
     public int getGuestId() { return guestId; }
-    public int getNumOfGuests() { return numOfGuests;}
+    public int getNumOfGuests() { return numOfGuests; }
+
     //static search functions
     public static Reservation search(int id){
         Collections.sort(history);
@@ -180,7 +206,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }
         return result;
     }
-    public static ArrayList<Reservation>search(Guest key){
+    public ArrayList<Reservation>search(Guest key){
         ArrayList<Reservation> result=new ArrayList<>();
         for(int i=0;i<history.size();i++){
             if(history.get(i).guestId==key.getId())
@@ -189,15 +215,14 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         return result;
     }
     public static ArrayList<Reservation>search(Meal key){
-    ArrayList<Reservation> result=new ArrayList<>();
-    
-    for(int i=0;i<history.size();i++){
-        for(int j=0;j<history.get(i).order.size();j++){
-            if(history.get(i).order.get(j)==key.getMeal_ID()){
-                result.add(history.get(i));
+        ArrayList<Reservation> result=new ArrayList<>();
+        for(int i=0;i<history.size();i++){
+            for(int j=0;j<history.get(i).order.size();j++){
+                if(history.get(i).order.get(j)==key.getMeal_ID()){
+                    result.add(history.get(i));
+                }
             }
         }
-    }
      return result;
     }
     //Reading & Writing in binary files methods
@@ -213,6 +238,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }catch(ClassNotFoundException e){
             System.out.println("Error in class Reservation reading compatiability");
         }
+        idgenerator=history.size();
     }
     public static void saveRecords(){
         try{
@@ -225,12 +251,13 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             System.out.println("Error happened writing in the file: Reservation archive");
         }
     }
+
     //Overriden object functions
     @Override
     public String toString(){
         return("Receptionist Name: "+Receptionist.search(receptionistId).getName()+"\nGuest Name: "+Guest.getGuest(guestId).getName()
         +"\nReservation No.: "+reservationNum+"\nTable No.: "+tableNum+"\nNo. of Guests: "+numOfGuests+
-        "\nDate: "+date+"\nFrom: "+startTime+" To: "+endTime+"\nOrder: "+order.toString()+"\nCost: "+price+"\nGuests rating: "+rating);
+        "\nDate: "+date+"\nFrom: "+startTime+" To: "+endTime+"\nOrder: "+orderNames()+"\nCost: "+price+"\nGuests rating: "+rating);
     }
     @Override
     public int compareTo(Reservation right){

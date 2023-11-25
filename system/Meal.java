@@ -20,12 +20,12 @@ public class Meal implements Serializable {
         Menu_ID = menu_ID;
     }
     private int noOfOrders=0;
-    public Meal(int Menu_ID, int meal_ID, String Name, double Price,int noOfOrders) {
+    public Meal(int Menu_ID, int meal_ID, String Name, double Price) {
         this.Menu_ID=Menu_ID;
         this.meal_ID = meal_ID;
         this.Name = Name;
         this.Price = Price;
-        this.noOfOrders = noOfOrders;
+        this.noOfOrders = 0;
     }
     public int getMeal_ID() {
         return meal_ID;
@@ -104,4 +104,5 @@ public class Meal implements Serializable {
                 count++;
         return count;
     }
+  
 }
