@@ -6,10 +6,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.ObjectInputStream;
 import user.Guest;
-public class Admin extends Person  {
+import java.io.Serializable;
+public class Admin extends Person implements Comparable<Admin>,Serializable  {
 private static ArrayList<Admin>Admins=new ArrayList<>();
+@Override
+    public int compareTo(Admin right){
+     return 0;
+    }
 public static ArrayList<Admin> getAdmins(){
     return Admins;
 }
