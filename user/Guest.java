@@ -4,12 +4,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import employees.Person;
 import system.Category;
 import system.Reservation;
-public class Guest extends Person implements Serializable {
+public class Guest extends Person {
     private static ArrayList<Guest> Guests=new ArrayList<Guest>();
     private int idGenerator=0;
     Category PreferredCategory;
@@ -59,7 +58,7 @@ public class Guest extends Person implements Serializable {
     } 
     public static void saveRecords(){
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("GuestsData.dat"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("TablesData.dat"));
                 out.writeObject(Guests);
             out.close();
             } catch (IOException e) {
@@ -68,7 +67,7 @@ public class Guest extends Person implements Serializable {
     }
     public static void getRecord(){
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("GuestsData.dat"));
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("TablesData.dat"));
             Guests=(ArrayList<Guest>)in.readObject();
             in.close();
         }catch (ClassNotFoundException e) {

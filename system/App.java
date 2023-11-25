@@ -44,31 +44,13 @@ public class App {
         return x;
     }
     public static void main(String[] args){
-        // Guest.getRecord();
-        // Table.getRecord();
-        // Receptionist.getRecord();
-        // Admin.getRecord();
-        // Menu.ReadFromMenuFile();
-        // Meal.ReadFromFile();
+        Guest.getRecord();
+        Table.getRecord();
+        Receptionist.getRecord();
+        Admin.getRecord();
+        Menu.ReadFromMenuFile();
+        Meal.ReadFromFile();
         Scanner s= new Scanner(System.in);
-        new Receptionist("Abdo", "Cairo", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "A", "A");
-        new Guest("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "A", "A");
-        new Guest("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","A","A");
-        new Admin("Michel","NewYork","27-12-1981","01165863239","michel_81@gmail.com","A","A");
-        new Table(4,Category.Private);
-        new Table(2);
-        new Table(6);
-        new Meal(1,1,"Egg",3.5);
-        new Meal(1,2,"Bread",1.5);
-        new Meal(2,3,"spiro spathis",10);
-        new Menu(MenuCategory.Breakfast);
-        new Menu(MenuCategory.Beverages);
-        // Guest.saveRecords();
-        // Table.saveRecords();
-        // Receptionist.saveRecords();
-        // Admin.saveRecords();
-        // Menu.WriteInMenuFile();
-        // Meal.WriteInFile();
         drawMenu(new String[]{"Admins","Receptionist","Guest","Exit"});
         switch(takeMenuIndex(s, 1, 4)){
             case 1:menuAdmin(s);
@@ -111,7 +93,7 @@ public class App {
              }
          }
          }
-}
+    }
     public static void Admindetails(Scanner s) {
         drawMenu(new String[]{"Guest Section","Receptionist Section","Menu Section","Table Section","back to main menu"});
         switch(takeMenuIndex(s, 1, 5)){
@@ -146,13 +128,14 @@ public class App {
             Guest x= Guest.getGuest(s.nextInt());
             drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Back"});
             switch(takeMenuIndex(s, 1, 7)){
-                case 1:x.setName(s.next()); break;
-                case 2:x.setAddress(s.nextLine());  break;
-                case 3:x.setDateOfBirth(s.nextLine());  break;
-                case 4:x.setPhoneNum(s.nextLine()); break;
-                case 5:x.setEmail(s.nextLine());    break;
-                case 6:x.setUserName(s.nextLine()); break;
-                case 7:GuestSection(s); break;
+                case 1:x.setName(s.next()); GuestSection(s);
+                case 2:x.setAddress(s.next());  GuestSection(s);
+                case 3:x.setDateOfBirth(s.next());  GuestSection(s);
+                case 4:x.setPhoneNum(s.next()); GuestSection(s);
+                case 5:x.setEmail(s.next());    GuestSection(s);
+                case 6:x.setUserName(s.next()); GuestSection(s);
+                case 7:x.setPassword(s.next()); GuestSection(s);
+                case 8:GuestSection(s);
             }
         } catch (NullPointerException e) {
             System.out.println("Guest not found!");
@@ -170,7 +153,7 @@ public class App {
     }
     public static void ReceptionistSection(Scanner s) {
         drawMenu(new String[]{"View receptionist","Edit receptionist", "Remove receptionist","back"});
-        switch(takeMenuIndex(s, 1, 3)){
+        switch(takeMenuIndex(s, 1, 4)){
             case 1:{viewReceptionist(s);    ReceptionistSection(s);}
             case 2: {editReceptionist(s);  ReceptionistSection(s);}
             case 3: {removeReceptionist(s);    ReceptionistSection(s);}
@@ -180,7 +163,7 @@ public class App {
     public static void viewReceptionist(Scanner s){
         System.out.print("Enter the Receptionist ID : ");
         try {
-            Receptionist.search(s.nextInt()).toString();
+            System.out.println(Receptionist.search(s.nextInt()).toString());
         } catch (NullPointerException e) {
             System.out.println("Receptionist not found!");
         }
@@ -191,14 +174,14 @@ public class App {
             Receptionist x= Receptionist.search(s.nextInt());
             drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Password","Back"});
             switch(takeMenuIndex(s, 1, 8)){
-                case 1:x.setName(s.nextLine());
-                case 2:x.setAddress(s.nextLine());
-                case 3:x.setDateOfBirth(s.nextLine());
-                case 4:x.setPhoneNum(s.nextLine());
-                case 5:x.setEmail(s.nextLine());
-                case 6:x.setUserName(s.nextLine());
-                case 7:x.setPassword(s.nextLine());
-                case 8:ReceptionistSection(s);
+                case 1:x.setName(s.next()); ReceptionistSection(s);
+                case 2:x.setAddress(s.next());  ReceptionistSection(s);
+                case 3:x.setDateOfBirth(s.next());  ReceptionistSection(s);
+                case 4:x.setPhoneNum(s.next()); ReceptionistSection(s);
+                case 5:x.setEmail(s.next());    ReceptionistSection(s);
+                case 6:x.setUserName(s.next()); ReceptionistSection(s);
+                case 7:x.setPassword(s.next()); ReceptionistSection(s);
+                case 8:ReceptionistSection(s);  
             }
         } catch (NullPointerException e) {
             System.out.println("Guest not found!"); 
@@ -279,7 +262,7 @@ public class App {
     public static void viewTable(Scanner s){
         System.out.print("Enter the Table Number : ");
         try {
-            Table.getTable(s.nextInt()).toString();
+            System.out.println(Table.getTable(s.nextInt()).toString());
         } catch (NullPointerException e) {
             System.out.println("Table not found!");
         }   
@@ -290,13 +273,13 @@ public class App {
             Table x=Table.getTable(s.nextInt());
             drawMenu(new String[]{"Number of seats","Cost","Category","Back"});
             switch(takeMenuIndex(s, 1, 4)){
-                case 1:x.setNoOfSeats(s.nextInt());
-                case 2:x.setCost(s.nextDouble());
-                case 3:editCategory(s,x,s.next());
-                case 4:GuestSection(s);
+                case 1:x.setNoOfSeats(s.nextInt()); TableSection(s);
+                case 2:x.setCost(s.nextDouble());   TableSection(s);
+                case 3:editCategory(s,x,s.next());  TableSection(s);
+                case 4:TableSection(s);
             }
         } catch (NullPointerException e) {
-            System.out.println("Guest not found!"); 
+            System.out.println("Table not found!"); 
         } 
     }
     public static void editCategory(Scanner s,Table x,String categ) {
@@ -456,7 +439,6 @@ public class App {
    System.out.println("Enter The Category : ");
    String categ=s.next();
    ArrayList<Guest>G=Guest.getList();
-   Category c;
    for(int i=0;i<G.size();i++){
     if(n==G.get(i).getName()){
         if(categ.equalsIgnoreCase("Standard"))
@@ -474,15 +456,71 @@ public class App {
      }
      return;
    }   
-    public static void menuGuest(Scanner s) {
-        drawMenu(new String[]{"Sign up","Log in","Back"});
-       switch(takeMenuIndex(s, 1, 3)){
-           case 1: AddGuest(s);
-           case 2: 
-           case 3: 
-                        main(null);
-       }
+    public static void menuGuest(Scanner s){
+    drawMenu(new String[]{"Sign up", "Log in", "Back"});
+    switch (takeMenuIndex(s, 1, 3)) {
+        case 1:
+       AddGuest(s);
+            break;
+        case 2:
+        loginGuest(s); 
+        break;
+        case 3:
+        main(null);
+        break;
     }
+}
+    public static void Guestdetails(Scanner s){
+        drawMenu(new String[]{"View Your Reservation's History","Rate Your Booking","back to main menu"});
+        switch(takeMenuIndex(s, 1, 3)){
+            case 1: View_Your_Reservation_History(s);
+            break;
+            /*case 2: Rate_Your_Booking(s);
+            break;*/
+            case 3: main(null);
+            break;
+        }
+    }
+    public static void loginGuest(Scanner s){
+    boolean check = false;
+    while (!check) {
+        System.out.print("Enter your username : ");
+        String user = s.next();
+        System.out.println();
+        System.out.print("Enter your password : ");
+        String pass = s.next();
+        for (int i = 0; i < Guest.getList().size(); i++) {
+            if (Guest.getList().get(i).getUserName().equals(user) && Guest.getList().get(i).getPassword().equals(pass)) {
+                check = true;
+                break;
+            }
+        }
+        if (!check) {
+            System.out.println("Login failed. Try again");
+        }
+    }
+    System.out.println("Login success");
+   
+        Guestdetails(s);
+}
+    public static void View_Your_Reservation_History(Scanner s) {
+    System.out.print("Enter your username: ");
+    String username = s.next();
+    Guest currentGuest = null;
+    ArrayList<Guest> guestList = Guest.getList();
+    for (int i = 0; i < guestList.size(); i++) {
+        if (guestList.get(i).getUserName().equals(username)) {
+            currentGuest = guestList.get(i);
+            break;
+        }
+    }
+    if (currentGuest != null) {
+        String history = currentGuest.ViewReservation();
+        System.out.println("Your Reservation History: " + history);
+    } else {
+        System.out.println("Not found");
+    }
+}
     public static void AddGuest(Scanner s){
        String username,pass ,Name,Address,DateOfBirth,PhoneNum,Email;
        System.out.println("Enter UserName: ");

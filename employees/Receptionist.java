@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 //Data Structures
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import java.lang.ClassNotFoundException;
 import java.text.ParseException;
 import javax.management.InvalidAttributeValueException;
 
-public class Receptionist extends Person implements Comparable<Receptionist>,Serializable{
+public class Receptionist extends Person implements Comparable<Receptionist>{
     private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
     private static int idGenerator=0;
@@ -103,37 +102,24 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
     }
     
     //Reading & Writing in binary files methods
-    public static void getRecord(){
-        try{
-            FileInputStream f=new FileInputStream("Receptionist archive.dat");
-            ObjectInputStream in=new ObjectInputStream(f);
-            int size=in.readInt();
-            while(size>0){
-                receptionists.add((Receptionist)in.readObject());
-                size--;
-            }    
-            in.close();
-            f.close();
-        }catch(IOException e){
-            System.out.println("Error happened reading the file: Receptionist archive");
-        }catch(ClassNotFoundException e){
-            System.out.println("Error in class Receptionist reading compatiability");
-        }
-    }
     public static void saveRecords(){
-        try{
-            FileOutputStream f=new FileOutputStream("Receptionist archive.dat");
-            ObjectOutputStream out=new ObjectOutputStream(f);
-            out.writeInt(receptionists.size());
-            int i=0;
-            while(i<receptionists.size()){
-                out.writeObject(receptionists.get(i));
-                i++;
-            }    
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("TablesData.dat"));
+                out.writeObject(receptionists);
             out.close();
-            f.close();
-        }catch(IOException e){
-            System.out.println("Error happened writing in the file: Receptionist archive");
+            } catch (IOException e) {
+            System.out.println(e);
+            }
+    }
+    public static void getRecord(){
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("TablesData.dat"));
+            receptionists=(ArrayList<Receptionist>)in.readObject();
+            in.close();
+        }catch (ClassNotFoundException e) {
+            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
     

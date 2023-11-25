@@ -6,10 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.io.ObjectInputStream;
 import user.Guest;
-public class Admin extends Person implements Comparable<Admin>,Serializable  {
+public class Admin extends Person implements Comparable<Admin>{
 private static ArrayList<Admin>Admins=new ArrayList<>();
 private static int idGenerator=0;
 @Override
@@ -21,7 +20,7 @@ public static ArrayList<Admin> getAdmins(){
 }
 public static void saveRecords(){
     try {
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("GuestsData.dat"));
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("TablesData.dat"));
             out.writeObject(Admins);
         out.close();
         } catch (IOException e) {
@@ -30,7 +29,7 @@ public static void saveRecords(){
 }
 public static void getRecord(){
     try {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream("GuestsData.dat"));
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream("TablesData.dat"));
         Admins=(ArrayList<Admin>)in.readObject();
         in.close();
     }catch (ClassNotFoundException e) {
@@ -38,7 +37,7 @@ public static void getRecord(){
     } catch (IOException e) {
         System.out.println(e);
     }
-} 
+}
 public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
     super(Name,Address,DateOfBirth,PhoneNum,Email,UserName, Password);
     Admins.add(this);
