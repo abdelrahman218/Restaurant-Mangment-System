@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.ObjectInputStream;
 import user.Guest;
-import java.io.Serializable;
 public class Admin extends Person implements Comparable<Admin>,Serializable  {
 private static ArrayList<Admin>Admins=new ArrayList<>();
 @Override
@@ -56,6 +55,7 @@ public static void getRecord(){
 }
 public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
     super(Name,Address,DateOfBirth,PhoneNum,Email,UserName, Password);
+    Admins.add(this);
 }
 public void addTable(int numofseats){
  Table table=new Table(numofseats);

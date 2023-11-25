@@ -113,6 +113,7 @@ public class App {
          for(int i=0;i<Admin.getAdmins().size();i++){
          if(Admin.getAdmins().get(i).checkpassword(notdata)){
             System.out.println("Welcome Mr/Mrs "+Admin.getAdmins().get(i).getName());
+            Admindetails(s);
           }
          else{
             System.out.println("Incorrect Password");
@@ -120,6 +121,12 @@ public class App {
          }
          }
 }
+
+    public static void Admindetails(Scanner s){
+     drawMenu(new String[]{"Guest Section","Menu Section","Table Section",});
+
+    }
+
     public static void loginReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
          boolean check=true;
          while (check) {
@@ -180,8 +187,7 @@ public class App {
      break;
      case 6:
      Receptionist.saveRecords();
-     System.exit(2);
-     break;
+     return;
     }
    }
    public static void CreateReservation(Scanner s,int ind) throws InvalidAttributeValueException, ParseException{

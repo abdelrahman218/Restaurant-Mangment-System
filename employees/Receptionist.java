@@ -1,29 +1,36 @@
 package employees;
-import java.util.Locale.Category;
+//Stream Classes
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
 //Data Structures
 import java.util.ArrayList;
 import java.util.Collections;
+
 //Self-Defined Classes
 import system.Meal;
 import system.Reservation;
 import user.Guest;
+import system.Category;
+
+//Exeception Classes
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
 import java.text.ParseException;
 import javax.management.InvalidAttributeValueException;
+
 public class Receptionist extends Person implements Comparable<Receptionist>,Serializable{
     private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
     private double reservationsCount;
-    public Receptionist(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
-        super(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
+    public Receptionist(String name,String address,String dateOfBirth,String Phone,String Email,String UserName,String Password){
+        super(name,address,dateOfBirth,Phone,Email,UserName,Password);
         receptionists.add(this);
     }
+    
     //Reservation Related functions
     public void createReservation(int guestId,int tableNum,int numOfGuests,String date,String start,String end,ArrayList<Meal>order)
     throws InvalidAttributeValueException,ParseException{
@@ -46,23 +53,32 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             throw e;
         }
         revenue+=r.getPrice();
+        Guest.getGuest(guestId).incrementReservation();
         reservationsCount++;
     }
     public void cancelReservation(int resId) throws InvalidAttributeValueException{
         ArrayList<Reservation> reservations=Reservation.search(this);
         for(int i=0;i<reservations.size();i++){
-            if(reservations.get(i).getReservationNumber()==resId){
+            Reservation temp=reservations.get(i);
+            if(temp.getReservationNumber()==resId){
+                ArrayList<Integer> order=temp.getOrder();
+                for(int j=0;j<temp.getOrder().size();j++){
+                    Meal.getMealById(order.get(j)).decrementOrders();
+                }
                 reservations.remove(i);
                 reservationsCount--;
+                Guest.getGuest(reservations.get(i).getGuestId()).decrementReservation();
                 return;
             }
         }
         throw new InvalidAttributeValueException("Reservation not found.");
-    }  
+    }
+    
     //Guest Related function
     public void selectGuestPref(Guest keyGuest,Category preferred){
         keyGuest.setPreferedCategory(preferred.ordinal());
     }
+    
     //Getter functions
     public  static ArrayList<Receptionist> getList() {
         return receptionists;
@@ -73,6 +89,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
     public double getreservationsCount() {
         return reservationsCount;
     }
+    
     //static search function
     public static Receptionist search(int id){
         Collections.sort(receptionists);
@@ -89,6 +106,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         }
         return null;    
     }
+    
     //Reading & Writing in binary files methods
     public static void getRecord(){
         try{
@@ -123,6 +141,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
             System.out.println("Error happened writing in the file: Receptionist archive");
         }
     }
+    
     //Overriden object functions
     @Override
     public String toString(){

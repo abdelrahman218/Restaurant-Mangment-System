@@ -6,11 +6,12 @@ import system.Reservation;
 public class Guest extends Person {
     private static ArrayList<Guest> Guests=new ArrayList<Guest>();
     Category PreferredCategory;
+    int numOfReservations=0;
    public Guest(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
         super(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
         Guests.add(this);
     }
-     public String ViewReservation(){
+    public String ViewReservation(){
         String list="";
         ArrayList<Reservation>R=Reservation.getList();
        for (int  i=0;i<Reservation.getList().size();i++){
@@ -18,7 +19,8 @@ public class Guest extends Person {
         }
         return list;
     }
-    
+    public void incrementReservation(){numOfReservations++;}
+    public void decrementReservation(){numOfReservations--;}
     public void setPreferedCategory(int key){
         switch(key){
             case 0:
