@@ -6,10 +6,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.io.ObjectInputStream;
 import user.Guest;
-public class Admin extends Person  {
+public class Admin extends Person implements Comparable<Admin>,Serializable  {
 private static ArrayList<Admin>Admins=new ArrayList<>();
+@Override
+    public int compareTo(Admin right){
+     return 0;
+    }
+public static ArrayList<Admin> getAdmins(){
+    return Admins;
+}
 public static void saveRecords(){
     try{
     FileOutputStream f=new FileOutputStream("Admin archive.dat");
@@ -47,21 +55,22 @@ public static void getRecord(){
 }
 public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
     super(Name,Address,DateOfBirth,PhoneNum,Email,UserName, Password);
+    Admins.add(this);
 }
-public void addTable(int numofseats){
+public static void addTable(int numofseats){
  Table table=new Table(numofseats);
  ArrayList<Table>Tables=Table.getlist();
  Tables.add(table);
 }
-public void editTable(int tableNum,Category tableCategory,double newcost,int newnoseats){
+public static void editTable(int tableNum,Category tableCategory,double newcost,int newnoseats){
     Table.getlist().get(tableNum).setCateg(tableCategory);
     Table.getlist().get(tableNum).setCost(newcost);
     Table.getlist().get(tableNum).setNoOfSeats(newnoseats);
 }
-public void removeTable(int tableNum){
+public static void removeTable(int tableNum){
     Table.getlist().remove(Table.getTable(tableNum));
 }
-public ArrayList<Table> searchTable(Category tableCategory){
+public static ArrayList<Table> searchTable(Category tableCategory){
     ArrayList<Table> Tables=new ArrayList<Table>();
     for(int i=0;i<Table.getlist().size();i++){
     if(Table.getlist().get(i).getcateg()==tableCategory){
@@ -70,7 +79,7 @@ public ArrayList<Table> searchTable(Category tableCategory){
     }
     return Tables;
 }
-public String viewTableReports( int tableNum,Date StartDate,Date EndDate){
+public static String viewTableReports( int tableNum,Date StartDate,Date EndDate){
    ArrayList<Table> Tables=Table.getlist();
    String list="";
    list+="The table Category is : ";
@@ -84,12 +93,21 @@ public String viewTableReports( int tableNum,Date StartDate,Date EndDate){
    list+="The table's cost : "+Tables.get(tableNum).getCost()+"\n";
 return list;
 }
-public void addMenu(){
+public static void addMenu(){
     Menu.getlist().add(new Menu());
 }
+public static void addMenu(int x){
+    switch (x){
+        case 1: Menu.getlist().add(new Menu(MenuCategory.Breakfast));
+        case 2: Menu.getlist().add(new Menu(MenuCategory.Lunch));
+        case 3: Menu.getlist().add(new Menu(MenuCategory.Dinner));
+        case 4: Menu.getlist().add(new Menu(MenuCategory.Beverages));
+        case 5: Menu.getlist().add(new Menu(MenuCategory.Dessert));
+    }
+}
 public void editMenu(int menuId,MenuCategory Menucategory){Menu.getlist().get(menuId).Categ=Menucategory;}
-public void removeMenu(int menuId){Menu.getlist().remove(Menu.getlist().get(menuId));}
-public String searchMenu(int menuId,Date Start,Date End){
+public static void removeMenu(int menuId){Menu.getlist().remove(Menu.getlist().get(menuId));}
+public static String searchMenu(int menuId,Date Start,Date End){
     String list="";
  list+="This menu's category is : ";
  list+=Menu.getlist().get(menuId).Categ;
@@ -97,24 +115,26 @@ public String searchMenu(int menuId,Date Start,Date End){
  list+="This menu's most ordered meal is : ";
  list+=Meal.getList().get(menuId).mostOrderedMeal(Start, End);
 return list;
-
 }
-public ArrayList<Meal> searchMenu(int menuId){return Menu.getlist().get(menuId).getMeals();}
-public MenuCategory viewMenuReportsCateg(int menuId){
+public static ArrayList<Meal> searchMenu(int menuId){return Menu.getlist().get(menuId).getMeals();}
+public static void createMeal(int Menu_ID, int meal_ID, String Name, double Price){
+Meal.getList().add(new Meal(Menu_ID, meal_ID, Name, Price));
+}
+public static MenuCategory viewMenuReportsCateg(int menuId){
 ArrayList<Menu>Menues=Menu.getlist();
 return Menues.get(menuId).Categ;
 }
-public Meal viewMenuReportsMostOrderedMeal(int menuId,Date Start,Date End){
+public static Meal viewMenuReportsMostOrderedMeal(int menuId,Date Start,Date End){
 ArrayList<Meal>Meals=Meal.getList();
 return Meals.get(menuId).mostOrderedMeal(Start, End);
 }
-public void addUsers(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
+public static void addUsers(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
 Guest guest=new Guest(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
 ArrayList<Guest>guests=Guest.getList();
 guests.add(guest);
 
 }
-public void editCategory(int UserId,String Categorys){
+public static void editCategory(int UserId,String Categorys){
 Guest Guests= Guest.getGuest(UserId);
 if(Categorys.equalsIgnoreCase("couples")){
 Guests.setPreferedCategory(1);
@@ -129,10 +149,10 @@ else if(Categorys.equalsIgnoreCase("private")){
  Guests.setPreferedCategory(3); 
 }
 }
-public void remove(int UserId) throws Throwable{
+public static void remove(int UserId) throws Throwable{
 Guest.getList().remove(Guest.getGuest(UserId));
 }
-public String viewUsers(int UserID){
+public static String viewUsers(int UserID){
 Reservation r = new Reservation();
 Guest guests =Guest.getGuest(UserID);
 ArrayList<Reservation> G=r.search(guests);
@@ -150,7 +170,7 @@ for(int i=0;i<G.size();i++){
 }
 return list;
 }
-public String viewUsers(){
+public static String viewUsers(){
 ArrayList<Guest>guests=Guest.getList();
 String list="";
 for(int i=0;i<guests.size();i++){
@@ -181,7 +201,7 @@ name=recep.get(j).getName();
     list+="Receptionist whoese "+name +"with max number of reservation is "+maxreserve+"\n";
     return list;
 }
-String viewReservationOfGuest(int GuestId){
+public static String viewReservationOfGuest(int GuestId){
 Reservation r = new Reservation();
 Guest guests =Guest.getGuest(GuestId);
 ArrayList<Reservation> G=r.search(guests);
@@ -199,7 +219,7 @@ for(int i=0;i<G.size();i++){
 }
 return list;
 }
-public String viewReservationdetails(int guestId,int reservationNO){
+public static String viewReservationdetails(int guestId,int reservationNO){
     
     Reservation r = new Reservation();
 Guest guests =Guest.getGuest(guestId);
@@ -231,6 +251,4 @@ public static Admin search(String userName){
     }
     return null;
 }
-
 }
-

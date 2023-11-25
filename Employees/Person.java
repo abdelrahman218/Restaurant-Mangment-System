@@ -39,7 +39,7 @@ public abstract class Person{
         this.UserName = UserName;
     }
     public void setPassword(String Password) {
-        this.Password = Password;
+        this.Password = encreptPassword(Password);
     }
     public String getName() {
         return Name;
@@ -66,24 +66,18 @@ public abstract class Person{
         return Password;
     }
     public boolean checkpassword(String password){
-    if(Password==encreptPassword(password)){
+    String check=encreptPassword(password);
+    if(Password.equals(check)){
     return true;
     }else{
     return false;
     }
     }
-    public boolean checkUserName(String userName){
-    if(UserName==userName){
-    return true;
-    }else{
-    return false;
-    }
-    }
-    public String encreptPassword(String password){
+    private String encreptPassword(String pass){
     String encp="";
     int j=2;
-    for(int i=0;i<password.length();i++){
-    encp+=(char)(password.charAt(i)+j);
+    for(int i=0;i<pass.length();i++){
+    encp+=(char)(pass.charAt(i)+j);
     }
     return encp;
     }
