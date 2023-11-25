@@ -43,12 +43,32 @@ public class App {
         }
         return x;
     }
-    public static void main(String[] args) throws InvalidAttributeValueException, ParseException{
+    public static void main(String[] args){
+        // Guest.getRecord();
+        // Table.getRecord();
+        // Receptionist.getRecord();
+        // Admin.getRecord();
+        // Menu.ReadFromMenuFile();
+        // Meal.ReadFromFile();
         Scanner s= new Scanner(System.in);
-        new Receptionist("Abdo", "1211 Paris", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "A", "A");
-        new Guest("Abdo", "1211 Paris", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "C", "C");
-        new Guest("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","B","B");
-        new Admin("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","A","A");
+        new Receptionist("Abdo", "Cairo", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "A", "A");
+        new Guest("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "A", "A");
+        new Guest("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","A","A");
+        new Admin("Michel","NewYork","27-12-1981","01165863239","michel_81@gmail.com","A","A");
+        new Table(4,Category.Private);
+        new Table(2);
+        new Table(6);
+        new Meal(1,1,"Egg",3.5);
+        new Meal(1,2,"Bread",1.5);
+        new Meal(2,3,"spiro spathis",10);
+        new Menu(MenuCategory.Breakfast);
+        new Menu(MenuCategory.Beverages);
+        // Guest.saveRecords();
+        // Table.saveRecords();
+        // Receptionist.saveRecords();
+        // Admin.saveRecords();
+        // Menu.WriteInMenuFile();
+        // Meal.WriteInFile();
         drawMenu(new String[]{"Admins","Receptionist","Guest","Exit"});
         switch(takeMenuIndex(s, 1, 4)){
             case 1:menuAdmin(s);
@@ -58,13 +78,12 @@ public class App {
         }
         s.close();
     }   
-    public static void menuAdmin(Scanner s)throws InvalidAttributeValueException, ParseException{
+    public static void menuAdmin(Scanner s){
     boolean check=true;
     Admin.getRecord();
          while (check) {
          System.out.print("Enter your username : ");
          String user=s.next();
-         System.out.println();
          int i=0;
          for(;i<Admin.getAdmins().size();i++){
          if(Admin.getAdmins().get(i).getUserName().equals(user)){
@@ -93,7 +112,7 @@ public class App {
          }
          }
 }
-    public static void Admindetails(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void Admindetails(Scanner s) {
         drawMenu(new String[]{"Guest Section","Receptionist Section","Menu Section","Table Section","back to main menu"});
         switch(takeMenuIndex(s, 1, 5)){
             case 1: GuestSection(s);
@@ -103,7 +122,7 @@ public class App {
             case 5: main(null);
         }
     }
-    public static void GuestSection(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void GuestSection(Scanner s) {
         drawMenu(new String[]{"View guest","Edit guest", "Remove guest","back"});
         switch(takeMenuIndex(s, 1, 3)){
             case 1:{viewGuest(s);    GuestSection(s);}
@@ -112,7 +131,7 @@ public class App {
             case 4: Admindetails(s);
         }
     }
-    public static void viewGuest(Scanner s) throws InvalidAttributeValueException,ParseException{
+    public static void viewGuest(Scanner s) {
         System.out.print("Enter the Guest ID : ");
         try {
             Guest x=Guest.getGuest(s.nextInt());
@@ -121,27 +140,26 @@ public class App {
             System.out.println("Guest not found!");
         }   
     }
-    public static void editGuest(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void editGuest(Scanner s) {
         System.out.print("Enter the Guest ID : ");
         try {
             Guest x= Guest.getGuest(s.nextInt());
-            drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Password","Back"});
-            switch(takeMenuIndex(s, 1, 8)){
-                case 1:x.setName(s.next());
-                case 2:x.setAddress(s.nextLine());
-                case 3:x.setDateOfBirth(s.nextLine());
-                case 4:x.setPhoneNum(s.nextLine());
-                case 5:x.setEmail(s.nextLine());
-                case 6:x.setUserName(s.nextLine());
-                case 7:x.setPassword(s.nextLine());
-                case 8:GuestSection(s);
+            drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Back"});
+            switch(takeMenuIndex(s, 1, 7)){
+                case 1:x.setName(s.next()); break;
+                case 2:x.setAddress(s.nextLine());  break;
+                case 3:x.setDateOfBirth(s.nextLine());  break;
+                case 4:x.setPhoneNum(s.nextLine()); break;
+                case 5:x.setEmail(s.nextLine());    break;
+                case 6:x.setUserName(s.nextLine()); break;
+                case 7:GuestSection(s); break;
             }
         } catch (NullPointerException e) {
             System.out.println("Guest not found!");
             GuestSection(s);
         }
     }
-    public static void removeGuest(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void removeGuest(Scanner s) {
         System.out.print("Enter the Guest ID : ");
         try {
              Guest.getList().remove(Guest.getGuest(s.nextInt()));           
@@ -150,7 +168,7 @@ public class App {
             GuestSection(s);
         } 
     }
-    public static void ReceptionistSection(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void ReceptionistSection(Scanner s) {
         drawMenu(new String[]{"View receptionist","Edit receptionist", "Remove receptionist","back"});
         switch(takeMenuIndex(s, 1, 3)){
             case 1:{viewReceptionist(s);    ReceptionistSection(s);}
@@ -167,7 +185,7 @@ public class App {
             System.out.println("Receptionist not found!");
         }
     }
-    public static void editReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void editReceptionist(Scanner s) {
        System.out.print("Enter the Receptionist ID : ");
         try {
             Receptionist x= Receptionist.search(s.nextInt());
@@ -187,7 +205,7 @@ public class App {
             GuestSection(s);
         } 
     }
-    public static void removeReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void removeReceptionist(Scanner s) {
         System.out.print("Enter the Receptionist ID : ");
         try {
              Receptionist.getList().remove(Receptionist.search(s.nextInt()));           
@@ -196,7 +214,7 @@ public class App {
             ReceptionistSection(s);
         }
     }
-    public static void MenuSection(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void MenuSection(Scanner s) {
     drawMenu(new String[]{"View Menu","Edit Menu","Add Menu","Add Meal","Back"});
     switch (takeMenuIndex(s, 1, 5)) {
        case 1:{viewMenu(s); MenuSection(s);}
@@ -249,7 +267,7 @@ public class App {
     double price = s.nextDouble();
     Meal.getList().add(new Meal(menu, meal, name, price));
    }
-    public static void TableSection(Scanner s) throws InvalidAttributeValueException, ParseException {
+    public static void TableSection(Scanner s)  {
         drawMenu(new String[]{"View table","Edit table", "Remove table","back"});
         switch(takeMenuIndex(s, 1, 3)){
             case 1:{viewTable(s);    TableSection(s);}
@@ -266,7 +284,7 @@ public class App {
             System.out.println("Table not found!");
         }   
     }
-    public static void editTable(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void editTable(Scanner s) {
         System.out.print("Enter the table number : ");
         try {
             Table x=Table.getTable(s.nextInt());
@@ -281,7 +299,7 @@ public class App {
             System.out.println("Guest not found!"); 
         } 
     }
-    public static void editCategory(Scanner s,Table x,String categ) throws InvalidAttributeValueException, ParseException{
+    public static void editCategory(Scanner s,Table x,String categ) {
         drawMenu(new String[]{"Standard","Couples","Family","Private","Back"});
         switch(takeMenuIndex(s, 1, 4)){
             case 1:x.setCateg(Category.Standard);
@@ -291,7 +309,7 @@ public class App {
             case 5:editTable(s);
         }
     }
-    public static void removeTable(Scanner s) throws InvalidAttributeValueException, ParseException {
+    public static void removeTable(Scanner s)  {
         System.out.print("Enter the Table Number : ");
         try {
              Table.getlist().remove(Table.getTable(s.nextInt()));           
@@ -300,7 +318,7 @@ public class App {
             GuestSection(s);
         }
     }
-    public static void menuRec(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void menuRec(Scanner s) {
         drawMenu(new String[]{"Log in","Exit"});
         switch(takeMenuIndex(s, 1, 2)){
             case 1:
@@ -311,7 +329,7 @@ public class App {
             break;
         }   
     }
-    public static void loginReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
+    public static void loginReceptionist(Scanner s) {
          boolean check=true;
          while (check) {
          System.out.print("Enter your username : ");
@@ -343,7 +361,7 @@ public class App {
          }
          }
     }
-    public static void Receptionistdetails(Scanner s,String Name) throws InvalidAttributeValueException, ParseException{
+    public static void Receptionistdetails(Scanner s,String Name) {
     Receptionist.getRecord();
     ArrayList<Receptionist> Re=Receptionist.getList();   
     int index=0;
@@ -374,7 +392,7 @@ public class App {
      return;
     }
    }
-    public static void CreateReservation(Scanner s,int ind) throws InvalidAttributeValueException, ParseException{
+    public static void CreateReservation(Scanner s,int ind) {
     try{
    System.out.println("Enter Guest ID : ");
    int Gid=s.nextInt();
@@ -407,10 +425,16 @@ public class App {
     }
     catch(InputMismatchException e){
      System.out.println("Incompatible type Entered and Reservation couldn't be made");
-     return;
     }
+    catch(InvalidAttributeValueException e){
+        System.out.println("Reservation couldn't be made!   Reason: "+e.getMessage());
+    }
+    catch(ParseException e){
+        System.out.println("Reservation couldn't be made!   Reason: "+e.getMessage());
+    }
+
 }
-    public static void CancelReservation(Scanner s,int ind) throws InvalidAttributeValueException{
+    public static void CancelReservation(Scanner s,int ind) {
    System.out.println("Enter Reservation number to be deleted : ");
    try {
      Receptionist.getList().get(ind).cancelReservation(s.nextInt());
@@ -435,23 +459,18 @@ public class App {
    Category c;
    for(int i=0;i<G.size();i++){
     if(n==G.get(i).getName()){
-        if(categ.equalsIgnoreCase("Standard")){
-            c= Category.Standard;
-       Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     } 
-     else if(categ.equalsIgnoreCase("Private")){
-        c=Category.Private;
-        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     }
-     else if(categ.equalsIgnoreCase("Family")){
-        c=Category.Family;
-        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     }
-     else if(categ.equalsIgnoreCase("Couples")){
-        c=Category.Couples;
-        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     }
-     }
+        if(categ.equalsIgnoreCase("Standard"))
+            G.get(i).setPreferedCategory(0);
+     
+        else if(categ.equalsIgnoreCase("Private"))
+           G.get(i).setPreferedCategory(3);
+     
+        else if(categ.equalsIgnoreCase("Family"))
+           G.get(i).setPreferedCategory(2);
+     
+        else if(categ.equalsIgnoreCase("Couples"))
+           G.get(i).setPreferedCategory(1);
+        }
      }
      return;
    }   
@@ -460,15 +479,9 @@ public class App {
        switch(takeMenuIndex(s, 1, 3)){
            case 1: AddGuest(s);
            case 2: 
-           case 3: try {
+           case 3: 
                         main(null);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }   
-                    catch (InvalidAttributeValueException e) {
-                        e.printStackTrace();
-                    }
-        }
+       }
     }
     public static void AddGuest(Scanner s){
        String username,pass ,Name,Address,DateOfBirth,PhoneNum,Email;

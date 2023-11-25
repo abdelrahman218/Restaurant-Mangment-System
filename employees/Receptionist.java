@@ -14,8 +14,6 @@ import java.util.Collections;
 import system.Meal;
 import system.Reservation;
 import user.Guest;
-import system.Category;
-
 //Exeception Classes
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
@@ -25,10 +23,12 @@ import javax.management.InvalidAttributeValueException;
 public class Receptionist extends Person implements Comparable<Receptionist>,Serializable{
     private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
+    private static int idGenerator=0;
     private double reservationsCount;
     public Receptionist(String name,String address,String dateOfBirth,String Phone,String Email,String UserName,String Password){
         super(name,address,dateOfBirth,Phone,Email,UserName,Password);
         receptionists.add(this);
+        Id=++idGenerator;
     }
     
     //Reservation Related functions
@@ -73,12 +73,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         }
         throw new InvalidAttributeValueException("Reservation not found.");
     }
-    
-    //Guest Related function
-    public void selectGuestPref(Guest keyGuest,Category preferred){
-        keyGuest.setPreferedCategory(preferred.ordinal());
-    }
-    
+
     //Getter functions
     public  static ArrayList<Receptionist> getList() {
         return receptionists;

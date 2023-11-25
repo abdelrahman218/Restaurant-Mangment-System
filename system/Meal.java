@@ -26,6 +26,7 @@ public class Meal implements Serializable {
         this.Name = Name;
         this.Price = Price;
         this.noOfOrders = 0;
+        Meals.add(this);
     }
     public int getMeal_ID() {
         return meal_ID;

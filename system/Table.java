@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalTime;
 public class Table implements Serializable {
-    private static ArrayList<Table> Tables;
+    private static ArrayList<Table> Tables=new ArrayList<Table>();
     private static int idGenerator=0;
     private int tableNum;
     private double Revenue;
@@ -22,6 +22,7 @@ public class Table implements Serializable {
         Cost = 100;
         this.NoOfSeats=4;
         this.Categ=Category.Standard;
+        Tables.add(this);
     }
     public Table(int NoOfSeats){
         Revenue =0;
@@ -29,6 +30,7 @@ public class Table implements Serializable {
         Cost = 100;
         this.NoOfSeats=NoOfSeats;
         this.Categ=Category.Standard;
+        Tables.add(this);
     }
     public Table(int NoOfSeats, Category data){
         Revenue =0;
@@ -36,6 +38,7 @@ public class Table implements Serializable {
         Cost = 100;
         this.NoOfSeats=NoOfSeats;
         this.Categ=data;
+        Tables.add(this);
     }
     public static Table getTable(int tableNum){return Tables.get(tableNum);}
     public int getTableID(){return tableNum;}
@@ -52,8 +55,7 @@ public class Table implements Serializable {
             }
         }
         return Tables.get(max);
-    }
-    
+    }  
     public static Table highestRevenue(Date StartDate,Date EndDate){
          int max=0;
         for(int i=1;i<50;i++){
@@ -90,19 +92,19 @@ public class Table implements Serializable {
                 count++;
         return count;
     }
-    public static void saveInFile(){
+    public static void saveRecords(){
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("TablesData.dat"));
-                out.writeObject(Table.Tables);
+                out.writeObject(Tables);
             out.close();
             } catch (IOException e) {
             System.out.println(e);
             }
     }
-    public static void readFromFile(){
+    public static void getRecord(){
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("TablesData.dat"));
-            Table.Tables=(ArrayList<Table>)in.readObject();
+            Tables=(ArrayList<Table>)in.readObject();
             in.close();
         }catch (ClassNotFoundException e) {
             System.out.println(e);

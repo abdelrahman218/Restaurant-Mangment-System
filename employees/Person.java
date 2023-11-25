@@ -1,8 +1,6 @@
 package employees;
 
 public abstract class Person{
-    private int ID;
-    private static int idGenerator=0;
     private String Name;
     private String UserName;
     private String Password;
@@ -10,6 +8,7 @@ public abstract class Person{
     private String DateOfBirth;
     private String PhoneNum;
     private String Email;
+    protected int Id;
     public Person(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password) {
         setName(Name);
         setAddress(Address);
@@ -18,7 +17,6 @@ public abstract class Person{
         setEmail(Email);
         setUserName(UserName);
         setPassword(Password);
-        ID=++idGenerator;
     }
     public void setName(String Name) {
         this.Name = Name;
@@ -57,7 +55,7 @@ public abstract class Person{
         return Email;
     }
     public int getId(){
-        return ID;
+        return Id;
     }
     public String getUserName() {
         return UserName;

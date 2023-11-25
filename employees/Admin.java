@@ -11,51 +11,38 @@ import java.io.ObjectInputStream;
 import user.Guest;
 public class Admin extends Person implements Comparable<Admin>,Serializable  {
 private static ArrayList<Admin>Admins=new ArrayList<>();
+private static int idGenerator=0;
 @Override
-    public int compareTo(Admin right){
+public int compareTo(Admin right){
      return 0;
     }
 public static ArrayList<Admin> getAdmins(){
     return Admins;
 }
 public static void saveRecords(){
-    try{
-    FileOutputStream f=new FileOutputStream("Admin archive.dat");
-    ObjectOutputStream out=new ObjectOutputStream(f);
-    out.writeInt(Admins.size());
-            int i=0;
-            while(i<Admins.size()){
-                out.writeObject(Admins.get(i));
-                i++;
-            }    
-            out.close();
-            f.close();
-    }
-    catch(IOException e){
-        System.out.println("Error happened writing in the file: Admin archive");
-    }
-
+    try {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("GuestsData.dat"));
+            out.writeObject(Admins);
+        out.close();
+        } catch (IOException e) {
+        System.out.println(e);
+        }
 }
 public static void getRecord(){
-    try{
-        FileInputStream f=new FileInputStream("Admin archive.dat");
-        ObjectInputStream in=new ObjectInputStream(f);
-        int size=in.readInt();
-        while(size>0){
-            Admins.add((Admin)in.readObject());
-            size--;
-        }    
+    try {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream("GuestsData.dat"));
+        Admins=(ArrayList<Admin>)in.readObject();
         in.close();
-        f.close();
-    }catch(IOException e){
-        System.out.println("Error happened reading the file: Admin archive");
-    }catch(ClassNotFoundException e){
-        System.out.println("Error in class Admin reading compatiability");
+    }catch (ClassNotFoundException e) {
+        System.out.println(e);
+    } catch (IOException e) {
+        System.out.println(e);
     }
-}
+} 
 public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
     super(Name,Address,DateOfBirth,PhoneNum,Email,UserName, Password);
     Admins.add(this);
+    Id=++idGenerator;
 }
 public static void addTable(int numofseats){
  Table table=new Table(numofseats);
