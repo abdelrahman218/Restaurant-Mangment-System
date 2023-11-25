@@ -10,6 +10,9 @@ import java.io.ObjectInputStream;
 import user.Guest;
 public class Admin extends Person  {
 private static ArrayList<Admin>Admins=new ArrayList<>();
+public static ArrayList<Admin> getAdmins(){
+    return Admins;
+}
 public static void saveRecords(){
     try{
     FileOutputStream f=new FileOutputStream("Admin archive.dat");
@@ -97,9 +100,11 @@ public String searchMenu(int menuId,Date Start,Date End){
  list+="This menu's most ordered meal is : ";
  list+=Meal.getList().get(menuId).mostOrderedMeal(Start, End);
 return list;
-
 }
 public ArrayList<Meal> searchMenu(int menuId){return Menu.getlist().get(menuId).getMeals();}
+public void createMeal(int Menu_ID, int meal_ID, String Name, double Price,int noOfOrders){
+Meal.getList().add(new Meal(Menu_ID, meal_ID, Name, Price, noOfOrders));
+}
 public MenuCategory viewMenuReportsCateg(int menuId){
 ArrayList<Menu>Menues=Menu.getlist();
 return Menues.get(menuId).Categ;
@@ -231,6 +236,5 @@ public static Admin search(String userName){
     }
     return null;
 }
-
 }
 
