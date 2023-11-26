@@ -1,5 +1,4 @@
 package system;
-import system.MenuCategory;
 import java.util.ArrayList;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,18 +8,20 @@ import java.io.IOException;
 import java.io.Serializable;
 public class Menu implements Serializable {
     private static ArrayList<Menu> Menues = new ArrayList<Menu>();
-    public MenuCategory Categ;
+    private MenuCategory Categ;
     private int Menu_ID;
     public Menu(MenuCategory data) {
         this.Categ = data;
+        Menues.add(this);
     }
     public Menu(){
         this.Categ=MenuCategory.Breakfast;
+        Menues.add(this);
     }
     public static ArrayList<Menu> getlist() {
         return Menues;
     }
-    public void ReadFromMenuFile() {
+    public static void ReadFromMenuFile() {
         try {
             FileInputStream i = new FileInputStream("Menu.dat");
             ObjectInputStream o = new ObjectInputStream(i);
@@ -33,7 +34,7 @@ public class Menu implements Serializable {
         System.out.println(e);
         }
     }
-    public void WriteInMenuFile() {
+    public static void WriteInMenuFile() {
         try {
             FileOutputStream i = new FileOutputStream("Menu.dat");
             ObjectOutputStream o = new ObjectOutputStream(i);
@@ -52,5 +53,15 @@ public class Menu implements Serializable {
             }
         }
         return Meals;
+    }
+    public MenuCategory getCateg() {
+        return Categ;
+    }
+    public void setCateg(MenuCategory categ) {
+        Categ = categ;
+    }
+    @Override
+    public String toString(){
+        return Categ.toString();
     }
 }

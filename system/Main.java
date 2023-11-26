@@ -7,6 +7,19 @@ import java.util.InputMismatchException;
 import Employees.*;
 import user.Guest;
 public class Main {
+    public static void main(String[] args){
+        begin();
+        Scanner s= new Scanner(System.in);
+        drawMenu(new String[]{"Admins","Receptionist","Guest","Exit"});
+        switch(takeMenuIndex(s, 1, 4)){
+            case 1:menuAdmin(s);
+            case 2:menuRec(s);
+            case 3:menuGuest(s);
+            case 4:s.close(); exit(0);
+        }   
+    }
+
+    //Menu Design
     private static void drawMenu(String[] list){
         System.out.println("-------------------------------------------");
         for(int i=1;i<=list.length;i++){
@@ -22,6 +35,8 @@ public class Main {
         }
         System.out.println("-------------------------------------------");
     }
+    
+    //Menu Functionality
     private static int takeMenuIndex(Scanner take,int minValue,int maxValue){
         int x=0;
         boolean check=true;
@@ -43,76 +58,108 @@ public class Main {
         }
         return x;
     }
-    public static void main(String[] args) throws InvalidAttributeValueException, ParseException{
-        Scanner s= new Scanner(System.in);
-        new Receptionist("Abdo", "1211 Paris", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "A", "A");
-        new Guest("Abdo", "1211 Paris", "21-8-2004", "01211665660", "abdelrahman.alkot2182004@gmail.com", "C", "C");
-        new Guest("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","B","B");
-        new Admin("John","13 NewYork","8-5-1962","01200588939","johnElbahrawy@gmail.com","A","A");
-        drawMenu(new String[]{"Admins","Receptionist","Guest","Exit"});
-        switch(takeMenuIndex(s, 1, 4)){
-            case 1:menuAdmin(s);
-            case 2:menuRec(s);
-            case 3:menuGuest(s);
-            case 4:System.exit(0);
+    
+    //Saving and Retrieving Files
+    private static void begin(){
+        Guest.getRecord();
+        Table.getRecord();
+        Receptionist.getRecord();
+        Admin.getRecord();
+        Menu.ReadFromMenuFile();
+        Meal.ReadFromFile();
+    }
+    private static void exit(int exitCode){
+        Guest.saveRecords();
+        Table.saveRecords();
+        Receptionist.saveRecords();
+        Admin.saveRecords();
+        Menu.WriteInMenuFile();
+        Meal.WriteInFile();
+        System.exit(exitCode);
+    }
+ 
+    //Admin Part
+    private static void menuAdmin(Scanner s){
+        boolean check=true;
+        Admin current=null;
+        while (check) {
+            System.out.print("Enter your username : ");
+            String user=s.next();
+            int i=0;
+            for(;i<Admin.getAdmins().size();i++){
+                if(Admin.getAdmins().get(i).getUserName().equals(user)){
+                    check=false;
+                    current = Admin.getAdmins().get(i);
+                    break;
+                }
+            }
+            if(check==true){
+                System.out.println("UserName Not Found,Try again");
+            }
         }
-        s.close();
-    }   
-    public static void menuAdmin(Scanner s)throws InvalidAttributeValueException, ParseException{
-    boolean check=true;
-    Admin.getRecord();
-         while (check) {
-         System.out.print("Enter your username : ");
-         String user=s.next();
-         System.out.println();
-         int i=0;
-         for(;i<Admin.getAdmins().size();i++){
-         if(Admin.getAdmins().get(i).getUserName().equals(user)){
-         check=false;
-         break;
-         }
-         }
-         if(check==false){
-         System.out.println("UserName Found");
-         }
-         else{
-         System.out.println("UserName Not Found,Try again");
-        }
-         }
-         while(true){
-         System.out.println("Enter password :  ");
-         String notdata=s.next();
-         for(int i=0;i<Admin.getAdmins().size();i++){
-         if(Admin.getAdmins().get(i).checkpassword(notdata)){
-            System.out.println("Welcome Mr/Mrs "+Admin.getAdmins().get(i).getName());
-            Admindetails(s);
-          }
-         else{
-            System.out.println("Incorrect Password");
-             }
-         }
-         }
-}
-    public static void Admindetails(Scanner s) throws InvalidAttributeValueException, ParseException{
-        drawMenu(new String[]{"Guest Section","Receptionist Section","Menu Section","Table Section","back to main menu"});
-        switch(takeMenuIndex(s, 1, 5)){
-            case 1: GuestSection(s);
-            case 2: ReceptionistSection(s);
-            case 3: MenuSection(s);
-            case 4: TableSection(s);
-            case 5: main(null);
+        while(true){
+            System.out.println("Enter password :  ");
+            String notdata=s.next();
+                if(current.checkpassword(notdata)){
+                    System.out.println("Welcome Mr/Mrs "+current.getName());
+                    Admindetails(s,current);
+                }
+                else{
+                    System.out.println("Incorrect Password");
+                }
         }
     }
-    public static void GuestSection(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void Admindetails(Scanner s,Admin current) {
+        drawMenu(new String[]{"Admin Section","Guest Section","Receptionist Section","Menu Section","Table Section","back to main menu"});
+        switch(takeMenuIndex(s, 1, 6)){
+            case 1: AdminSection(s,current);
+            case 2: GuestSection(s,current);
+            case 3: ReceptionistSection(s,current);
+            case 4: MenuSection(s,current);
+            case 5: TableSection(s,current);
+            case 6: main(null);
+        }
+    }
+    private static void AdminSection(Scanner s,Admin current){
         drawMenu(new String[]{"View guest","Edit guest", "Remove guest","back"});
         switch(takeMenuIndex(s, 1, 3)){
-            case 1:{viewGuest(s);    GuestSection(s);}
-            case 2: {editGuest(s);  GuestSection(s);}
-            case 3: {removeGuest(s);    GuestSection(s);}
-            case 4: Admindetails(s);
+            case 1:{viewAdmin(s,current);    AdminSection(s, current);}
+            case 2: {editAdmin(s,current);  AdminSection(s,current);}
+            case 3: {removeAdmin(s,current);    AdminSection(s,current);}
+            case 4: Admindetails(s,current);
         }
     }
-    public static void viewGuest(Scanner s) throws InvalidAttributeValueException,ParseException{
+    private static void viewAdmin(Scanner s, Admin current) {
+            viewData(new String[]{"Name: "+current.getName(),"Address : "+current.getAddress(),
+            "Date of birth : "+current.getDateOfBirth(), "Phone Number : "+current.getPhoneNum(),
+            "Email : "+current.getEmail(),"Username : "+current.getUserName(),"Password : "+current.getPassword()});
+    }
+    private static void editAdmin(Scanner s, Admin current) {
+        drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Back"});
+            switch(takeMenuIndex(s, 1, 7)){
+                case 1:current.setName(s.next()); AdminSection(s, current);
+                case 2:current.setAddress(s.next());  AdminSection(s,current);
+                case 3:current.setDateOfBirth(s.next());  AdminSection(s,current);
+                case 4:current.setPhoneNum(s.next()); AdminSection(s,current);
+                case 5:current.setEmail(s.next());    AdminSection(s,current);
+                case 6:current.setUserName(s.next()); AdminSection(s,current);
+                case 7:current.setPassword(s.next()); AdminSection(s,current);
+                case 8:AdminSection(s,current);
+            }
+    }
+    private static void removeAdmin(Scanner s, Admin current) {
+        Admin.getAdmins().remove(current);
+    }
+    private static void GuestSection(Scanner s,Admin current) {
+        drawMenu(new String[]{"View guest","Edit guest", "Remove guest","back"});
+        switch(takeMenuIndex(s, 1, 3)){
+            case 1:{viewGuest(s);    GuestSection(s,current);}
+            case 2: {editGuest(s,current);  GuestSection(s,current);}
+            case 3: {removeGuest(s,current);    GuestSection(s,current);}
+            case 4: Admindetails(s,current);
+        }
+    }
+    private static void viewGuest(Scanner s) {
         System.out.print("Enter the Guest ID : ");
         try {
             Guest x=Guest.getGuest(s.nextInt());
@@ -121,124 +168,123 @@ public class Main {
             System.out.println("Guest not found!");
         }   
     }
-    public static void editGuest(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void editGuest(Scanner s,Admin current) {
         System.out.print("Enter the Guest ID : ");
         try {
             Guest x= Guest.getGuest(s.nextInt());
-            drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Password","Back"});
-            switch(takeMenuIndex(s, 1, 8)){
-                case 1:x.setName(s.next());
-                case 2:x.setAddress(s.nextLine());
-                case 3:x.setDateOfBirth(s.nextLine());
-                case 4:x.setPhoneNum(s.nextLine());
-                case 5:x.setEmail(s.nextLine());
-                case 6:x.setUserName(s.nextLine());
-                case 7:x.setPassword(s.nextLine());
-                case 8:GuestSection(s);
+            drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Back"});
+            switch(takeMenuIndex(s, 1, 7)){
+                case 1:x.setName(s.next()); GuestSection(s,current);
+                case 2:x.setAddress(s.next());  GuestSection(s,current);
+                case 3:x.setDateOfBirth(s.next());  GuestSection(s,current);
+                case 4:x.setPhoneNum(s.next()); GuestSection(s,current);
+                case 5:x.setEmail(s.next());    GuestSection(s,current);
+                case 6:x.setUserName(s.next()); GuestSection(s,current);
+                case 7:x.setPassword(s.next()); GuestSection(s,current);
+                case 8:GuestSection(s,current);
             }
         } catch (NullPointerException e) {
             System.out.println("Guest not found!");
-            GuestSection(s);
+            GuestSection(s,current);
         }
     }
-    public static void removeGuest(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void removeGuest(Scanner s,Admin current) {
         System.out.print("Enter the Guest ID : ");
         try {
              Guest.getList().remove(Guest.getGuest(s.nextInt()));           
         } catch (NullPointerException e) {
             System.out.println("Guest not found!");
-            GuestSection(s);
+            GuestSection(s,current);
         } 
     }
-    public static void ReceptionistSection(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void ReceptionistSection(Scanner s,Admin current) {
         drawMenu(new String[]{"View receptionist","Edit receptionist", "Remove receptionist","back"});
-        switch(takeMenuIndex(s, 1, 3)){
-            case 1:{viewReceptionist(s);    ReceptionistSection(s);}
-            case 2: {editReceptionist(s);  ReceptionistSection(s);}
-            case 3: {removeReceptionist(s);    ReceptionistSection(s);}
-            case 4: Admindetails(s);
+        switch(takeMenuIndex(s, 1, 4)){
+            case 1:{viewReceptionist(s);    ReceptionistSection(s,current);}
+            case 2: {editReceptionist(s,current);  ReceptionistSection(s,current);}
+            case 3: {removeReceptionist(s,current);    ReceptionistSection(s,current);}
+            case 4: Admindetails(s,current);
         }
     }
-    public static void viewReceptionist(Scanner s){
+    private static void viewReceptionist(Scanner s){
         System.out.print("Enter the Receptionist ID : ");
         try {
-            Receptionist.search(s.nextInt()).toString();
+            System.out.println(Receptionist.search(s.nextInt()).toString());
         } catch (NullPointerException e) {
             System.out.println("Receptionist not found!");
         }
     }
-    public static void editReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void editReceptionist(Scanner s,Admin current) {
        System.out.print("Enter the Receptionist ID : ");
         try {
             Receptionist x= Receptionist.search(s.nextInt());
             drawMenu(new String[]{"Name","Address","Date of birth","Phone Number","Email","UserName","Password","Back"});
             switch(takeMenuIndex(s, 1, 8)){
-                case 1:x.setName(s.nextLine());
-                case 2:x.setAddress(s.nextLine());
-                case 3:x.setDateOfBirth(s.nextLine());
-                case 4:x.setPhoneNum(s.nextLine());
-                case 5:x.setEmail(s.nextLine());
-                case 6:x.setUserName(s.nextLine());
-                case 7:x.setPassword(s.nextLine());
-                case 8:ReceptionistSection(s);
+                case 1:x.setName(s.next()); ReceptionistSection(s,current);
+                case 2:x.setAddress(s.next());  ReceptionistSection(s,current);
+                case 3:x.setDateOfBirth(s.next());  ReceptionistSection(s,current);
+                case 4:x.setPhoneNum(s.next()); ReceptionistSection(s,current);
+                case 5:x.setEmail(s.next());    ReceptionistSection(s,current);
+                case 6:x.setUserName(s.next()); ReceptionistSection(s,current);
+                case 7:x.setPassword(s.next()); ReceptionistSection(s,current);
+                case 8:ReceptionistSection(s,current);  
             }
         } catch (NullPointerException e) {
             System.out.println("Guest not found!"); 
-            GuestSection(s);
+            GuestSection(s,current);
         } 
     }
-    public static void removeReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void removeReceptionist(Scanner s,Admin current) {
         System.out.print("Enter the Receptionist ID : ");
         try {
              Receptionist.getList().remove(Receptionist.search(s.nextInt()));           
         } catch (NullPointerException e) {
             System.out.println("Guest not found!");
-            ReceptionistSection(s);
+            ReceptionistSection(s,current);
         }
     }
-    public static void MenuSection(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void MenuSection(Scanner s,Admin current) {
     drawMenu(new String[]{"View Menu","Edit Menu","Add Menu","Add Meal","Back"});
     switch (takeMenuIndex(s, 1, 5)) {
-       case 1:{viewMenu(s); MenuSection(s);}
-       case 2:{EditMenu(s); MenuSection(s);}
-       case 3:{AddMenu(s);  MenuSection(s);}
-       case 4:{Addmeal(s);  MenuSection(s);}
-       case 5:Admindetails(s);
+       case 1:{viewMenu(s); MenuSection(s,current);}
+       case 2:{EditMenu(s,current); MenuSection(s,current);}
+       case 3:{AddMenu(s);  MenuSection(s,current);}
+       case 4:{Addmeal(s);  MenuSection(s,current);}
+       case 5:Admindetails(s,current);
     }
    }
-    public static void viewMenu(Scanner s){
+    private static void viewMenu(Scanner s){
     System.out.print("Enter Menu Id : ");
-    Admin.viewMenuReportsCateg(s.nextInt());
+    int x=s.nextInt();
+    while(x<1||x>Menu.getlist().size()){
+        System.out.println("Invalid Input! (Enter an Integer between 1 -> "+Menu.getlist().size()+" )");
+        x=s.nextInt();
+    }
+    System.out.println(Menu.getlist().get(x).toString());
    } 
-    public static void EditMenu(Scanner s){
+    private static void EditMenu(Scanner s,Admin current){
    System.out.println("Enter Menu Id : ");
    int id=s.nextInt();
-   System.out.println("Enter New Category : ");
-   String Name=s.next();
-   if(Name.equalsIgnoreCase("Breakfast")){
-       MenuCategory m=MenuCategory.Breakfast;
-       Admin.getAdmins().get(0).editMenu(id, m);
-   }else if(Name.equalsIgnoreCase("Lunch")){
-       MenuCategory m=MenuCategory.Lunch;
-       Menu.getlist().add(new Menu(m));
-   }else if(Name.equalsIgnoreCase("Dinner")){
-       MenuCategory m=MenuCategory.Dinner;
-       Admin.getAdmins().get(0).editMenu(id, m);
-   }else if(Name.equalsIgnoreCase("Beverages")){
-       MenuCategory m=MenuCategory.Beverages;
-       Admin.getAdmins().get(0).editMenu(id, m);
-   }else if(Name.equalsIgnoreCase("Dessert")){
-       MenuCategory m=MenuCategory.Dessert;
-       Admin.getAdmins().get(0).editMenu(id, m);
-   }
-
+   while(id<1||id>Menu.getlist().size()){
+        System.out.println("Invalid Input! (Enter an Integer between 1 -> "+Menu.getlist().size()+" )");
+        id=s.nextInt();
+    }
+    Menu x=Menu.getlist().get(id);
+   drawMenu(new String[]{"Breakfast","Lunch","Dinner","Beverages","Dessert","Back"});
+        switch(takeMenuIndex(s, 1, 6)){
+            case 1:x.setCateg(MenuCategory.Breakfast);
+            case 2:x.setCateg(MenuCategory.Lunch);
+            case 3:x.setCateg(MenuCategory.Dinner);
+            case 4:x.setCateg(MenuCategory.Beverages);
+            case 5:x.setCateg(MenuCategory.Dessert);
+            case 6:editTable(s,current);
+        }
    } 
-    public static void AddMenu(Scanner s){
-       drawMenu(new String[]{"Breakfast","Lunch","Dinner","Beverages","Dessert"});
-       int x=s.nextInt();
-       Admin.addMenu(x);
+    private static void AddMenu(Scanner s){
+       drawMenu(new String[]{"Breakfast","Lunch","Dinner","Beverages","Dessert","Back"});
+       Admin.addMenu(takeMenuIndex(s, 1, 6));
    }
-    public static void Addmeal(Scanner s){
+    private static void Addmeal(Scanner s){
     System.out.println("Enter Menu id : ");
     int menu=s.nextInt();
     System.out.println("Enter Meal id : ");
@@ -249,132 +295,124 @@ public class Main {
     double price = s.nextDouble();
     Meal.getList().add(new Meal(menu, meal, name, price));
    }
-    public static void TableSection(Scanner s) throws InvalidAttributeValueException, ParseException {
+    private static void TableSection(Scanner s,Admin current)  {
         drawMenu(new String[]{"View table","Edit table", "Remove table","back"});
         switch(takeMenuIndex(s, 1, 3)){
-            case 1:{viewTable(s);    TableSection(s);}
-            case 2: {editTable(s);  TableSection(s);}
-            case 3: {removeTable(s);    TableSection(s);}
-            case 4: Admindetails(s);
+            case 1:{viewTable(s);    TableSection(s,current);}
+            case 2: {editTable(s,current);  TableSection(s,current);}
+            case 3: {removeTable(s,current);    TableSection(s,current);}
+            case 4: Admindetails(s,current);
         }
     }
-    public static void viewTable(Scanner s){
+    private static void viewTable(Scanner s){
         System.out.print("Enter the Table Number : ");
         try {
-            Table.getTable(s.nextInt()).toString();
+            System.out.println(Table.getTable(s.nextInt()).toString());
         } catch (NullPointerException e) {
             System.out.println("Table not found!");
         }   
     }
-    public static void editTable(Scanner s) throws InvalidAttributeValueException, ParseException{
+    private static void editTable(Scanner s,Admin current) {
         System.out.print("Enter the table number : ");
         try {
             Table x=Table.getTable(s.nextInt());
             drawMenu(new String[]{"Number of seats","Cost","Category","Back"});
             switch(takeMenuIndex(s, 1, 4)){
-                case 1:x.setNoOfSeats(s.nextInt());
-                case 2:x.setCost(s.nextDouble());
-                case 3:editCategory(s,x,s.next());
-                case 4:GuestSection(s);
+                case 1:x.setNoOfSeats(s.nextInt()); TableSection(s,current);
+                case 2:x.setCost(s.nextDouble());   TableSection(s,current);
+                case 3:editCategory(s,x,s.next(),current);  TableSection(s,current);
+                case 4:TableSection(s,current);
             }
         } catch (NullPointerException e) {
-            System.out.println("Guest not found!"); 
+            System.out.println("Table not found!"); 
         } 
     }
-    public static void editCategory(Scanner s,Table x,String categ) throws InvalidAttributeValueException, ParseException{
+    private static void editCategory(Scanner s,Table x,String categ,Admin current) {
         drawMenu(new String[]{"Standard","Couples","Family","Private","Back"});
         switch(takeMenuIndex(s, 1, 4)){
             case 1:x.setCateg(Category.Standard);
             case 2:x.setCateg(Category.Couples);
             case 3:x.setCateg(Category.Family);
             case 4:x.setCateg(Category.Private);
-            case 5:editTable(s);
+            case 5:editTable(s,current);
         }
     }
-    public static void removeTable(Scanner s) throws InvalidAttributeValueException, ParseException {
+    private static void removeTable(Scanner s,Admin current)  {
         System.out.print("Enter the Table Number : ");
         try {
              Table.getlist().remove(Table.getTable(s.nextInt()));           
         } catch (NullPointerException e) {
             System.out.println("Table not found!"); 
-            GuestSection(s);
+            GuestSection(s,current);
         }
     }
-    public static void menuRec(Scanner s) throws InvalidAttributeValueException, ParseException{
-        drawMenu(new String[]{"Log in","Exit"});
+
+    //Receptionist Part
+    public static void menuRec(Scanner s) {
+        drawMenu(new String[]{"Log in","Back"});
         switch(takeMenuIndex(s, 1, 2)){
             case 1:
             loginReceptionist(s);
             break;
             case 2:
-            System.exit(0);
+            main(null);
             break;
         }   
     }
-    public static void loginReceptionist(Scanner s) throws InvalidAttributeValueException, ParseException{
-         boolean check=true;
-         while (check) {
+    public static void loginReceptionist(Scanner s) {
+        boolean check=true;
+        Receptionist current=null;
+        while (check) {
          System.out.print("Enter your username : ");
          String user=s.next();
          System.out.println();
          for(int i=0;i<Receptionist.getList().size();i++){
          if(Receptionist.getList().get(i).getUserName().equals(user)){
+         current=Receptionist.getList().get(i);
          check=false;
          }
          }
-         if(check==false){
-         System.out.println("UserName Found");
-         }
-         else{
+         if(check==true){
          System.out.println("UserName Not Found,Try again");
-        }
+         }
          }
          while(true){
          System.out.println("Enter password :  ");
          String notdata=s.next();
-         for(int i=0;i<Receptionist.getList().size();i++){
-         if(Receptionist.getList().get(i).checkpassword(notdata)){
-            System.out.println("Welcome Mr/Mrs "+Receptionist.getList().get(i).getName());
-            Receptionistdetails(s, Receptionist.getList().get(i).getName());
+         if(current.checkpassword(notdata)){
+            System.out.println("Welcome Mr/Mrs "+current.getName());
+            Receptionistdetails(s, current);
+            break;
           }
          else{
             System.out.println("Incorrect Password");
-             }
-         }
-         }
-    }
-    public static void Receptionistdetails(Scanner s,String Name) throws InvalidAttributeValueException, ParseException{
-    Receptionist.getRecord();
-    ArrayList<Receptionist> Re=Receptionist.getList();   
-    int index=0;
-    for(int i=0;i<Re.size();i++){
-        if(Re.get(i).getName().equals(Name)){
-            index=i;
+            }
         }
-   }
+    }
+    public static void Receptionistdetails(Scanner s,Receptionist current) {
    drawMenu(new String[]{"Create Reservation","Cancel Reservation","Select Guest Category","Get Revenue","Get Number of Reservations done","Exit"});
    switch (takeMenuIndex(s, 1, 6)) {
     case 1:
-     CreateReservation(s,index); 
+     CreateReservation(s,current); 
      break; 
      case 2:
-     CancelReservation(s,index);
+     CancelReservation(s,current);
      break;
      case 3:
-     selecguestcateg(s,index);
+     selecguestcateg(s);
      break;
      case 4:
-     System.out.println( "The Revenue is : "+Receptionist.getList().get(index).getRevenue());
+     System.out.println( "The Revenue is : "+current.getRevenue());
      break;
      case 5:
-     System.out.println("Number of Reservations are : "+Receptionist.getList().get(index).getreservationsCount());
+     System.out.println("Number of Reservations are : "+current.getreservationsCount());
      break;
      case 6:
-     Receptionist.saveRecords();
+     main(null);
      return;
     }
    }
-    public static void CreateReservation(Scanner s,int ind) throws InvalidAttributeValueException, ParseException{
+    public static void CreateReservation(Scanner s,Receptionist current) {
     try{
    System.out.println("Enter Guest ID : ");
    int Gid=s.nextInt();
@@ -395,32 +433,38 @@ public class Main {
    }
    ArrayList<Meal>Me=new ArrayList<>();
    while(true){
-    int Mealno=s.nextInt();
-    Me.add(M.get(Mealno));
+    int Mealno=takeMenuIndex(s, 1, M.size());
+    Me.add(M.get(Mealno-1));
     System.out.println("Anything Else?");
     String ans=s.next();
     if(ans.equalsIgnoreCase("no")){
      break;
     }
    }
-    Receptionist.getList().get(ind).createReservation(Gid, Tid, NoGuests, Date, Start, End, Me);;
+    current.createReservation(Gid, Tid, NoGuests, Date, Start, End, Me);
     }
     catch(InputMismatchException e){
      System.out.println("Incompatible type Entered and Reservation couldn't be made");
-     return;
     }
+    catch(InvalidAttributeValueException e){
+        System.out.println("Reservation couldn't be made!   Reason: "+e.getMessage());
+    }
+    catch(ParseException e){
+        System.out.println("Reservation couldn't be made!   Reason: "+e.getMessage());
+    }
+
 }
-    public static void CancelReservation(Scanner s,int ind) throws InvalidAttributeValueException{
+    public static void CancelReservation(Scanner s,Receptionist current) {
    System.out.println("Enter Reservation number to be deleted : ");
    try {
-     Receptionist.getList().get(ind).cancelReservation(s.nextInt());
+     current.cancelReservation(s.nextInt());
    } catch (InvalidAttributeValueException e) {
      System.out.println("Reservation couldn't be found");
      return;
    }
   
 }
-    public static void selecguestcateg(Scanner s,int ind){
+    public static void selecguestcateg(Scanner s){
    System.out.println("Enter guest Name : ");
    String n=s.next();
    String[] list=new String[]{"Standard","Couples","Family","Private"};
@@ -432,44 +476,39 @@ public class Main {
    System.out.println("Enter The Category : ");
    String categ=s.next();
    ArrayList<Guest>G=Guest.getList();
-   Category c;
    for(int i=0;i<G.size();i++){
     if(n==G.get(i).getName()){
-        if(categ.equalsIgnoreCase("Standard")){
-            c= Category.Standard;
-       Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     } 
-     else if(categ.equalsIgnoreCase("Private")){
-        c=Category.Private;
-        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     }
-     else if(categ.equalsIgnoreCase("Family")){
-        c=Category.Family;
-        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     }
-     else if(categ.equalsIgnoreCase("Couples")){
-        c=Category.Couples;
-        Receptionist.getList().get(ind).selectGuestPref(G.get(ind), c);
-     }
-     }
+        if(categ.equalsIgnoreCase("Standard"))
+            G.get(i).setPreferedCategory(0);
+     
+        else if(categ.equalsIgnoreCase("Private"))
+           G.get(i).setPreferedCategory(3);
+     
+        else if(categ.equalsIgnoreCase("Family"))
+           G.get(i).setPreferedCategory(2);
+     
+        else if(categ.equalsIgnoreCase("Couples"))
+           G.get(i).setPreferedCategory(1);
+        }
      }
      return;
-   }   
-    public static void menuGuest(Scanner s) {
-        drawMenu(new String[]{"Sign up","Log in","Back"});
-       switch(takeMenuIndex(s, 1, 3)){
-           case 1: AddGuest(s);
-           case 2: 
-           case 3: try {
-                        main(null);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }   
-                    catch (InvalidAttributeValueException e) {
-                        e.printStackTrace();
-                    }
-        }
     }
+    
+    //Guest Part
+    public static void menuGuest(Scanner s){
+    drawMenu(new String[]{"Sign up", "Log in", "Back"});
+    switch (takeMenuIndex(s, 1, 3)) {
+        case 1:
+       AddGuest(s);
+            break;
+        case 2:
+        loginGuest(s); 
+        break;
+        case 3:
+        main(null);
+        break;
+    }
+}
     public static void AddGuest(Scanner s){
        String username,pass ,Name,Address,DateOfBirth,PhoneNum,Email;
        System.out.println("Enter UserName: ");
@@ -487,5 +526,70 @@ public class Main {
        System.out.println("Enter Email: ");
        Email=s.next();
        new Guest(Name, Address, DateOfBirth, PhoneNum, Email, username, pass);
+    }
+    public static void loginGuest(Scanner s){
+    boolean check = false;
+    Guest current=null;
+    while (!check) {
+        System.out.print("Enter your username : ");
+        String user = s.next();
+        System.out.println();
+        System.out.print("Enter your password : ");
+        String pass = s.next();
+        for (int i = 0; i < Guest.getList().size(); i++) {
+            if (Guest.getList().get(i).getUserName().equals(user) && Guest.getList().get(i).getPassword().equals(pass)) {
+                check = true;
+                current=Guest.getList().get(i);
+                break;
+            }
+        }
+        if (!check) {
+            System.out.println("Login failed. Try again");
+        }
+    }
+    System.out.println("Login success");
+    Guestdetails(s,current);
+    }
+    public static void Guestdetails(Scanner s,Guest current){
+        drawMenu(new String[]{"View Your Reservation's History","Rate Your Booking","back to main menu"});
+        switch(takeMenuIndex(s, 1, 3)){
+            case 1: View_Your_Reservation_History(s,current);
+            break;
+            case 2: RateBooking(s,current);
+            break;
+            case 3: main(null);
+            break;
+        }
+    }
+    public static void View_Your_Reservation_History(Scanner s,Guest currentGuest) {
+    String history = currentGuest.ViewReservation();
+    System.out.println("Your Reservation History: " + history);
+}
+    public static void RateBooking(Scanner s,Guest current){
+        boolean check=true;
+        ArrayList<Reservation> guestReservations=Reservation.search(current);
+        String[] resDates=new String[guestReservations.size()];
+        for(int i=0;i<guestReservations.size();i++){
+            resDates[i]=guestReservations.get(i).getDate().toString();
+        }
+        drawMenu(resDates);
+        while(check){
+            try{
+                int x=s.nextInt();
+                while(x<1||x>guestReservations.size()){
+                    System.out.println("Invalid input (Choose Number between 1 -> )"+guestReservations.size());
+                    x=s.nextInt();
+                }
+                System.out.println("Enter the Rating : ");
+                guestReservations.get(x).setRating(s.nextByte());
+                check=false;
+            }catch(InvalidAttributeValueException e){
+                System.out.println(e.getMessage());
+                s.next();
+            }catch(InputMismatchException IE){
+                System.out.println("Invalid input (Integer is required)");
+                s.next();
+            }
+        }
     }
 }
