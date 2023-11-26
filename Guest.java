@@ -1,24 +1,30 @@
 package user;
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;;
 import employees.Person;
-import java.util.Scanner;
 import javax.management.InvalidAttributeValueException;
 import system.Category;
 import system.Reservation;
 public class Guest extends Person {
     private static ArrayList<Guest> Guests=new ArrayList<Guest>();
     Category PreferredCategory;
+    int numOfReservations=0;
    public Guest(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
         super(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
         Guests.add(this);
     }
-     public  String ViewReservation(){
+      public  String ViewReservation(){
     
         String list = Reservation.search(this).toString();
                return list;
       
     }
-    
+    public void incrementReservation(){numOfReservations++;}
+    public void decrementReservation(){numOfReservations--;}
     public void setPreferedCategory(int key){
         switch(key){
             case 0:
@@ -44,27 +50,37 @@ public class Guest extends Person {
         }
         return null;
     }
-    public static ArrayList getList(){
+    public static ArrayList<Guest> getList(){
      return Guests;
-
-    }   
-
-    @Override
-    public String toString() {
-        return "Guest{" + "PreferredCategory=" + PreferredCategory + '}';
+    } 
+    public static void saveRecords(){
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("GuestsData.dat"));
+                out.writeObject(Guests);
+            out.close();
+            } catch (IOException e) {
+            System.out.println(e);
+            }
     }
-
-    public static ArrayList<Guest> getGuests() {
-        return Guests;
+    public static void getRecord(){
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("GuestsData.dat"));
+            Guests=(ArrayList<Guest>)in.readObject();
+            in.close();
+        }catch (ClassNotFoundException e) {
+            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
-    public Category getPreferredCategory() {
-        return PreferredCategory;
-    }
-
-public void RateBooking(byte Rating) throws InvalidAttributeValueException{
+    public void RateBooking(byte Rating) throws InvalidAttributeValueException{
     Reservation.search(this).getLast().setRating(Rating);
     
 }    
-    
-            
-}
+    @Override
+    public String toString() {
+        String history=ViewReservation();
+        return "Guest{history= " + history + ", PreferredCategory=" + PreferredCategory + '}';
+    }
+}            
+
