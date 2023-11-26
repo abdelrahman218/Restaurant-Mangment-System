@@ -154,7 +154,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     private String orderNames(){
         String orderList="[ ";
         for(int i=0;i<order.size();i++){
-            orderList+=(Meal.getMealById(order.get(i)));
+            orderList+=(Meal.getMealById(order.get(i)).getName());
             if(i!=order.size()-1){
                 orderList+=" , ";
             }
@@ -240,7 +240,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }catch(ClassNotFoundException e){
             System.out.println("Error in class Reservation reading compatiability");
         }
-        idgenerator=history.size();
+        idgenerator=history.get(history.size()-1).getReservationNumber();
     }
     public static void saveRecords(){
         try{
