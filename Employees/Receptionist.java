@@ -32,6 +32,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
     //Reservation Related functions
     public void createReservation(int guestId,int tableNum,int numOfGuests,String date,String start,String end,ArrayList<Meal>order)
     throws InvalidAttributeValueException,ParseException{
+        reservationsCount++;
         Reservation r=new Reservation();
         try{
             r.setReceptionistId(getId());
@@ -53,16 +54,16 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
         }
         revenue+=r.getPrice();
         Guest.getGuest(guestId).incrementReservation();
-        reservationsCount++;
     }
     public void cancelReservation(int resId) throws InvalidAttributeValueException{
         ArrayList<Reservation> reservations=Reservation.search(this);
+        Reservation toBeDeleted=Reservation.search(resId);
         for(int i=0;i<reservations.size();i++){
             Reservation temp=reservations.get(i);
-            if(temp.getReservationNumber()==resId){
+            if(temp==toBeDeleted){
                 ArrayList<Integer> order=temp.getOrder();
                 for(int j=0;j<temp.getOrder().size();j++){
-                    Meal.getMealById(order.get(j)).decrementOrders();
+                    Meal.getMealById(order.get(j).intValue()).decrementOrders();
                 }
                 reservationsCount--;
                 Guest.getGuest(reservations.get(i).getGuestId()).decrementReservation();
