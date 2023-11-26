@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import Employees.Person;
+import employees.Person;
+import javax.management.InvalidAttributeValueException;
 import system.Category;
 import system.Reservation;
 public class Guest extends Person {
@@ -16,16 +17,16 @@ public class Guest extends Person {
         super(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
         Guests.add(this);
     }
-    public String ViewReservation(){
-        String list="";
-        ArrayList<Reservation>R=Reservation.getList();
-       for (int  i=0;i<Reservation.getList().size();i++){
-           list+=R.get(i)+"\n";
-        }
-        return list;
+      public  String ViewReservation(){
+       String List=Reservation.search(this).toString();
+       return List;
     }
-    public void incrementReservation(){numOfReservations++;}
-    public void decrementReservation(){numOfReservations--;}
+    public void incrementReservation(){
+        numOfReservations++;
+    }
+    public void decrementReservation(){
+        numOfReservations--;
+    }
     public void setPreferedCategory(int key){
         switch(key){
             case 0:
@@ -73,10 +74,14 @@ public class Guest extends Person {
         } catch (IOException e) {
             System.out.println(e);
         }
-    } 
+    }
+    public void RateBooking(byte Rating) throws InvalidAttributeValueException{
+    Reservation.search(this).getLast().setRating(Rating);
+}    
     @Override
     public String toString() {
         String history=ViewReservation();
         return "Guest{history= " + history + ", PreferredCategory=" + PreferredCategory + '}';
     }
-}
+}            
+
