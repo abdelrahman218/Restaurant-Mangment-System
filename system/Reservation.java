@@ -81,7 +81,8 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     }
     public void setTableNum(int tableNumber) throws InvalidAttributeValueException{
         try{
-            Table.getTable(tableNum);
+            Table.getTable(tableNumber);
+            tableNum=tableNumber;
         }catch(IndexOutOfBoundsException e){
             throw new InvalidAttributeValueException("Table not found!");
         }
@@ -91,6 +92,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         if(num>reserved.getNoOfSeats()){
             throw new InvalidAttributeValueException("Guests can't be more than "+reserved.getNoOfSeats());
         }
+        numOfGuests=num;
     }
     public void setDate(String input) throws ParseException{
         SimpleDateFormat sf=new SimpleDateFormat("dd/MM/yyyy");
@@ -127,12 +129,12 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             throw new InvalidAttributeValueException("Rating must be (0->10)");
         }
     }
-    
+   
     //Functions
     public void takeOrder(ArrayList<Meal> orderOfMeals) throws NullPointerException{
         for(int i=0;i<orderOfMeals.size();i++){
             if(orderOfMeals.get(i)!=null){
-                order.add(orderOfMeals.get(i).getMeal_ID());
+                order.add(Integer.valueOf(orderOfMeals.get(i).getMeal_ID()));
                 orderOfMeals.get(i).incrementedOrders();
             }
             else{
@@ -154,7 +156,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     private String orderNames(){
         String orderList="[ ";
         for(int i=0;i<order.size();i++){
-            orderList+=(Meal.getMealById(order.get(i)).getName());
+            orderList+=(Meal.getMealById(order.get(i).intValue()).getName());
             if(i!=order.size()-1){
                 orderList+=" , ";
             }
@@ -258,8 +260,8 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     @Override
     public String toString(){
         return("Receptionist Name: "+Receptionist.search(receptionistId).getName()+"\nGuest Name: "+Guest.getGuest(guestId).getName()
-        +"\nReservation No.: "+reservationNum+"\nTable No.: "+tableNum+"\nNo. of Guests: "+numOfGuests+
-        "\nDate: "+date+"\nFrom: "+startTime+" To: "+endTime+"\nOrder: "+orderNames()+"\nCost: "+price+"\nGuests rating: "+rating);
+        +"\nReservation No.: "+getReservationNumber()+"\nTable No.: "+getTableNum()+"\nNo. of Guests: "+getNumOfGuests()+
+        "\nDate: "+getDate()+"\nFrom: "+getStartTime()+" To: "+getEndTime()+"\nOrder: "+orderNames()+"\nCost: "+getPrice()+"\nGuests rating: "+rating);
     }
     @Override
     public int compareTo(Reservation right){
