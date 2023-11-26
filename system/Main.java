@@ -489,7 +489,7 @@ public class Main {
             try{
             System.out.print("Enter guest ID : ");
             int n=s.nextInt();
-            x=Guest.getList().get(n);
+            x=Guest.getGuest(n);
             }catch(NullPointerException e){
                 System.out.println("Guest not Found!");
             }catch(InputMismatchException e){
@@ -497,7 +497,7 @@ public class Main {
             }
         }
     drawMenu(new String[]{"Standard","Couples","Family","Private","Back"});
-        switch(takeMenuIndex(s, 1, 4)){
+        switch(takeMenuIndex(s, 1, 5)){
             case 1:x.setPreferedCategory(0);    Receptionistdetails(s, current);
             case 2:x.setPreferedCategory(1);    Receptionistdetails(s, current);
             case 3:x.setPreferedCategory(2);    Receptionistdetails(s, current);
@@ -566,7 +566,7 @@ public class Main {
     }
     private static void View_Your_Reservation_History(Scanner s,Guest currentGuest) {
     String history = currentGuest.ViewReservation();
-    System.out.println("Your Reservation History: " + history);
+    System.out.println("Your Reservation History:\n " + history);
     }
     private static void RateBooking(Scanner s,Guest current){
         boolean check=true;

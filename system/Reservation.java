@@ -91,8 +91,9 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         Table reserved=Table.getTable(tableNum);
         if(num>reserved.getNoOfSeats()){
             throw new InvalidAttributeValueException("Guests can't be more than "+reserved.getNoOfSeats());
-        }
-        numOfGuests=num;
+        }else{
+            numOfGuests=num;
+        }    
     }
     public void setDate(String input) throws ParseException{
         SimpleDateFormat sf=new SimpleDateFormat("dd/MM/yyyy");
