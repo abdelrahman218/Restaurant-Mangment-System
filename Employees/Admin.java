@@ -6,51 +6,35 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.io.ObjectInputStream;
 import user.Guest;
-public class Admin extends Person implements Comparable<Admin>,Serializable  {
+public class Admin extends Person implements Comparable<Admin>{
 private static ArrayList<Admin>Admins=new ArrayList<>();
 @Override
-    public int compareTo(Admin right){
+public int compareTo(Admin right){
      return 0;
     }
 public static ArrayList<Admin> getAdmins(){
     return Admins;
 }
 public static void saveRecords(){
-    try{
-    FileOutputStream f=new FileOutputStream("Admin archive.dat");
-    ObjectOutputStream out=new ObjectOutputStream(f);
-    out.writeInt(Admins.size());
-            int i=0;
-            while(i<Admins.size()){
-                out.writeObject(Admins.get(i));
-                i++;
-            }    
-            out.close();
-            f.close();
-    }
-    catch(IOException e){
-        System.out.println("Error happened writing in the file: Admin archive");
-    }
-
+    try {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Admin archive.dat"));
+            out.writeObject(Admins);
+        out.close();
+        } catch (IOException e) {
+        System.out.println(e);
+        }
 }
 public static void getRecord(){
-    try{
-        FileInputStream f=new FileInputStream("Admin archive.dat");
-        ObjectInputStream in=new ObjectInputStream(f);
-        int size=in.readInt();
-        while(size>0){
-            Admins.add((Admin)in.readObject());
-            size--;
-        }    
+    try {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream("Admin archive.dat"));
+        Admins=(ArrayList<Admin>)in.readObject();
         in.close();
-        f.close();
-    }catch(IOException e){
-        System.out.println("Error happened reading the file: Admin archive");
-    }catch(ClassNotFoundException e){
-        System.out.println("Error in class Admin reading compatiability");
+    }catch (ClassNotFoundException e) {
+        System.out.println(e);
+    } catch (IOException e) {
+        System.out.println(e);
     }
 }
 public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
@@ -105,12 +89,12 @@ public static void addMenu(int x){
         case 5: Menu.getlist().add(new Menu(MenuCategory.Dessert));
     }
 }
-public void editMenu(int menuId,MenuCategory Menucategory){Menu.getlist().get(menuId).Categ=Menucategory;}
+public void editMenu(int menuId,MenuCategory Menucategory){Menu.getlist().get(menuId).setCateg(Menucategory);}
 public static void removeMenu(int menuId){Menu.getlist().remove(Menu.getlist().get(menuId));}
 public static String searchMenu(int menuId,Date Start,Date End){
     String list="";
  list+="This menu's category is : ";
- list+=Menu.getlist().get(menuId).Categ;
+ list+=Menu.getlist().get(menuId).getCateg();
  list+="\n";
  list+="This menu's most ordered meal is : ";
  list+=Meal.getList().get(menuId).mostOrderedMeal(Start, End);
@@ -122,7 +106,7 @@ Meal.getList().add(new Meal(Menu_ID, meal_ID, Name, Price));
 }
 public static MenuCategory viewMenuReportsCateg(int menuId){
 ArrayList<Menu>Menues=Menu.getlist();
-return Menues.get(menuId).Categ;
+return Menues.get(menuId).getCateg();
 }
 public static Meal viewMenuReportsMostOrderedMeal(int menuId,Date Start,Date End){
 ArrayList<Meal>Meals=Meal.getList();

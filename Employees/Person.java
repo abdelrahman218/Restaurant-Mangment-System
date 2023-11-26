@@ -1,8 +1,6 @@
 package Employees;
-
-public abstract class Person{
-    private int ID;
-    private static int idGenerator=0;
+import java.io.Serializable;
+public abstract class Person implements Serializable{
     private String Name;
     private String UserName;
     private String Password;
@@ -10,6 +8,8 @@ public abstract class Person{
     private String DateOfBirth;
     private String PhoneNum;
     private String Email;
+    private int Id;
+    private static int idGenerator=0;
     public Person(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password) {
         setName(Name);
         setAddress(Address);
@@ -18,7 +18,7 @@ public abstract class Person{
         setEmail(Email);
         setUserName(UserName);
         setPassword(Password);
-        ID=++idGenerator;
+        Id=++idGenerator;
     }
     public void setName(String Name) {
         this.Name = Name;
@@ -57,13 +57,18 @@ public abstract class Person{
         return Email;
     }
     public int getId(){
-        return ID;
+        return Id;
     }
     public String getUserName() {
         return UserName;
     }
     public String getPassword() {
-        return Password;
+    String encp="";
+     int j=2;
+     for(int i=0;i<Password.length();i++){
+     encp+=(char)(Password.charAt(i)-j);
+     }
+        return encp;
     }
     public boolean checkpassword(String password){
     String check=encreptPassword(password);

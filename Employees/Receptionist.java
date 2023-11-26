@@ -112,11 +112,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         try{
             FileInputStream f=new FileInputStream("Receptionist archive.dat");
             ObjectInputStream in=new ObjectInputStream(f);
-            int size=in.readInt();
-            while(size>0){
-                receptionists.add((Receptionist)in.readObject());
-                size--;
-            }    
+            receptionists=(ArrayList<Receptionist>)in.readObject(); 
             in.close();
             f.close();
         }catch(IOException e){
@@ -129,12 +125,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         try{
             FileOutputStream f=new FileOutputStream("Receptionist archive.dat");
             ObjectOutputStream out=new ObjectOutputStream(f);
-            out.writeInt(receptionists.size());
-            int i=0;
-            while(i<receptionists.size()){
-                out.writeObject(receptionists.get(i));
-                i++;
-            }    
+            out.writeObject(receptionists);  
             out.close();
             f.close();
         }catch(IOException e){
