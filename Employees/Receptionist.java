@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 //Data Structures
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.Collections;
 import system.Meal;
 import system.Reservation;
 import user.Guest;
-import system.Category;
 
 //Exeception Classes
 import java.io.IOException;
@@ -22,10 +20,10 @@ import java.lang.ClassNotFoundException;
 import java.text.ParseException;
 import javax.management.InvalidAttributeValueException;
 
-public class Receptionist extends Person implements Comparable<Receptionist>,Serializable{
+public class Receptionist extends Person implements Comparable<Receptionist>{
     private static ArrayList<Receptionist> receptionists=new ArrayList<>();
     private double revenue;
-    private double reservationsCount;
+    private int reservationsCount;
     public Receptionist(String name,String address,String dateOfBirth,String Phone,String Email,String UserName,String Password){
         super(name,address,dateOfBirth,Phone,Email,UserName,Password);
         receptionists.add(this);
@@ -37,6 +35,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         Reservation r=new Reservation();
         try{
             r.setReceptionistId(getId());
+            r.setGuestId(guestId);
             r.setTableNum(tableNum);
             r.setNumOfGuests(numOfGuests);
             try{
@@ -65,18 +64,13 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
                 for(int j=0;j<temp.getOrder().size();j++){
                     Meal.getMealById(order.get(j)).decrementOrders();
                 }
-                reservations.remove(i);
                 reservationsCount--;
                 Guest.getGuest(reservations.get(i).getGuestId()).decrementReservation();
+                reservations.remove(i);
                 return;
             }
         }
         throw new InvalidAttributeValueException("Reservation not found.");
-    }
-    
-    //Guest Related function
-    public void selectGuestPref(Guest keyGuest,Category preferred){
-        keyGuest.setPreferedCategory(preferred.ordinal());
     }
     
     //Getter functions
@@ -86,7 +80,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
     public double getRevenue() {
         return revenue;
     }
-    public double getreservationsCount() {
+    public int getreservationsCount() {
         return reservationsCount;
     }
     
@@ -99,9 +93,9 @@ public class Receptionist extends Person implements Comparable<Receptionist>,Ser
         while(first<=last){
             mid=(int)((first+last)/2);
             if(id>receptionists.get(mid).getId())
-            first=mid+1;
+                first=mid+1;
             else if(id<receptionists.get(mid).getId())
-            last=mid-1;
+                last=mid-1;
             else return receptionists.get(mid);
         }
         return null;    
