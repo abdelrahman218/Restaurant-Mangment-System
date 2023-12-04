@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 public class Restaurant extends Application {
     
+    public Scene start;    
     @Override
     public void start(Stage primaryStage) throws Exception {
     new Admin("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "A", "A");
@@ -29,31 +30,32 @@ public class Restaurant extends Application {
     Button bt3=new Button("Guest");
     HBox root =new HBox(50,bt1,bt2,bt3);
     root.setAlignment(Pos.CENTER);
-    Scene s = new Scene(root,700,200);
+     start = new Scene(root,700,200);
     bt1.setOnAction(e->{admindetails(primaryStage);});
-    bt2.setOnAction(e->{receptionistdetails(primaryStage);});
+    bt2.setOnAction(e->{primaryStage.setScene(null);
+        receptionistdetails(primaryStage);});
     bt3.setOnAction(e->{guestdetails(primaryStage);});
-    primaryStage.setScene(s);
+    primaryStage.setScene(start);
     primaryStage.setTitle("Restaurant");
     primaryStage.show();
     } 
     private void admindetails(Stage nested){
-    nested.close();
-    Stage admin = new Stage();
+    
+    
     Button bt1=new Button("Sign in");
     Button bt3=new Button("Back");
     HBox root = new HBox(20,bt1,bt3);
     root.setAlignment(Pos.CENTER);
     Scene s = new Scene(root,700,200);
-    bt1.setOnAction(e->{adminlogin(admin);});
-    bt3.setOnAction(e->{nested.show();admin.close(); });
-    admin.setScene(s);
-    admin.setTitle("Admin");
-    admin.show();
+    bt1.setOnAction(e->{adminlogin(nested);});
+    bt3.setOnAction(e->{ nested.setScene(start); });
+    nested.setScene(s);
+    nested.setTitle("Admin");
+    nested.show();
     }
     private void adminlogin(Stage nested){
-    nested.close();
-    Stage admin = new Stage();
+    
+    
     Button bt1=new Button("Back");
     Button bt2 = new Button("Login");
     Label l1=new Label("UserName");
@@ -86,21 +88,21 @@ public class Restaurant extends Application {
                             ad.setTitle("Welcome");
                             ad.setHeaderText("Login Sucessful");
                             ad.show();
-                            adminmenu(admin);}
+                            adminmenu(nested);}
                           else{
                           Alert a = new Alert(Alert.AlertType.ERROR);
                             a.setTitle("Error");
                             a.setHeaderText("Password Wrong");
                             a.show();
                           }});
-    bt1.setOnAction(e->{nested.show();admin.close();});
-    admin.setScene(s);
-    admin.setTitle("Login");
-    admin.show();
+    bt1.setOnAction(e->{admindetails(nested);});
+    nested.setScene(s);
+    nested.setTitle("Login");
+    nested.show();
     }
     private void adminmenu(Stage nested){
-    nested.close();
-    Stage admin = new Stage();
+    
+    
     Button bt1 = new Button("Create Admin");
     Button bt2 = new Button("test2");
     Button bt3 = new Button("test3");
@@ -108,14 +110,13 @@ public class Restaurant extends Application {
     HBox root =new HBox(20,bt1,bt2,bt3,bt4);
     root.setAlignment(Pos.CENTER);
     Scene s= new Scene(root,700,200);
-    bt1.setOnAction(e->{admincreate(admin);});
-    admin.setScene(s);
-    admin.show();
-    
+    bt1.setOnAction(e->{admincreate(nested);});
+    nested.setScene(s);
+    nested.show();
     }
     private void admincreate(Stage nested){
-    nested.close();
-    Stage admin=new Stage();
+    
+    
     Label name=new Label("Name");
     Label email=new Label("Email");
     Label address=new Label("Address");
@@ -130,29 +131,25 @@ public class Restaurant extends Application {
     root.setPadding(new Insets(20));
     root.setAlignment(Pos.TOP_LEFT);
     Scene s =new Scene(root,700,200);
-    admin.setTitle("Sign up");
-    admin.setScene(s);
-    admin.show();
+    nested.setTitle("Sign up");
+    nested.setScene(s);
+    nested.show();
     }
     private void receptionistdetails(Stage nested){
-    nested.close();
-    Stage receptionist = new Stage();
     Button bt1=new Button("Sign in");
     Button bt2=new Button("Sign up");
     Button bt3=new Button("Back");
     HBox root = new HBox(20,bt1,bt2,bt3);
     root.setAlignment(Pos.CENTER);
     Scene s = new Scene(root,700,200);
-    bt1.setOnAction(e->{receptionistlogin(receptionist);});
-    bt2.setOnAction(e->{receptionistcreate(receptionist);});
-    bt3.setOnAction(e->{nested.show();receptionist.close(); });
-    receptionist.setScene(s);
-    receptionist.setTitle("Receptionist");
-    receptionist.show();
+    bt1.setOnAction(e->{receptionistlogin(nested);});
+    bt2.setOnAction(e->{receptionistcreate(nested);});
+    bt3.setOnAction(e->{nested.setScene(start); });
+    nested.setScene(s);
+    nested.setTitle("Receptionist");
+    nested.show();
     }
     private void receptionistlogin(Stage nested){
-    nested.close();
-    Stage receptionist = new Stage();
     Button bt1=new Button("Back");
     Button bt2 = new Button("Login");
     Label l1=new Label("UserName");
@@ -165,7 +162,7 @@ public class Restaurant extends Application {
     root.setAlignment(Pos.CENTER);
     root.setPadding(new Insets(20));
     Scene s=new Scene(root,700,200);
-    bt1.setOnAction(e->{nested.show();receptionist.close();});
+    bt1.setOnAction(e->{receptionistdetails(nested);});
     bt2.setOnAction(e->{ Receptionist current =null;
                          Boolean check=true;
                          String pa= pas.getText();
@@ -192,13 +189,11 @@ public class Restaurant extends Application {
                             a.setHeaderText("Password Wrong");
                             a.show();
                           }});
-    receptionist.setScene(s);
-    receptionist.setTitle("Login");
-    receptionist.show();
+    nested.setScene(s);
+    nested.setTitle("Login");
+    nested.show();
     }
     private void receptionistcreate(Stage nested){
-    nested.close();
-    Stage receptionist=new Stage();
     Label name=new Label("Name");
     Label email=new Label("Email");
     Label address=new Label("Address");
@@ -213,29 +208,25 @@ public class Restaurant extends Application {
     root.setPadding(new Insets(20));
     root.setAlignment(Pos.TOP_LEFT);
     Scene s =new Scene(root,700,200);
-    receptionist.setTitle("Sign up");
-    receptionist.setScene(s);
-    receptionist.show();
+    nested.setTitle("Sign up");
+    nested.setScene(s);
+    nested.show();
     }
     private void guestdetails(Stage nested){
-    nested.close();
-    Stage guest = new Stage();
     Button bt1=new Button("Sign in");
     Button bt2=new Button("Sign up");
     Button bt3=new Button("Back");
     HBox root = new HBox(20,bt1,bt2,bt3);
     root.setAlignment(Pos.CENTER);
     Scene s = new Scene(root,700,200);
-    bt1.setOnAction(e->{guestlogin(guest);});
-    bt2.setOnAction(e->{guestcreate(guest);});
-    bt3.setOnAction(e->{nested.show();guest.close(); });
-    guest.setScene(s);
-    guest.setTitle("Guest");
-    guest.show();
+    bt1.setOnAction(e->{guestlogin(nested);});
+    bt2.setOnAction(e->{guestcreate(nested);});
+    bt3.setOnAction(e->{nested.setScene(start); });
+    nested.setScene(s);
+    nested.setTitle("Guest");
+    nested.show();
     }
     private void guestlogin(Stage nested){
-    nested.close();
-    Stage guest = new Stage();
     Button bt1=new Button("Back");
     Button bt2 = new Button("Login");
     Label l1=new Label("UserName");
@@ -248,7 +239,7 @@ public class Restaurant extends Application {
     root.setAlignment(Pos.CENTER);
     root.setPadding(new Insets(20));
     Scene s=new Scene(root,700,200);
-    bt1.setOnAction(e->{nested.show();guest.close();});
+    bt1.setOnAction(e->{guestdetails(nested);});
     bt2.setOnAction(e->{ Guest current =null;
                          Boolean check=true;
                          String pa= pas.getText();
@@ -275,13 +266,11 @@ public class Restaurant extends Application {
                             a.setHeaderText("Password Wrong");
                             a.show();
                           }});
-    guest.setScene(s);
-    guest.setTitle("Login");
-    guest.show();
+    nested.setScene(s);
+    nested.setTitle("Login");
+    nested.show();
     }
     private void guestcreate(Stage nested){
-    nested.close();
-    Stage guest=new Stage();
     Label name=new Label("Name");
     Label email=new Label("Email");
     Label address=new Label("Address");
@@ -296,9 +285,9 @@ public class Restaurant extends Application {
     root.setPadding(new Insets(20));
     root.setAlignment(Pos.TOP_LEFT);
     Scene s =new Scene(root,700,200);
-    guest.setTitle("Sign up");
-    guest.setScene(s);
-    guest.show();
+    nested.setTitle("Sign up");
+    nested.setScene(s);
+    nested.show();
     }
       public static void main(String[] args) {
         launch(args);
