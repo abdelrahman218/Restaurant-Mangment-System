@@ -1,4 +1,4 @@
-package Employees;
+package employees;
 //Stream Classes
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -14,7 +14,7 @@ import system.Meal;
 import system.Reservation;
 import user.Guest;
 
-//Exeception Classes
+//Exception Classes
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
 import java.text.ParseException;
@@ -32,28 +32,27 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
     //Reservation Related functions
     public void createReservation(int guestId,int tableNum,int numOfGuests,String date,String start,String end,ArrayList<Meal>order)
     throws InvalidAttributeValueException,ParseException{
-        reservationsCount++;
+
         Reservation r=new Reservation();
         try{
             r.setReceptionistId(getId());
             r.setGuestId(guestId);
             r.setTableNum(tableNum);
             r.setNumOfGuests(numOfGuests);
-            try{
-                r.setDate(date);
-            }catch(ParseException parse){
-                cancelReservation(r.getReservationNumber());
-                throw parse;
-            }
+            r.setDate(date);
             r.setStartTime(start);
             r.setEndTime(end);
             r.takeOrder(order);
         }catch(InvalidAttributeValueException e){
-            cancelReservation(r.getReservationNumber());
             throw e;
+        }catch(ParseException parse){
+            throw parse;
         }
+        reservationsCount++;
         revenue+=r.getPrice();
         Guest.getGuest(guestId).incrementReservation();
+        r.setReservationNum();
+        Reservation.getList().add(r);
     }
     public void cancelReservation(int resId) throws InvalidAttributeValueException{
         ArrayList<Reservation> reservations=Reservation.search(this);
@@ -113,7 +112,7 @@ public class Receptionist extends Person implements Comparable<Receptionist>{
         }catch(IOException e){
             System.out.println("Error happened reading the file: Receptionist archive");
         }catch(ClassNotFoundException e){
-            System.out.println("Error in class Receptionist reading compatiability");
+            System.out.println("Error in class Receptionist reading compatibility");
         }
     }
     public static void saveRecords(){
