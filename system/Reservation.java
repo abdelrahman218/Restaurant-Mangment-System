@@ -16,12 +16,12 @@ import system.Reservation;
 import system.Table;
 import system.Meal;
 import user.Guest;
-import Employees.Receptionist;
+import employees.Receptionist;
 
-//Formater Classes
+//Formatter Classes
 import java.text.SimpleDateFormat;
 
-//Exeception Classes
+//Exception Classes
 import java.lang.IndexOutOfBoundsException;
 import java.text.ParseException;
 import java.time.format.DateTimeParseException;
@@ -52,12 +52,10 @@ public class Reservation implements Comparable<Reservation>,Serializable{
 
     //Constructor
     public Reservation(){
-       reservationNum=++idgenerator;
        date=new Date();
        order=new ArrayList<>();
        startTime=LocalTime.MIDNIGHT;
        endTime=LocalTime.MIDNIGHT;
-       history.add(this);
     }
     
     //Setters
@@ -130,6 +128,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             throw new InvalidAttributeValueException("Rating must be (0->10)");
         }
     }
+    public void setReservationNum(){ reservationNum=++idgenerator; }
    
     //Functions
     public void takeOrder(ArrayList<Meal> orderOfMeals) throws NullPointerException{
@@ -241,7 +240,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }catch(IOException e){
             System.out.println("Error happened reading the file: Reservation archive");
         }catch(ClassNotFoundException e){
-            System.out.println("Error in class Reservation reading compatiability");
+            System.out.println("Error in class Reservation reading compatibility");
         }
         idgenerator=history.get(history.size()-1).getReservationNumber();
     }

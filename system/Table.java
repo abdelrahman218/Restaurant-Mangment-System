@@ -40,7 +40,7 @@ public class Table implements Serializable {
         this.Categ=data;
         Tables.add(this);
     }
-    public static Table getTable(int tableNum){return Tables.get(tableNum);}
+    public static Table getTable(int tableNum){return Tables.get(tableNum-1);}
     public int getTableID(){return tableNum;}
     public int getNoOfSeats(){return NoOfSeats;}
     public double getCost(){return Cost;}
