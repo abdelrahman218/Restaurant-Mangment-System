@@ -7,9 +7,10 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 public class Menu implements Serializable {
+    private static int idGenerator=0;
     private static ArrayList<Menu> Menues = new ArrayList<Menu>();
     private MenuCategory Categ;
-    private int Menu_ID;
+    private int Menu_ID=++idGenerator;
     public Menu(MenuCategory data) {
         this.Categ = data;
         Menues.add(this);
