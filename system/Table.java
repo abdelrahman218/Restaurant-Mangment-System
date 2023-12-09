@@ -40,13 +40,16 @@ public class Table implements Serializable {
         this.Categ=data;
         Tables.add(this);
     }
-    public static Table getTable(int tableNum){return Tables.get(tableNum);}
     public int getTableID(){return tableNum;}
     public int getNoOfSeats(){return NoOfSeats;}
     public double getCost(){return Cost;}
     public Category getcateg(){return Categ;}
-     public double getRevenue() {return Revenue;}
+    public double getRevenue() {return Revenue;}
     public static ArrayList<Table> getlist() {return Tables;}
+    public void setCateg(Category categ) {Categ = categ;}
+    public void setNoOfSeats(int noOfSeats) {NoOfSeats = noOfSeats;}
+    public void setCost(double cost) {Cost = cost;}
+    public static Table getTable(int tableNum){return Tables.get(tableNum);}
     public static Table mostReservedTable(Date StartDate, Date EndDate){
         int max=0;
         for(int i=1;i<Tables.size();i++){
@@ -77,6 +80,14 @@ public class Table implements Serializable {
         }
         return false;
     }
+    public ArrayList<Table> searchByDate(Date day,LocalTime start ,LocalTime end){
+        ArrayList<Table> availabletables=new ArrayList<>();
+        for(int i=0;i<Tables.size();i++){
+            if(!Tables.get(i).isReserved(day, start, end))
+                availabletables.add(this);
+        }    
+        return availabletables;
+    }
     public void addToRevenue(){
         ArrayList<Reservation> reservations=Reservation.search(this);
          for(int i=0;i<reservations.size();i++){
@@ -97,8 +108,8 @@ public class Table implements Serializable {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("TablesData.dat"));
                 out.writeObject(Tables);
             out.close();
-            } catch (IOException e) {
-            System.out.println(e);
+            } catch(IOException e){
+                System.out.println("Error happened reading the file: Receptionist archive");
             }
     }
     public static void getRecord(){
@@ -106,20 +117,11 @@ public class Table implements Serializable {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("TablesData.dat"));
             Tables=(ArrayList<Table>)in.readObject();
             in.close();
-        }catch (ClassNotFoundException e) {
-            System.out.println(e);
-        } catch (IOException e) {
-            System.out.println(e);
+        }catch(IOException e){
+            System.out.println("Error happened reading the file: Receptionist archive");
+        }catch(ClassNotFoundException e){
+            System.out.println("Error in class Receptionist reading compatiability");
         }
-    }
-    public void setCateg(Category categ) {
-        Categ = categ;
-    }
-    public void setNoOfSeats(int noOfSeats) {
-        NoOfSeats = noOfSeats;
-    }
-    public void setCost(double cost) {
-        Cost = cost;
     }
     @Override
     public String toString(){
