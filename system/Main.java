@@ -34,10 +34,125 @@ import java.util.Date;
 
 public class Main extends Application{
     private void guestPreferencesMenu(Stage mainWindow,Receptionist current){
+        //Declaration of Nodes
+        Text headerText=new Text("Select Guest Preferences");
+        headerText.setFont(Font.font("Cosmic Sans MS",FontWeight.BOLD,FontPosture.REGULAR,36));
+        ComboBox<String> names=new ComboBox<>();
+        names.setPromptText("Select Guest");
+        ComboBox<String> pref=new ComboBox<>(FXCollections.observableArrayList("Standard","Couples","Family","Private"));
+        pref.setPromptText("Select Preferred Category");
+        Button back=new Button("Back");
+        Button btSelect=new Button("Select");
 
+        //Designing of layout
+        HBox backBox=new HBox(back);
+        backBox.setAlignment(Pos.CENTER_LEFT);
+        backBox.setPadding(new Insets(5,0,0,10));
+        HBox header=new HBox(headerText);
+        header.setAlignment(Pos.CENTER);
+        header.setPadding(new Insets(30));
+        HBox buttonBox=new HBox(btSelect);
+        buttonBox.setAlignment(Pos.BASELINE_RIGHT);
+        buttonBox.setPadding(new Insets(20));
+        VBox body=new VBox(10,names,pref);
+        body.setAlignment(Pos.CENTER);
+        VBox root=new VBox(backBox,header,body,buttonBox);
+
+        //Loading Nodes with content
+        ArrayList<Guest> guests=Guest.getList();
+        ObservableList<String> guestNames=FXCollections.observableArrayList();
+        for(Guest iter:guests){ guestNames.add(iter.getName());}
+        names.setItems(guestNames);
+
+        //Event Handling of nodes
+        back.setOnAction(e->{recepOptions(mainWindow,current);});
+        btSelect.setOnAction(e->{
+            if(names.getSelectionModel().getSelectedIndex()>=0&&
+            pref.getSelectionModel().getSelectedIndex()>=0){
+                guests.get(names.getSelectionModel().getSelectedIndex()).setPreferedCategory(pref.getSelectionModel().getSelectedIndex());
+                names.getSelectionModel().select(-1);
+                pref.getSelectionModel().select(-1);
+                Alert warning=new Alert(Alert.AlertType.INFORMATION);
+                warning.setHeaderText(null);
+                warning.setContentText("Preferred Category has changed successfully");
+                warning.showAndWait();
+
+            }else{
+                Alert warning=new Alert(Alert.AlertType.ERROR);
+                warning.setHeaderText(null);
+                warning.setContentText("Please fill All Required Fields");
+                warning.showAndWait();
+            }
+        });
+
+        //Scene & Main window modification
+        Scene guestPrefScene=new Scene(root,500,250);
+        mainWindow.setScene(guestPrefScene);
+        mainWindow.setTitle("Select Guest Preferences");
     }
     private void cancelReservationMenu(Stage mainWindow,Receptionist current){
+        //Declaration of Nodes
+        Text headerText=new Text("Cancel Reservation");
+        headerText.setFont(Font.font("Cosmic Sans MS",FontWeight.BOLD,FontPosture.REGULAR,36));
+        ComboBox<Integer> reservationNumbers=new ComboBox<>();
+        reservationNumbers.setPromptText("Reservation ID");
+        TextArea reservationDetails=new TextArea();
+        reservationDetails.setEditable(false);
+        reservationDetails.setPrefHeight(300);
+        Button btDelete=new Button("Delete Reservation");
+        Button back=new Button("Back");
 
+        //Designing of layout
+        HBox backBox=new HBox(back);
+        backBox.setAlignment(Pos.CENTER_LEFT);
+        HBox header=new HBox(headerText);
+        header.setAlignment(Pos.CENTER);
+        header.setPadding(new Insets(30));
+        VBox body=new VBox(20,reservationNumbers,reservationDetails);
+        body.setAlignment(Pos.CENTER);
+        body.setPadding(new Insets(0,10,0,10));
+        HBox buttonBox=new HBox(btDelete);
+        buttonBox.setAlignment(Pos.BASELINE_RIGHT);
+        buttonBox.setPadding(new Insets(20));
+        VBox root=new VBox(backBox,header,body,buttonBox);
+
+        //Loading Nodes with content
+        ArrayList<Reservation>reservations=Reservation.search(current);
+        ObservableList<Integer> resId=FXCollections.observableArrayList();
+        for(Reservation iter:reservations){
+            resId.add(iter.getReservationNumber());
+        }
+        reservationNumbers.setItems(resId);
+
+        //Event Handling of nodes
+        back.setOnAction(e->{recepOptions(mainWindow,current);});
+        reservationNumbers.setOnAction(e->{
+            int index=reservationNumbers.getSelectionModel().getSelectedIndex();
+            if(index>=0){
+                reservationDetails.setText("Reservation Details:-\n"+reservations.get(index).toString());
+            }
+        });
+        btDelete.setOnAction(e->{
+            int index=reservationNumbers.getValue();
+            if(index>=0){
+                try{
+                    current.cancelReservation(index);
+                }catch (InvalidAttributeValueException ignored){}
+            }
+            reservationNumbers.getItems().clear();
+            reservationDetails.clear();
+            ArrayList<Reservation> newReservations=Reservation.search(current);
+            ObservableList<Integer> newResId=FXCollections.observableArrayList();
+            for(Reservation iter:newReservations){
+                newResId.add(iter.getReservationNumber());
+            }
+            reservationNumbers.setItems(newResId);
+        });
+
+        //Scene & Main window modification
+        Scene cancelResScene=new Scene(root,1000,500);
+        mainWindow.setScene(cancelResScene);
+        mainWindow.setTitle("Cancel Reservation");
     }
     private void createReservationMenu(Stage mainWindow,Receptionist current){
         //Declaration of Nodes
@@ -45,6 +160,7 @@ public class Main extends Application{
         order.setPrefSize(200,400);
         order.setEditable(false);
         Button btCrRes=new Button("Create Reservation"),btCancel=new Button("Cancel"),btAdd=new Button("Add");
+        Button back=new Button("Back");
         ArrayList<ComboBox<String>> tiles=new ArrayList<>(9);
         /*O->Guest Names,1->Table number,2->Number of Guests,3->Start Hours,4->Start Minutes
         5->End Hours,6->End Minutes,7->Menus,8->Meals*/
@@ -52,6 +168,7 @@ public class Main extends Application{
         ArrayList<Menu> menus=Menu.getlist();
         ArrayList<ObservableList<String>> content= new ArrayList<>(4);
         //0->Contents of Guest Names,1->Contents of Hours,2->Contents of Minutes,3->Content of Menus Names
+
         //Loading Nodes with content
         for(int i=0;i<4;i++){ content.add(FXCollections.observableArrayList()); }
         for(Guest temp:guests){ content.get(0).add(temp.getName()); }
@@ -82,6 +199,7 @@ public class Main extends Application{
         for(int i=3;i<7;i+=2){tiles.get(i).setItems(content.get(1));}
         for(int i=4;i<7;i+=2){tiles.get(i).setItems(content.get(2));}
         tiles.get(7).setItems(content.get(3));
+
         //Event Handling of Nodes
         EventHandler<ActionEvent> updatingTable=new EventHandler<ActionEvent>() {
             @Override
@@ -125,41 +243,84 @@ public class Main extends Application{
         tiles.get(1).setOnAction(e->{
             int max=0;
             try{
-                max=Table.getTable(Integer.valueOf(tiles.get(1).getValue()).intValue()).getNoOfSeats();
+                if(tiles.get(1).getValue()!=null){
+                    max=Table.getTable(Integer.valueOf(tiles.get(1).getValue()).intValue()).getNoOfSeats();
+                }
             }catch (NumberFormatException ignored){}
             ObservableList<String> numOfGuests=FXCollections.observableArrayList();
             for(int i=1;i<=max;i++){numOfGuests.add(Integer.valueOf(i).toString());}
             tiles.get(2).setItems(numOfGuests);
         });
         tiles.get(7).setOnAction(e->{
-            int index=0;
-            if(tiles.get(7).getValue().equalsIgnoreCase("Beverages"))
-                index=0;
-            else if(tiles.get(7).getValue().equalsIgnoreCase("Breakfast"))
-                index=1;
-            else if(tiles.get(7).getValue().equalsIgnoreCase("Lunch"))
-                index=2;
-            else if(tiles.get(7).getValue().equalsIgnoreCase("Dinner"))
-                index=3;
-            else if(tiles.get(7).getValue().equalsIgnoreCase("Dessert"))
-                index=4;
-            ArrayList<Meal> menuMeals=menus.get(index).getMeals();
-            ObservableList<String> meals=FXCollections.observableArrayList();
-            for(Meal temp:menuMeals){meals.add(temp.getName());}
-            tiles.get(8).setItems(meals);
+            int index=tiles.get(7).getSelectionModel().getSelectedIndex();
+            if(index>=0){
+                ArrayList<Meal> menuMeals=menus.get(index).getMeals();
+                ObservableList<String> meals=FXCollections.observableArrayList();
+                for(Meal temp:menuMeals){meals.add(temp.getName());}
+                tiles.get(8).setItems(meals);
+            }
         });
+        back.setOnAction(e->{recepOptions(mainWindow,current);});
         btAdd.setOnAction(e->{
             if(tiles.get(8).getValue()!=null){
                 order.appendText(tiles.get(8).getValue()+"\n");
             }
         });
+        btCrRes.setOnAction(e->{
+            if(tiles.get(0).getSelectionModel().getSelectedIndex()>=0&&
+                    tiles.get(1).getSelectionModel().getSelectedIndex()>=0&&
+                    tiles.get(2).getSelectionModel().getSelectedIndex()>=0&&
+                    tiles.get(3).getSelectionModel().getSelectedIndex()>=0&&
+                    tiles.get(4).getSelectionModel().getSelectedIndex()>=0&&
+                    tiles.get(5).getSelectionModel().getSelectedIndex()>=0&&
+                    tiles.get(6).getSelectionModel().getSelectedIndex()>=0&&
+                    day.getValue()!=null){
+                int guestId=guests.get(tiles.get(0).getSelectionModel().getSelectedIndex()).getId();
+                int tableNum=Integer.valueOf(tiles.get(1).getValue());
+                int numOfGuests=Integer.valueOf(tiles.get(2).getValue());
+                String startTime=tiles.get(3).getValue()+':'+tiles.get(4).getValue();
+                String endTime=tiles.get(5).getValue()+':'+tiles.get(6).getValue();
+                String orderInString=null;
+                String[] mealsInString=null;
+                ArrayList<Meal> actualMeals=new ArrayList<>();
+                if(order.getText()!=null&& !order.getText().isEmpty()){
+                    orderInString=order.getText();
+                    mealsInString=orderInString.split("\n");
+                    for(String tmp:mealsInString) {
+                        actualMeals.add(Meal.getMealByNames(tmp));
+                    }
+                }
+                try {
+                    current.createReservation(guestId,tableNum,numOfGuests,day.getEditor().getText(),startTime,endTime,actualMeals);
+                    btCancel.fire();
+                } catch (InvalidAttributeValueException | ParseException ex) {
+                    Alert warning=new Alert(Alert.AlertType.ERROR);
+                    warning.setHeaderText(null);
+                    warning.setContentText(ex.getMessage());
+                    warning.showAndWait();
+                }
+
+            }else{
+                Alert warning=new Alert(Alert.AlertType.ERROR);
+                warning.setHeaderText(null);
+                warning.setContentText("Please fill All Required Fields");
+                warning.showAndWait();
+            }
+        });
         btCancel.setOnAction(e->{
+            for(ComboBox<String> temp:tiles){
+                temp.getSelectionModel().select(-1);
+            }
+            day.getEditor().setText(day.getConverter().toString(LocalDate.now()));
             order.clear();
-            tiles.get(1).getItems().clear();
             tiles.get(2).getItems().clear();
+            tiles.get(1).getItems().clear();
             tiles.get(8).getItems().clear();
         });
+
         //Designing of layout
+        HBox backBox=new HBox(back);
+        backBox.setAlignment(Pos.CENTER_LEFT);
         Text headerText=new Text("Create Reservation");
         headerText.setFont(Font.font("Cosmic Sans MS",FontWeight.BOLD,FontPosture.REGULAR,36));
         ArrayList<VBox> columns=new ArrayList<>(4);
@@ -178,7 +339,8 @@ public class Main extends Application{
         header.setPadding(new Insets(50));
         HBox body=new HBox();
         for(VBox temp:columns){ body.getChildren().add(temp); }
-        VBox root=new VBox(header,body);
+        VBox root=new VBox(backBox,header,body);
+
         //Scene & Main window modification
         Scene crResScene=new Scene(root,700,400);
         mainWindow.setScene(crResScene);
@@ -196,14 +358,17 @@ public class Main extends Application{
         images.add(new ImageView(new Image("D:\\Abdelrahman Stuff\\College\\Year 2\\Object Oriented Programming\\Project\\media\\take_reservation.jpg")));
         images.add(new ImageView(new Image("D:\\Abdelrahman Stuff\\College\\Year 2\\Object Oriented Programming\\Project\\media\\reservation.jpg")));
         images.add(new ImageView(new Image("D:\\Abdelrahman Stuff\\College\\Year 2\\Object Oriented Programming\\Project\\media\\guest icon.png")));
+
         //Nodes Styling
         for(ImageView temp:images){temp.setFitHeight(180); temp.setFitWidth(230);}
         for(Text temp:titles){temp.setFont(Font.font("Cosmic Sans MS",FontWeight.BLACK,FontPosture.REGULAR,28));}
+
         //Layout Building
         for(int i=0;i<3;i++){ columns.add(new VBox(20,images.get(i),titles.get(i))); }
         HBox layout=new HBox(50);
         for(VBox temp:columns){layout.getChildren().add(temp); temp.setAlignment(Pos.CENTER);}
         layout.setAlignment(Pos.CENTER);
+
         //Animations
         ArrayList<ScaleTransition> zooming=new ArrayList<>(6);
         for(int i=0;i<3;i++){
@@ -222,6 +387,7 @@ public class Main extends Application{
         for(int i=0;i<3;i++){
             tileTransition.add(new ParallelTransition(zooming.get(i),zooming.get(i+3)));
         }
+
         //Event Handling of VBoxes
         columns.get(0).setOnMouseEntered(e->{
             tileTransition.get(0).play();
@@ -241,6 +407,7 @@ public class Main extends Application{
         columns.get(2).setOnMouseClicked(e->{
             guestPreferencesMenu(mainWindow, current);
         });
+
         //Scene & Main window modification
         Scene optionsScene=new Scene(layout,1000,600);
         columns.get(0).requestFocus();
@@ -251,12 +418,14 @@ public class Main extends Application{
     private void recepLogin(Stage mainWindow){
         //Fonts
         Font lbFont=Font.font("Cosmic Sans MS",FontWeight.MEDIUM,FontPosture.REGULAR,16);
+
         //Nodes Declaration
         Text header=new Text("Log In");
         TextField tfUN=new TextField();
         PasswordField pfPW=new PasswordField();
         Label lbUN=new Label("Username: "),lbPW=new Label("Password: ");
         Button btLogIn=new Button("Log In"),btCancel=new Button("Cancel");
+
         //Nodes Styling
         header.setFont(Font.font("Cosmic Sans MS", FontWeight.BOLD, FontPosture.REGULAR,48));
         tfUN.setPromptText("Enter your username here");
@@ -267,14 +436,15 @@ public class Main extends Application{
         lbPW.setFont(lbFont);
         lbUN.setPrefSize(90,20);
         lbPW.setPrefSize(90,20);
+
         //Event-handling of Nodes
         tfUN.setOnKeyPressed(e->{
-            if(e.getCode().equals(KeyCode.ENTER)){
+            if(!tfUN.getText().isEmpty()&&e.getCode().equals(KeyCode.ENTER)){
                 pfPW.requestFocus();
             }
         });
         pfPW.setOnKeyPressed(e->{
-            if(!tfUN.getText().isEmpty()&&e.getCode().equals(KeyCode.ENTER)){
+            if(!tfUN.getText().isEmpty()&&!pfPW.getText().isEmpty()&&e.getCode().equals(KeyCode.ENTER)){
                 btLogIn.fire();
             }
         });
@@ -294,6 +464,7 @@ public class Main extends Application{
             tfUN.clear();
             pfPW.clear();
         });
+
         //Layout Building
         ArrayList<HBox> rows=new ArrayList<>(3);
         rows.add(new HBox(header));
@@ -309,6 +480,7 @@ public class Main extends Application{
         VBox layout=new VBox(5);
         layout.setPadding(new Insets(10));
         for (HBox row : rows) layout.getChildren().add(row);
+
         //Scene & Main window modification
         Scene LogInScene=new Scene(layout,500,250);
         mainWindow.setScene(LogInScene);
