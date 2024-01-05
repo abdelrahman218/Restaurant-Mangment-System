@@ -94,7 +94,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }    
     }
     public void setDate(String input) throws ParseException{
-        SimpleDateFormat sf=new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sf=new SimpleDateFormat("MM/dd/yyyy");
         try{
             date=sf.parse(input);
         }catch(ParseException e){
@@ -115,7 +115,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             throw e;
         }
         if(endTime.compareTo(startTime)<0){
-            throw new InvalidAttributeValueException("----------Invalid Time input-------------");
+            throw new InvalidAttributeValueException("End Time is  invalid");
         }else if(isReserved()){
             throw new InvalidAttributeValueException("Table is reserved in the specified time.");
         }  
@@ -261,7 +261,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     public String toString(){
         return("Receptionist Name: "+Receptionist.search(receptionistId).getName()+"\nGuest Name: "+Guest.getGuest(guestId).getName()
         +"\nReservation No.: "+getReservationNumber()+"\nTable No.: "+getTableNum()+"\nNo. of Guests: "+getNumOfGuests()+
-        "\nDate: "+getDate()+"\nFrom: "+getStartTime()+" To: "+getEndTime()+"\nOrder: "+orderNames()+"\nCost: "+getPrice()+"\nGuests rating: "+rating);
+        "\nDate: "+getDate()+"\nFrom: "+getStartTime()+" To: "+getEndTime()+"\nOrder: "+orderNames()+"\nCost: "+getPrice()+" LE\nGuests rating: "+rating);
     }
     @Override
     public int compareTo(Reservation right){

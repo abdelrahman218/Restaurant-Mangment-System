@@ -76,7 +76,6 @@ public class Main extends Application{
                 warning.setHeaderText(null);
                 warning.setContentText("Preferred Category has changed successfully");
                 warning.showAndWait();
-
             }else{
                 Alert warning=new Alert(Alert.AlertType.ERROR);
                 warning.setHeaderText(null);
@@ -134,7 +133,7 @@ public class Main extends Application{
         });
         btDelete.setOnAction(e->{
             int index=reservationNumbers.getValue();
-            if(index>=0){
+            if(index>0){
                 try{
                     current.cancelReservation(index);
                 }catch (InvalidAttributeValueException ignored){}
@@ -352,6 +351,7 @@ public class Main extends Application{
         ArrayList<VBox> columns=new ArrayList<>(3);
         ArrayList<ImageView> images=new ArrayList<>(3);
         ArrayList<Text> titles=new ArrayList<>(3);
+        Button btBack=new Button("Back");
         titles.add(new Text("Create Reservation"));
         titles.add(new Text("Cancel Reservation"));
         titles.add(new Text("Select Guest Preferences"));
@@ -365,9 +365,12 @@ public class Main extends Application{
 
         //Layout Building
         for(int i=0;i<3;i++){ columns.add(new VBox(20,images.get(i),titles.get(i))); }
-        HBox layout=new HBox(50);
+        VBox buttonBox=new VBox(btBack);
+        HBox layout=new HBox(50,buttonBox);
         for(VBox temp:columns){layout.getChildren().add(temp); temp.setAlignment(Pos.CENTER);}
         layout.setAlignment(Pos.CENTER);
+        VBox.setMargin(images.get(2),new Insets(0,20,0,0));
+        VBox.setMargin(titles.get(2),new Insets(0,20,0,0));
 
         //Animations
         ArrayList<ScaleTransition> zooming=new ArrayList<>(6);
@@ -388,7 +391,7 @@ public class Main extends Application{
             tileTransition.add(new ParallelTransition(zooming.get(i),zooming.get(i+3)));
         }
 
-        //Event Handling of VBoxes
+        //Event Handling of Nodes
         columns.get(0).setOnMouseEntered(e->{
             tileTransition.get(0).play();
         });
@@ -407,9 +410,11 @@ public class Main extends Application{
         columns.get(2).setOnMouseClicked(e->{
             guestPreferencesMenu(mainWindow, current);
         });
-
+        btBack.setOnAction(e->{
+            recepLogin(mainWindow);
+        });
         //Scene & Main window modification
-        Scene optionsScene=new Scene(layout,1000,600);
+        Scene optionsScene=new Scene(layout,1035,500);
         columns.get(0).requestFocus();
         mainWindow.setResizable(false);
         mainWindow.setScene(optionsScene);
@@ -425,6 +430,7 @@ public class Main extends Application{
         PasswordField pfPW=new PasswordField();
         Label lbUN=new Label("Username: "),lbPW=new Label("Password: ");
         Button btLogIn=new Button("Log In"),btCancel=new Button("Cancel");
+        Button btBack=new Button("Back");
 
         //Nodes Styling
         header.setFont(Font.font("Cosmic Sans MS", FontWeight.BOLD, FontPosture.REGULAR,48));
@@ -464,25 +470,30 @@ public class Main extends Application{
             tfUN.clear();
             pfPW.clear();
         });
+        btBack.setOnAction(e->{
+            start(mainWindow);
+        });
 
         //Layout Building
         ArrayList<HBox> rows=new ArrayList<>(3);
+        rows.add(new HBox(btBack));
         rows.add(new HBox(header));
         rows.add(new HBox(5,lbUN,tfUN));
         rows.add(new HBox(6,lbPW,pfPW));
         rows.add(new HBox(7,btLogIn,btCancel));
-        rows.get(0).setPadding(new Insets(0,0,30,0));
-        rows.get(0).setAlignment(Pos.CENTER);
+        rows.get(0).setAlignment(Pos.TOP_LEFT);
+        rows.get(1).setPadding(new Insets(0,0,30,0));
         rows.get(1).setAlignment(Pos.CENTER);
         rows.get(2).setAlignment(Pos.CENTER);
-        rows.get(3).setAlignment(Pos.CENTER_RIGHT);
-        rows.get(3).setPadding(new Insets(50,0,0,0));
+        rows.get(3).setAlignment(Pos.CENTER);
+        rows.get(4).setAlignment(Pos.CENTER_RIGHT);
+        rows.get(4).setPadding(new Insets(50,0,0,0));
         VBox layout=new VBox(5);
         layout.setPadding(new Insets(10));
         for (HBox row : rows) layout.getChildren().add(row);
 
         //Scene & Main window modification
-        Scene LogInScene=new Scene(layout,500,250);
+        Scene LogInScene=new Scene(layout,500,300);
         mainWindow.setScene(LogInScene);
         mainWindow.setTitle("Log In");
         mainWindow.setResizable(false);
