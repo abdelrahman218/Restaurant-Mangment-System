@@ -71,9 +71,9 @@ public class Table implements Serializable {
     public boolean isReserved(Date day,LocalTime start ,LocalTime end){
         ArrayList<Reservation> reservations=Reservation.search(this);
        for(int i=0;i<reservations.size();i++){
-           if((reservations.get(i).getDate()==day)&&
+           if((reservations.get(i).getDate().equals(day))&&
                 ((start.isBefore(reservations.get(i).getEndTime())&& (start.isAfter(reservations.get(i).getStartTime())))
-                 ||(end.isAfter(reservations.get(i).getStartTime())&& end.isBefore(reservations.get(i).getStartTime()))
+                 ||(end.isAfter(reservations.get(i).getStartTime())&& end.isBefore(reservations.get(i).getEndTime()))
                  ||start.equals(reservations.get(i).getStartTime())
                  ||end.equals(reservations.get(i).getEndTime())))
                return true;
