@@ -1,5 +1,5 @@
 package system;
-import employees.Receptionist;
+//Javafx imports
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
@@ -22,7 +22,12 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+//Self-Defined Classes
+import employees.Receptionist;
 import user.Guest;
+
+//Java imports
 import javax.management.InvalidAttributeValueException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
