@@ -5,52 +5,37 @@ import system.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import user.Guest;
-public class Admin extends Person implements Comparable<Admin>,Serializable  {
+public class Admin extends Person implements Comparable<Admin>,Serializable{
 private static ArrayList<Admin>Admins=new ArrayList<>();
 @Override
-    public int compareTo(Admin right){
+public int compareTo(Admin right){
      return 0;
     }
 public static ArrayList<Admin> getAdmins(){
     return Admins;
 }
 public static void saveRecords(){
-    try{
-    FileOutputStream f=new FileOutputStream("Admin archive.dat");
-    ObjectOutputStream out=new ObjectOutputStream(f);
-    out.writeInt(Admins.size());
-            int i=0;
-            while(i<Admins.size()){
-                out.writeObject(Admins.get(i));
-                i++;
-            }    
-            out.close();
-            f.close();
-    }
-    catch(IOException e){
-        System.out.println("Error happened writing in the file: Admin archive");
-    }
-
+    try {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Admin archive.dat"));
+            out.writeObject(Admins);
+        out.close();
+        } catch (IOException e) {
+        System.out.println(e);
+        }
 }
 public static void getRecord(){
-    try{
-        FileInputStream f=new FileInputStream("Admin archive.dat");
-        ObjectInputStream in=new ObjectInputStream(f);
-        int size=in.readInt();
-        while(size>0){
-            Admins.add((Admin)in.readObject());
-            size--;
-        }    
+    try {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream("Admin archive.dat"));
+        Admins=(ArrayList<Admin>)in.readObject();
         in.close();
-        f.close();
-    }catch(IOException e){
-        System.out.println("Error happened reading the file: Admin archive");
-    }catch(ClassNotFoundException e){
-        System.out.println("Error in class Admin reading compatiability");
+    }catch (ClassNotFoundException e) {
+        System.out.println(e);
+    } catch (IOException e) {
+        System.out.println(e);
     }
 }
 public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
@@ -70,7 +55,7 @@ public void editTable(int tableNum,Category tableCategory,double newcost,int new
 public void removeTable(int tableNum){
     Table.getlist().remove(Table.getTable(tableNum));
 }
-public ArrayList<Table> searchTable(Category tableCategory){
+public static ArrayList<Table> searchTable(Category tableCategory){
     ArrayList<Table> Tables=new ArrayList<Table>();
     for(int i=0;i<Table.getlist().size();i++){
     if(Table.getlist().get(i).getcateg()==tableCategory){
@@ -79,7 +64,7 @@ public ArrayList<Table> searchTable(Category tableCategory){
     }
     return Tables;
 }
-public String viewTableReports( int tableNum,Date StartDate,Date EndDate){
+public static String viewTableReports( int tableNum,Date StartDate,Date EndDate){
    ArrayList<Table> Tables=Table.getlist();
    String list="";
    list+="The table Category is : ";
@@ -96,26 +81,35 @@ return list;
 public void addMenu(){
     Menu.getlist().add(new Menu());
 }
-public void editMenu(int menuId,MenuCategory Menucategory){Menu.getlist().get(menuId).Categ=Menucategory;}
+public void addMenu(int x){
+    switch (x){
+        case 1: Menu.getlist().add(new Menu(MenuCategory.Breakfast));
+        case 2: Menu.getlist().add(new Menu(MenuCategory.Lunch));
+        case 3: Menu.getlist().add(new Menu(MenuCategory.Dinner));
+        case 4: Menu.getlist().add(new Menu(MenuCategory.Beverages));
+        case 5: Menu.getlist().add(new Menu(MenuCategory.Dessert));
+    }
+}
+public void editMenu(int menuId,MenuCategory Menucategory){Menu.getlist().get(menuId).setCateg(Menucategory);}
 public void removeMenu(int menuId){Menu.getlist().remove(Menu.getlist().get(menuId));}
-public String searchMenu(int menuId,Date Start,Date End){
+public static String searchMenu(int menuId,Date Start,Date End){
     String list="";
  list+="This menu's category is : ";
- list+=Menu.getlist().get(menuId).Categ;
+ list+=Menu.getlist().get(menuId).getCateg();
  list+="\n";
  list+="This menu's most ordered meal is : ";
  list+=Meal.getList().get(menuId).mostOrderedMeal(Start, End);
 return list;
 }
-public ArrayList<Meal> searchMenu(int menuId){return Menu.getlist().get(menuId).getMeals();}
-public void createMeal(int Menu_ID, int meal_ID, String Name, double Price,int noOfOrders){
-Meal.getList().add(new Meal(Menu_ID, meal_ID, Name, Price, noOfOrders));
+public static ArrayList<Meal> searchMenu(int menuId){return Menu.getlist().get(menuId).getMeals();}
+public void createMeal(int Menu_ID, int meal_ID, String Name, double Price){
+Meal.getList().add(new Meal(Menu_ID, meal_ID, Name, Price));
 }
-public MenuCategory viewMenuReportsCateg(int menuId){
+public static MenuCategory viewMenuReportsCateg(int menuId){
 ArrayList<Menu>Menues=Menu.getlist();
-return Menues.get(menuId).Categ;
+return Menues.get(menuId).getCateg();
 }
-public Meal viewMenuReportsMostOrderedMeal(int menuId,Date Start,Date End){
+public static Meal viewMenuReportsMostOrderedMeal(int menuId,Date Start,Date End){
 ArrayList<Meal>Meals=Meal.getList();
 return Meals.get(menuId).mostOrderedMeal(Start, End);
 }
@@ -126,24 +120,26 @@ guests.add(guest);
 
 }
 public void editCategory(int UserId,String Categorys){
-Guest Guests= Guest.getGuest(UserId);
 if(Categorys.equalsIgnoreCase("couples")){
-Guests.setPreferedCategory(1);
+    Guest.getList().get(UserId).setPreferedCategory(1);
 }
 else if(Categorys.equalsIgnoreCase("standard")){
-Guests.setPreferedCategory(0);
+Guest.getList().get(UserId).setPreferedCategory(0);
 }
 else if(Categorys.equalsIgnoreCase("family")){
-  Guests.setPreferedCategory(2); 
+  Guest.getList().get(UserId).setPreferedCategory(2); 
 }
 else if(Categorys.equalsIgnoreCase("private")){
- Guests.setPreferedCategory(3); 
+ Guest.getList().get(UserId).setPreferedCategory(3); 
 }
 }
-public void remove(int UserId) throws Throwable{
-Guest.getList().remove(Guest.getGuest(UserId));
+public void removeGuest(int UserId) throws Throwable{
+Guest.getList().remove(UserId);
 }
-public String viewUsers(int UserID){
+public void removeReceptionist(int UserId) throws Throwable{
+Receptionist.getList().remove(UserId);
+}
+public static String viewUsers(int UserID){
 Reservation r = new Reservation();
 Guest guests =Guest.getGuest(UserID);
 ArrayList<Reservation> G=r.search(guests);
@@ -161,7 +157,7 @@ for(int i=0;i<G.size();i++){
 }
 return list;
 }
-public String viewUsers(){
+public static String viewUsers(){
 ArrayList<Guest>guests=Guest.getList();
 String list="";
 for(int i=0;i<guests.size();i++){
@@ -192,7 +188,7 @@ name=recep.get(j).getName();
     list+="Receptionist whoese "+name +"with max number of reservation is "+maxreserve+"\n";
     return list;
 }
-String viewReservationOfGuest(int GuestId){
+public static String viewReservationOfGuest(int GuestId){
 Reservation r = new Reservation();
 Guest guests =Guest.getGuest(GuestId);
 ArrayList<Reservation> G=r.search(guests);
@@ -210,7 +206,7 @@ for(int i=0;i<G.size();i++){
 }
 return list;
 }
-public String viewReservationdetails(int guestId,int reservationNO){
+public static String viewReservationdetails(int guestId,int reservationNO){
     
     Reservation r = new Reservation();
 Guest guests =Guest.getGuest(guestId);
@@ -243,4 +239,3 @@ public static Admin search(String userName){
     return null;
 }
 }
-
