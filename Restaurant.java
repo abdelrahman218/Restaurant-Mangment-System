@@ -29,8 +29,8 @@ public class Restaurant extends Application {
     public void start(Stage primaryStage) throws Exception {
     new Admin("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "A", "A");
     new Admin("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","B","B");
-    new Receptionist("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "C", "C");
-    new Receptionist("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","D","D");
+    new Receptionist("David", "NewZealand", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "C", "C");
+    new Receptionist("Mark","China","8-5-1962","01200588939","johnwhite@gmail.com","D","D");
     new Guest("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "E", "E");
     new Guest("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","F","F");
     new Table(4);
@@ -162,46 +162,147 @@ public class Restaurant extends Application {
     nested.show();
     }
     private void adminmenu(Stage nested,Admin current){
-    Button bt1 = new Button("Create User");
-    Button bt2 = new Button("Table details");
-    Button bt3 = new Button("Receptionist details");
-    Button bt4 = new Button("Menu details");
-    Button bt5 =new Button("Guest details");
-    Button bt6 = new Button("View Logs");
-    Button bt7 = new Button("Sign out");
-    bt1.setPrefHeight(30);
-    bt1.setPrefWidth(120);
-    bt2.setPrefHeight(30);
-    bt2.setPrefWidth(120);
-    bt3.setPrefHeight(30);
-    bt3.setPrefWidth(130);
-    bt4.setPrefHeight(30);
-    bt4.setPrefWidth(120);
-    bt5.setPrefHeight(30);
-    bt5.setPrefWidth(120);
-    bt6.setPrefHeight(30);
-    bt6.setPrefWidth(120);
-    bt7.setPrefHeight(30);
-    bt7.setPrefWidth(120);
+    Button create = new Button("Create User");
+    Button Tab = new Button("Table details");
+    Button Recep = new Button("Receptionist details");
+    Button Menues = new Button("Menu details");
+    Button Guests =new Button("Guest details");
+    Button logs = new Button("View Logs");
+    Button signOut = new Button("Sign out");
+    create.setPrefHeight(30);
+    create.setPrefWidth(120);
+    Tab.setPrefHeight(30);
+    Tab.setPrefWidth(120);
+    Recep.setPrefHeight(30);
+    Recep.setPrefWidth(130);
+    Menues.setPrefHeight(30);
+    Menues.setPrefWidth(120);
+    Guests.setPrefHeight(30);
+    Guests.setPrefWidth(120);
+    logs.setPrefHeight(30);
+    logs.setPrefWidth(120);
+    signOut.setPrefHeight(30);
+    signOut.setPrefWidth(120);
     GridPane root=new GridPane();
-    root.add(bt6,2,0);
-    root.add(bt1,0,1);
-    root.add(bt2,1,1);
-    root.add(bt3,2,1);
-    root.add(bt4,3,1);
-    root.add(bt5,4,1);
-    root.add(bt7,2,2);
+    root.add(logs,2,0);
+    root.add(create,0,1);
+    root.add(Tab,1,1);
+    root.add(Recep,2,1);
+    root.add(Menues,3,1);
+    root.add(Guests,4,1);
+    root.add(signOut,2,2);
     root.setHgap(10);
     root.setVgap(10);
     root.setAlignment(Pos.CENTER);
+     root.setStyle("-fx-background-image: url('file:D:\\start.jpg');   "
+             + "-fx-background-size: cover;\n" +
+"    -fx-background-repeat: no-repeat;");
     Scene s= new Scene(root);
-    bt1.setOnAction(e->{usercreate(nested,current);});
-    bt2.setOnAction(e->{tb_details(nested,current);});
-    bt4.setOnAction(e->{menudetails(nested,current);});
-    bt7.setOnAction(e->{adminlogin(nested);});
+    create.setOnAction(e->{usercreate(nested,current);});
+    Tab.setOnAction(e->{tb_details(nested,current);});
+    Recep.setOnAction(e->{Recep_details(nested,current);});
+    Guests.setOnAction(e->{Guest_details(nested,current);});
+    Menues.setOnAction(e->{menudetails(nested,current);});
+    signOut.setOnAction(e->{adminlogin(nested);});
     nested.setTitle("Admin Menu");
     nested.setScene(s);
     nested.show();
+    }
+    private void Recep_details(Stage nested,Admin current){
+    ComboBox data=new ComboBox();
+    ObservableList<String> items = FXCollections.observableArrayList();
+    for(int i=0;i<Receptionist.getList().size();i++){
+    String it="";
+    it+=(i+1);
+    items.add(it);
+    }
+    data.setItems(items);
+    Label recepNo = new Label("Receptionist ID");
+    ListView<String> viewData = new ListView();
+    Button back=new Button("Back");
+    Button remove=new Button("Remove");
+    viewData.setPrefWidth(150);
+    viewData.setPrefHeight(250);
+    GridPane root= new GridPane();
+    root.add(recepNo,0,0);
+    root.add(data,1,0);
+    root.add(viewData,0,1);
+    root.add(back,1,2);
+    root.add(remove,0,2);
+    root.setHgap(10);
+    root.setVgap(10);
+    root.setAlignment(Pos.CENTER);
+    data.setOnAction(e->{String get=(String)data.getValue();
+                        int id =Integer.parseInt(get);
+                        ObservableList<String> itemss = FXCollections.observableArrayList();
+                        itemss.add(Receptionist.getList().get(id-1).toString());
+                        viewData.setItems(itemss);});
+    back.setOnAction(e->{adminmenu(nested,current);});
+    remove.setOnAction(e->{try{
+                           String get=(String)data.getValue();
+                        int id =Integer.parseInt(get);
+                        int number=id-1;
+                        current.removeReceptionist(number); 
+                        Recep_details(nested,current);}
+                        catch(Throwable ee){
+                        }});
+     root.setStyle("-fx-background-image: url('file:C://fod.png');   "
+             + "-fx-background-size: cover;\n" +
+"    -fx-background-repeat: no-repeat;");
+    Scene s= new Scene(root);
+    nested.setScene(s);
+    nested.setTitle("View Receptionist");
+    nested.show();
+    
+     
+    }
+    private void Guest_details(Stage nested,Admin current){
+    ComboBox data=new ComboBox();
+    ObservableList<String> items = FXCollections.observableArrayList();
+    for(int i=0;i<Guest.getList().size();i++){
+    String it="";
+    it+=(i+1);
+    items.add(it);
+    }
+    data.setItems(items);
+    Label recepNo = new Label("Guest ID");
+    ListView<String> viewData = new ListView();
+    Button back=new Button("Back");
+    Button remove=new Button("Remove");
+    viewData.setPrefWidth(150);
+    viewData.setPrefHeight(250);
+    GridPane root= new GridPane();
+    root.add(recepNo,0,0);
+    root.add(data,1,0);
+    root.add(viewData,1,1);
+    root.add(back,0,2);
+    root.add(remove,1,2);
+    root.setHgap(10);
+    root.setVgap(10);
+    root.setAlignment(Pos.CENTER);
+     root.setStyle("-fx-background-image: url('file:C://fod.png');   "
+             + "-fx-background-size: cover;\n" +
+"    -fx-background-repeat: no-repeat;");
+    data.setOnAction(e->{String get=(String)data.getValue();
+                        int id =Integer.parseInt(get);
+                        ObservableList<String> itemsss = FXCollections.observableArrayList();
+                        itemsss.add(Guest.getList().get(id-1).toString());
+                        viewData.setItems(itemsss);});
+    back.setOnAction(e->{adminmenu(nested,current);});
+    remove.setOnAction(e->{try{
+                           String gett=(String)data.getValue();
+                        int idd =Integer.parseInt(gett);
+                        int number=idd-1;
+                        current.removeGuest(number); 
+                        Guest_details(nested,current);}
+                        catch(Throwable ee){
+                        }});
+    Scene s= new Scene(root);
+    nested.setScene(s);
+    nested.setTitle("View Guest");
+    nested.show();
+    
+     
     }
     private void tb_details(Stage nested, Admin current){
         Button view=new Button("View Table");
@@ -266,7 +367,7 @@ public class Restaurant extends Application {
                         }
                         });
     bt2.setOnAction(e->{tb_details(nested,current);});
-    Scene s= new Scene(root,1000,500);
+    Scene s= new Scene(root);
     nested.setScene(s);
     nested.setTitle("View Menu");
     nested.show();
@@ -387,6 +488,7 @@ public class Restaurant extends Application {
                         }
                         data.setItems(itemsss);
                         });
+    exit.setOnAction(e->{tb_details(nested,current);});
     Scene s=new Scene(root,1000,500);
     nested.setScene(s);
     nested.show();
