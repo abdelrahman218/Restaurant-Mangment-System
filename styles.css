@@ -3,12 +3,6 @@
     -fx-text-fill: #FFFFFF;
     -fx-background-radius: 20;
 }
-.background-image {
-    -fx-background-image: url("D:\christmas.jpg");
-    -fx-background-size: cover;
-    -fx-background-position: center;
-}
-
 
 .custom-button {
     -fx-background-color: #5487DF; 
@@ -25,16 +19,12 @@
     -fx-text-fill: black;
 }
 
-
-
-
-
 .admin-button{
     -fx-background-image: url('file:D://admin.jpg');
     -fx-background-size: 450px,250px; /* Adjust the size based on your needs */
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-min-width: 450px; /* Set a minimum width for the button */
+    -fx-min-width: 380px; /* Set a minimum width for the button */
     -fx-min-height: 210px; /* Set a minimum height for the button */
     -fx-border-radius: 100,100,100,100;
     -fx-cursor: hand; /* Show a hand cursor on hover */
@@ -117,21 +107,23 @@
 }
 .custom-textfield{
     -fx-background-color: transparent;
-    -fx-text-fil: black;
+    -fx-text-fill: Red;
+
     -fx-border-color: blue;
     -fx-border-width: 2;
     -fx-background-radius: 15; 
     -fx-border-radius: 15;
 }
 .custom-textfield .text{
-    -fx-fill: red;
+    -fx-fill: #CA3A23;
+    -fx-color:#CA3A23;
 /*    -fx-font-size: 14px;*/
-    
+        -fx-text-color:#CA3A23;
 }
 
 .custom-passwordfield{
     -fx-background-color: transparent;
-    -fx-text-fil: black;
+    -fx-text-fill: Red;
     -fx-border-color: blue;
     -fx-border-width: 2;
     -fx-background-radius: 15; 
@@ -145,10 +137,11 @@
 
 .label{
     -fx-background-color:transparent;
-    -fx-text-fil:black;
+    -fx-text-fill:black;
     -fx-font-size:14px;
     -fx-font-weight: bold;
     -fx-border-color: blue;
+    -fx-padding: 10px 10px 10px 10px;       
     -fx-border-width: 2;
      -fx-background-radius: 15; 
     -fx-border-radius: 15;
