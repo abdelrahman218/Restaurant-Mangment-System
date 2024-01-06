@@ -34,6 +34,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
@@ -46,8 +47,7 @@ import javax.management.InvalidAttributeValueException;
 public class Restaurant extends Application {
     public Scene start;    
     @Override
-    public void start(Stage primaryStage) {
-    
+public void start(Stage primaryStage) {
     Button bt1=new Button();
     Button bt2=new Button();
     Button bt3=new Button();
@@ -67,13 +67,13 @@ public class Restaurant extends Application {
     root.setHgap(30);
     root.setVgap(30);
     root.setAlignment(Pos.CENTER);
-    Image im = new Image("file:D:\\start.jpg");
+    Image im = new Image("file:D:\\open.jpg");
     BackgroundImage bgi = new BackgroundImage(
     im,
      BackgroundRepeat.NO_REPEAT,
     BackgroundRepeat.NO_REPEAT,
      BackgroundPosition.CENTER,
-        new BackgroundSize(100,100,true,true,true,true));
+        new BackgroundSize(1,1,true,true,false,false));
     Background bg=new Background(bgi);
     root.setBackground(bg);
     Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
@@ -94,7 +94,7 @@ public class Restaurant extends Application {
 //    primaryStage.setMaximized(true);
     primaryStage.show();
     } 
-    private void adminlogin(Stage nested){
+private void adminlogin(Stage nested){
     Button bt1=new Button("Back");
     Button bt2 = new Button("Login");
     bt1.setPrefHeight(30);
@@ -158,9 +158,16 @@ public class Restaurant extends Application {
                             a.setHeaderText("Password Wrong");
                             a.show();
                           }});
-     root.setStyle("-fx-background-image: url('file:C://Users//EHKR//Documents//NetBeansProjects//media//fod.png');   "
-             + "-fx-background-size: cover;\n" +
-"    -fx-background-repeat: no-repeat;");
+     Image im = new Image("file:C:\\loging.jpg");
+    BackgroundImage bgi = new BackgroundImage(
+    im,
+     BackgroundRepeat.NO_REPEAT,
+    BackgroundRepeat.NO_REPEAT,
+     BackgroundPosition.CENTER,
+        new BackgroundSize(1,1,true,true,false,false));
+        Background bg=new Background(bgi);
+        root.setBackground(bg);
+    s.getStylesheets().add("/restaurant/styles.css");
     bt1.setOnAction(e->{nested.setScene(start);;});
     s.getStylesheets().add(getClass().getResource("/restaurant/styles.css").toExternalForm());
     nested.setScene(s);
@@ -168,7 +175,7 @@ public class Restaurant extends Application {
     nested.setMaximized(true);
     nested.show();
     }
-    private void adminmenu(Stage nested,Admin current){
+private void adminmenu(Stage nested,Admin current){
     Button create = new Button("Create User");
     Button Tab = new Button("Table details");
     Button Recep = new Button("Receptionist details");
@@ -215,7 +222,7 @@ public class Restaurant extends Application {
     nested.setScene(s);
     nested.show();
     }
-    private void Recep_details(Stage nested,Admin current){
+private void Recep_details(Stage nested,Admin current){
     ComboBox data=new ComboBox();
     ObservableList<String> items = FXCollections.observableArrayList();
     for(int i=0;i<Receptionist.getList().size();i++){
@@ -263,7 +270,7 @@ public class Restaurant extends Application {
     
      
     }
-    private void Guest_details(Stage nested,Admin current){
+private void Guest_details(Stage nested,Admin current){
     ComboBox data=new ComboBox();
     ObservableList<String> items = FXCollections.observableArrayList();
     for(int i=0;i<Guest.getList().size();i++){
@@ -311,7 +318,7 @@ public class Restaurant extends Application {
     
      
     }
-    private void tb_details(Stage nested, Admin current){
+private void tb_details(Stage nested, Admin current){
         Button view=new Button("View Table");
         Button change=new Button("Change Table");
         Button add=new Button("Add Table");
@@ -336,7 +343,7 @@ public class Restaurant extends Application {
         nested.setScene(s);
         nested.show();
     }
-    private void viewTable(Stage nested,Admin current){
+private void viewTable(Stage nested,Admin current){
     ComboBox b1=new ComboBox();
     ObservableList<String> items = FXCollections.observableArrayList();
     for(int i=0;i<system.Table.getlist().size();i++){
@@ -379,7 +386,7 @@ public class Restaurant extends Application {
     nested.setTitle("View Menu");
     nested.show();
     }
-    private void changeTable(Stage nested,Admin current){
+private void changeTable(Stage nested,Admin current){
         Label l1=new Label("Table Number ");
     Label l3=new Label("Table Number ");
     Label NoOfSeats =new Label("Number of seats" );
@@ -451,7 +458,7 @@ public class Restaurant extends Application {
     nested.setScene(s);
     nested.show();
     }
-    private void searchTable(Stage nested,Admin current){
+private void searchTable(Stage nested,Admin current){
     ListView data=new ListView();    
     Label Categ= new Label("Category");    
     ComboBox Category=new ComboBox();
@@ -500,7 +507,7 @@ public class Restaurant extends Application {
     nested.setScene(s);
     nested.show();
     }
-    private void menudetails(Stage nested, Admin current){
+private void menudetails(Stage nested, Admin current){
     Button bt1=new Button("View Menu");
     Button bt2=new Button("Change menu");
     Button bt4=new Button("Add Meal");
@@ -523,7 +530,7 @@ public class Restaurant extends Application {
     nested.show();
     
     }
-    private void addmeal(Stage nested,Admin current){
+private void addmeal(Stage nested,Admin current){
     Label l1=new Label("Menu Id");
     Label l2=new Label("Meal Id");
     Label l3=new Label("Meal Name");
@@ -571,7 +578,7 @@ public class Restaurant extends Application {
     nested.setScene(s);
     nested.show();
     }
-    private void changemenu(Stage nested,Admin current){
+private void changemenu(Stage nested,Admin current){
     Label l1=new Label("Menu Id ");
     Label l3=new Label("Menu Id ");
     Label l2 =new Label("New Category " );
@@ -636,7 +643,7 @@ public class Restaurant extends Application {
     nested.show();
     
     }
-    private void viewmenu(Stage nested,Admin current){
+private void viewmenu(Stage nested,Admin current){
     ComboBox b1=new ComboBox();
     ObservableList<String> items = FXCollections.observableArrayList();
     for(int i=0;i<system.Menu.getlist().size();i++){
@@ -692,7 +699,7 @@ public class Restaurant extends Application {
     nested.setTitle("View Menu");
     nested.show();
     }
-    private void usercreate(Stage nested,Admin current){
+private void usercreate(Stage nested,Admin current){
     Button bt1=new Button ("Admin create");
     Button bt2=new Button("Receptionist create");
     Button bt3=new Button("Back");
@@ -718,7 +725,7 @@ public class Restaurant extends Application {
     nested.setScene(s);
     nested.show();
     }
-    private void admincreate(Stage nested,Admin current){
+private void admincreate(Stage nested,Admin current){
         Button bt1=new Button("Sign up");
         Button bt2=new Button("Back");
         Label l1= new Label("Name");
@@ -793,7 +800,7 @@ public class Restaurant extends Application {
         nested.show();
 
     }
-    private void receptionistcreate(Stage nested,Admin current){
+private void receptionistcreate(Stage nested,Admin current){
     Button bt1=new Button("Sign up");
         Button bt2=new Button("Back");
         Label l1= new Label("Name");
@@ -867,7 +874,7 @@ public class Restaurant extends Application {
         nested.setScene(s);
         nested.show();
     }
-    private void guestPreferencesMenu(Stage mainWindow,Receptionist current){
+private void guestPreferencesMenu(Stage mainWindow,Receptionist current){
         //Declaration of Nodes
         Text headerText=new Text("Select Guest Preferences");
         headerText.setFont(Font.font("Cosmic Sans MS",FontWeight.BOLD,FontPosture.REGULAR,36));
@@ -890,7 +897,7 @@ public class Restaurant extends Application {
         buttonBox.setPadding(new Insets(20));
         VBox body=new VBox(10,names,pref);
         body.setAlignment(Pos.CENTER);
-        VBox root=new VBox(backBox,header,body,buttonBox);
+        VBox root=new VBox(80,backBox,header,body,buttonBox);
 
         //Loading Nodes with content
         ArrayList<Guest> guests=Guest.getList();
@@ -923,7 +930,7 @@ public class Restaurant extends Application {
         mainWindow.setScene(guestPrefScene);
         mainWindow.setTitle("Select Guest Preferences");
     }
-    private void cancelReservationMenu(Stage mainWindow,Receptionist current){
+private void cancelReservationMenu(Stage mainWindow,Receptionist current){
         //Declaration of Nodes
         Text headerText=new Text("Cancel Reservation");
         headerText.setFont(Font.font("Cosmic Sans MS",FontWeight.BOLD,FontPosture.REGULAR,36));
@@ -987,7 +994,7 @@ public class Restaurant extends Application {
         mainWindow.setScene(cancelResScene);
         mainWindow.setTitle("Cancel Reservation");
     }
-    private void createReservationMenu(Stage mainWindow,Receptionist current){
+private void createReservationMenu(Stage mainWindow,Receptionist current){
         //Declaration of Nodes
         TextArea order=new TextArea();
         order.setPrefSize(200,400);
@@ -1154,6 +1161,7 @@ public class Restaurant extends Application {
         //Designing of layout
         HBox backBox=new HBox(back);
         backBox.setAlignment(Pos.CENTER_LEFT);
+        backBox.setPadding(new Insets(0,0,0,100));
         Text headerText=new Text("Create Reservation");
         headerText.setFont(Font.font("Cosmic Sans MS",FontWeight.BOLD,FontPosture.REGULAR,36));
         ArrayList<VBox> columns=new ArrayList<>(4);
@@ -1171,16 +1179,18 @@ public class Restaurant extends Application {
         header.setAlignment(Pos.CENTER);
         header.setPadding(new Insets(50));
         HBox body=new HBox();
+        body.setAlignment(Pos.CENTER);
         for(VBox temp:columns){ body.getChildren().add(temp); }
         VBox root=new VBox(backBox,header,body);
-
+        root.setAlignment(Pos.CENTER);
+        
         //Scene & Main window modification
         Scene crResScene=new Scene(root,700,400);
         mainWindow.setScene(crResScene);
         mainWindow.setTitle("Create Reservation");
         mainWindow.setResizable(false);
     }
-    private void recepOptions(Stage mainWindow,Receptionist current){
+private void recepOptions(Stage mainWindow,Receptionist current){
         //Nodes Declaration
         ArrayList<VBox> columns=new ArrayList<>(3);
         ArrayList<ImageView> images=new ArrayList<>(3);
@@ -1200,6 +1210,7 @@ public class Restaurant extends Application {
         //Layout Building
         for(int i=0;i<3;i++){ columns.add(new VBox(20,images.get(i),titles.get(i))); }
         VBox buttonBox=new VBox(btBack);
+        buttonBox.setAlignment(Pos.TOP_LEFT);
         HBox layout=new HBox(50,buttonBox);
         for(VBox temp:columns){layout.getChildren().add(temp); temp.setAlignment(Pos.CENTER);}
         layout.setAlignment(Pos.CENTER);
@@ -1254,18 +1265,23 @@ public class Restaurant extends Application {
         mainWindow.setScene(optionsScene);
         mainWindow.setTitle("Receptionist Options");
     }
-    private void recepLogin(Stage mainWindow){
+private void recepLogin(Stage mainWindow){
         //Fonts
         Font lbFont=Font.font("Cosmic Sans MS",FontWeight.MEDIUM,FontPosture.REGULAR,16);
 
         //Nodes Declaration
         Text header=new Text("Log In");
+        header.getStyleClass().add("colored-word");
         TextField tfUN=new TextField();
+        tfUN.getStyleClass().add("custom-textfield");
         PasswordField pfPW=new PasswordField();
+        pfPW.getStyleClass().add("custom-passwordfield");
         Label lbUN=new Label("Username: "),lbPW=new Label("Password: ");
         Button btLogIn=new Button("Log In"),btCancel=new Button("Cancel");
         Button btBack=new Button("Back");
-
+        btLogIn.getStyleClass().add("custom-button");
+        btBack.getStyleClass().add("custom-button");
+        btCancel.getStyleClass().add("custom-button");
         //Nodes Styling
         header.setFont(Font.font("Cosmic Sans MS", FontWeight.BOLD, FontPosture.REGULAR,48));
         tfUN.setPromptText("Enter your username here");
@@ -1320,19 +1336,32 @@ public class Restaurant extends Application {
         rows.get(1).setAlignment(Pos.CENTER);
         rows.get(2).setAlignment(Pos.CENTER);
         rows.get(3).setAlignment(Pos.CENTER);
-        rows.get(4).setAlignment(Pos.CENTER_RIGHT);
+        rows.get(4).setAlignment(Pos.CENTER);
         rows.get(4).setPadding(new Insets(50,0,0,0));
         VBox layout=new VBox(5);
         layout.setPadding(new Insets(10));
         for (HBox row : rows) layout.getChildren().add(row);
-
+//        layout.setStyle("-fx-background-image: url('file:C://loging.jpg');   "
+//             + "-fx-background-size: cover;\n" +
+//"    -fx-background-repeat: no-repeat;");
+        Image im = new Image("file:C:\\loging.jpg");
+    BackgroundImage bgi = new BackgroundImage(
+    im,
+     BackgroundRepeat.NO_REPEAT,
+    BackgroundRepeat.NO_REPEAT,
+     BackgroundPosition.CENTER,
+        new BackgroundSize(1,1,true,true,false,false));
+        Background bg=new Background(bgi);
+        layout.setBackground(bg);
         //Scene & Main window modification
         Scene LogInScene=new Scene(layout,500,300);
+        LogInScene.getStylesheets().add(getClass().getResource("/restaurant/styles.css").toExternalForm());
+        
         mainWindow.setScene(LogInScene);
         mainWindow.setTitle("Log In");
         mainWindow.setResizable(false);
     }
-    private void guestlogin(Stage nested){
+private void guestlogin(Stage nested){
     Button bt1=new Button("Back");
     Button bt2 = new Button("Login");
     Button bt3 = new Button("Sign up");
@@ -1381,12 +1410,14 @@ public class Restaurant extends Application {
                             a.setTitle("Error");
                             a.setHeaderText("Login Failed");
                             a.show();
+                           
                          }
                          else if(current.checkpassword(pa)){
                             Alert ad=new Alert(Alert.AlertType.INFORMATION);
                             ad.setTitle("Welcome");
                             ad.setHeaderText("Login Sucessful");
-                            ad.show();}
+                            ad.show();
+                          mainScene( nested, current);}
                           else{
                           Alert a = new Alert(Alert.AlertType.ERROR);
                             a.setTitle("Error");
@@ -1395,14 +1426,21 @@ public class Restaurant extends Application {
                           }});
     bt3.setOnAction(e->{guestcreate(nested);});
     nested.setScene(s);
-    root.setStyle("-fx-background-image: url('file:C://test.jpg');   "
-             + "-fx-background-size: cover;\n" +
-"    -fx-background-repeat: no-repeat;");
+    Image im = new Image("file:C:\\loging.jpg");
+    BackgroundImage bgi = new BackgroundImage(
+    im,
+     BackgroundRepeat.NO_REPEAT,
+    BackgroundRepeat.NO_REPEAT,
+     BackgroundPosition.CENTER,
+        new BackgroundSize(1,1,true,true,false,false));
+        Background bg=new Background(bgi);
+        root.setBackground(bg);
     s.getStylesheets().add("/restaurant/styles.css");
     nested.setTitle("Login");
     nested.show();
     }
-    private void guestcreate(Stage nested){
+private void guestcreate(Stage nested){
+        Button bt1=new Button("Back"); 
     Label name=new Label("Name");
     Label email=new Label("Email");
     Label address=new Label("Address");
@@ -1411,9 +1449,10 @@ public class Restaurant extends Application {
     TextField em=new TextField();
     TextField add=new TextField();
     TextField pas=new TextField();
-    VBox v1=new VBox(30,name,email,address,pass);
+    VBox v1=new VBox(30,name,email,address,pass,bt1);
     VBox v2=new VBox(20,na,em,add,pas);
     HBox root=new HBox(10,v1,v2);
+    bt1.setOnAction(e->{nested.setScene(start);});
     root.setPadding(new Insets(20));
     root.setAlignment(Pos.TOP_LEFT);
     Scene s =new Scene(root,1000,500);
@@ -1421,7 +1460,112 @@ public class Restaurant extends Application {
     nested.setScene(s);
     nested.show();
     }
-    public static void main(String[] args) {
+private void mainScene(Stage nested,Guest current) {
+        
+        Button viewReservationButton = new Button("View Reservations");
+        Button rateBookingButton = new Button("Rate Booking");
+        rateBookingButton.setOnAction(e->{ 
+                if("[]".equals(current.ViewReservation())){
+                Alert ad = new Alert(
+            AlertType.INFORMATION);
+            ad.setTitle("Reservations");
+            ad.setHeaderText("No Reservation Found");
+            ad.show();
+            }
+            else{
+rateBookingScene(nested,current);}});
+        viewReservationButton.setOnAction(e->{
+            if("[]".equals(current.ViewReservation())){
+                Alert ad = new Alert(
+            AlertType.INFORMATION);
+            ad.setTitle("Reservations");
+            ad.setHeaderText("No Reservation Found");
+            ad.show();
+            }
+            else{
+            ViewReservationScene(nested,current);
+            }});
+         Button back= new Button("Back");
+         back.setOnAction(e->{mainScene(nested,current);});
+        VBox root=new VBox(10,viewReservationButton,rateBookingButton,back);
+//        root.add(viewReservationButton,0,0);
+//        root.add(rateBookingButton,0,1);
+//        root.add(back,0,2);
+//        root.setHgap(10);
+//        root.setVgap(10);
+        root.setAlignment(Pos.CENTER);
+        Scene s=new Scene(root);
+//        mainLayout.setPadding(new Insets(10, 10, 10, 10));
+        
+       nested.setScene(s);
+       nested.show();
+        
+    }
+private void ViewReservationScene(Stage nested,Guest current) {
+    Button bt1=new Button("Back");
+    ObservableList<String> items = FXCollections.observableArrayList();
+    ListView data=new ListView();
+    items.add(current.ViewReservation());
+    data.setItems(items);
+    VBox ViewReservationLayout = new VBox(10,data,bt1);
+    Scene s=new Scene(ViewReservationLayout);
+       bt1.setOnAction(e->{mainScene(nested,current);});
+        ViewReservationLayout.setAlignment(Pos.CENTER);
+        nested.setScene(s);
+        nested.show();
+}
+private void rateBookingScene(Stage nested,Guest current) {
+        GridPane root= new GridPane();
+        Scene s=new Scene(root);
+        Label ratingLabel = new Label("Enter Rating From 1 to 10:");
+        TextField ratingTextField = new TextField();
+        Button submitRatingButton = new Button("Submit");
+            Button Back= new Button("Back");
+Back.setOnAction(e->{nested.setScene(start);});
+       Button Exit= new Button("Exit");
+       Exit.setOnAction(e->{
+          javafx. application. Platform. exit();
+       });
+        submitRatingButton.setOnAction(e->{  if(ratingTextField.getText().isEmpty()){
+              Alert ad = new Alert(
+AlertType.ERROR);
+ad.setTitle("Try agin ");
+ad.setHeaderText("Enter a Rating");
+ad.show();
+        }
+        else{
+            submitRating(ratingTextField.getText());
+                }});
+        VBox rateBookingLayout = new VBox(10);
+        rateBookingLayout.getChildren().addAll(ratingLabel, ratingTextField, submitRatingButton,Back,Exit);
+        rateBookingLayout.setAlignment(Pos.CENTER);
+        rateBookingLayout.setPadding(new Insets(10, 10, 10, 10));
+        root.getChildren().clear();
+        root.getChildren().add(rateBookingLayout);
+        nested.setScene(s);
+        nested.show();
+    }
+private void submitRating(String rating) {
+        int Rating= Integer.parseInt(rating);
+  if(Rating>=0&&Rating<=10){
+ 
+Alert ad = new Alert(
+AlertType.INFORMATION);
+ad.setTitle("Thank You");
+ad.setHeaderText("Rating Submitted Successfully");
+ad.setContentText(rating);
+ad.show();
+//Back();
+  }
+  else{
+Alert ad = new Alert(
+AlertType.ERROR);
+ad.setTitle("Try agin ");
+ad.setHeaderText("Enter a valid Rating");
+ad.show();
+  }
+}
+public static void main(String[] args) {
         new Menu(MenuCategory.Beverages);
         new Menu(MenuCategory.Breakfast);
         new Menu(MenuCategory.Lunch);
