@@ -302,6 +302,7 @@ private void Recep_details(Stage nested,Admin current){
     Background bg=new Background(bgi);
     root.setBackground(bg);
     Scene s= new Scene(root);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.setScene(s);
     nested.setTitle("View Receptionist");
     nested.show();
@@ -357,6 +358,7 @@ private void Guest_details(Stage nested,Admin current){
                         }});
     Scene s= new Scene(root);
     nested.setScene(s);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.setTitle("View Guest");
     nested.show();
     
@@ -393,6 +395,7 @@ private void tb_details(Stage nested, Admin current){
     Background bg=new Background(bgi);
     root.setBackground(bg);
         nested.setTitle("Table");
+        s.getStylesheets().add("/restaurant/styles.css");  
         nested.setScene(s);
         nested.show();
     }
@@ -466,8 +469,8 @@ private void viewTable(Stage nested,Admin current){
     Label l1 = new Label("Table Number");
     ListView<String> l = new ListView();
     Button bt2=new Button("Back");
-    l.setPrefWidth(150);
-    l.setPrefHeight(250);
+    l.setPrefWidth(200);
+    l.setPrefHeight(350);
     GridPane root= new GridPane();
     root.add(l1,0,0);
     root.add(b1,1,0);
@@ -502,7 +505,9 @@ private void viewTable(Stage nested,Admin current){
         new BackgroundSize(1,1,true,true,false,false));
     Background bg=new Background(bgi);
     root.setBackground(bg);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.setScene(s);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.setTitle("View Table");
     nested.show();
     }
@@ -689,6 +694,7 @@ private void searchTable(Stage nested,Admin current){
     root.setBackground(bg);
     Scene s=new Scene(root,1000,500);
     nested.setScene(s);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.show();
     }
 private void menudetails(Stage nested, Admin current){
@@ -778,6 +784,7 @@ private void addmeal(Stage nested,Admin current){
     Background bg=new Background(bgi);
     root.setBackground(bg);
     nested.setScene(s);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.show();
     }
 private void changemenu(Stage nested,Admin current){
@@ -873,6 +880,7 @@ private void changemenu(Stage nested,Admin current){
     Background bg=new Background(bgi);
     root.setBackground(bg);
     nested.setScene(s);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.show();
     
     }
@@ -939,6 +947,7 @@ private void viewmenu(Stage nested,Admin current){
     root.setBackground(bg);
     nested.setScene(s);
     nested.setTitle("View Menu");
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.show();
     }
 private void usercreate(Stage nested,Admin current){
@@ -1018,12 +1027,15 @@ private void viewUsers(Stage nested,Admin current){
     Background bg=new Background(bgi);
     root.setBackground(bg);
     nested.setScene(s);
+    s.getStylesheets().add("/restaurant/styles.css");  
     nested.setTitle("View Uers");
     nested.show();
 }
 private void admincreate(Stage nested,Admin current){
         Button bt1=new Button("Sign up");
         Button bt2=new Button("Back");
+        bt1.getStyleClass().add("custom-button");
+        bt2.getStyleClass().add("custom-button");
         Label l1= new Label("Name");
         Label l2= new Label("Address");
         Label l3= new Label("Date of Birth");
@@ -1038,6 +1050,12 @@ private void admincreate(Stage nested,Admin current){
         TextField em = new TextField();
         TextField us = new TextField();
         TextField pas = new TextField();
+        na.getStyleClass().add("custom-textfield");
+        ad.getStyleClass().add("custom-textfield");
+        ph.getStyleClass().add("custom-textfield");
+        em.getStyleClass().add("custom-textfield");
+        us.getStyleClass().add("custom-textfield");
+        pas.getStyleClass().add("custom-textfield");
         GridPane root = new GridPane();
         root.add(l1,0,0);
         root.add(l2,0,1);
@@ -1102,12 +1120,15 @@ private void admincreate(Stage nested,Admin current){
     root.setBackground(bg);
         nested.setTitle("Admin");
         nested.setScene(s);
+        s.getStylesheets().add("/restaurant/styles.css");  
         nested.show();
 
     }
 private void receptionistcreate(Stage nested,Admin current){
     Button bt1=new Button("Sign up");
         Button bt2=new Button("Back");
+        bt1.getStyleClass().add("custom-button");
+        bt2.getStyleClass().add("custom-button");
         Label l1= new Label("Name");
         Label l2= new Label("Address");
         Label l3= new Label("Date of Birth");
@@ -1122,6 +1143,12 @@ private void receptionistcreate(Stage nested,Admin current){
         TextField em = new TextField();
         TextField us = new TextField();
         TextField pas = new TextField();
+        na.getStyleClass().add("custom-textfield");
+        ad.getStyleClass().add("custom-textfield");
+        ph.getStyleClass().add("custom-textfield");
+        em.getStyleClass().add("custom-textfield");
+        us.getStyleClass().add("custom-textfield");
+        pas.getStyleClass().add("custom-textfield");
         GridPane root = new GridPane();
         root.add(l1,0,0);
         root.add(l2,0,1);
@@ -1185,6 +1212,7 @@ private void receptionistcreate(Stage nested,Admin current){
     Background bg=new Background(bgi);
     root.setBackground(bg);
         nested.setTitle("Receptionist");
+        s.getStylesheets().add("/restaurant/styles.css");
         nested.setScene(s);
         nested.show();
     }
@@ -1251,6 +1279,7 @@ private void guestPreferencesMenu(Stage mainWindow,Receptionist current){
         //Scene & Main window modification
         Scene guestPrefScene=new Scene(root,500,250);
         mainWindow.setScene(guestPrefScene);
+        guestPrefScene.getStylesheets().add("/restaurant/styles.css");
         mainWindow.setTitle("Select Guest Preferences");
     }
 private void cancelReservationMenu(Stage mainWindow,Receptionist current){
@@ -1324,6 +1353,7 @@ private void cancelReservationMenu(Stage mainWindow,Receptionist current){
         //Scene & Main window modification
         Scene cancelResScene=new Scene(root,1000,500);
         mainWindow.setScene(cancelResScene);
+        cancelResScene.getStylesheets().add("/restaurant/styles.css");
         mainWindow.setTitle("Cancel Reservation");
     }
 private void createReservationMenu(Stage mainWindow,Receptionist current){
@@ -1528,6 +1558,7 @@ private void createReservationMenu(Stage mainWindow,Receptionist current){
         //Scene & Main window modification
         Scene crResScene=new Scene(root,700,400);
         mainWindow.setScene(crResScene);
+        crResScene.getStylesheets().add("/restaurant/styles.css");
         mainWindow.setTitle("Create Reservation");
         mainWindow.setResizable(false);
     }
@@ -1614,6 +1645,7 @@ private void recepOptions(Stage mainWindow,Receptionist current){
         columns.get(0).requestFocus();
         mainWindow.setResizable(false);
         mainWindow.setScene(optionsScene);
+        optionsScene.getStylesheets().add("/restaurant/styles.css");
         mainWindow.setTitle("Receptionist Options");
     }
 private void recepLogin(Stage mainWindow){
@@ -1706,7 +1738,7 @@ private void recepLogin(Stage mainWindow){
         layout.setBackground(bg);
         //Scene & Main window modification
         Scene LogInScene=new Scene(layout,500,300);
-        LogInScene.getStylesheets().add(getClass().getResource("/restaurant/styles.css").toExternalForm());
+        LogInScene.getStylesheets().add("/restaurant/styles.css");
         
         mainWindow.setScene(LogInScene);
         mainWindow.setTitle("Log In");
@@ -1810,7 +1842,7 @@ private void guestlogin(Stage nested){
         layout.setBackground(bg);
         //Scene & Main window modification
         Scene LogInScene=new Scene(layout,500,300);
-        LogInScene.getStylesheets().add(getClass().getResource("/restaurant/styles.css").toExternalForm());
+        LogInScene.getStylesheets().add("/restaurant/styles.css");
         
         nested.setScene(LogInScene);
         nested.setTitle("Log In");
@@ -1819,6 +1851,8 @@ private void guestlogin(Stage nested){
 private void guestcreate(Stage nested){
      Button bt1=new Button("Sign up");
         Button bt2=new Button("Back");
+        bt1.getStyleClass().add("custom-button");
+        bt2.getStyleClass().add("custom-button");
         Label l1= new Label("Name");
         Label l2= new Label("Address");
         Label l3= new Label("Date of Birth");
@@ -1833,6 +1867,12 @@ private void guestcreate(Stage nested){
         TextField em = new TextField();
         TextField us = new TextField();
         TextField pas = new TextField();
+        na.getStyleClass().add("custom-textfield");
+        ad.getStyleClass().add("custom-textfield");
+        ph.getStyleClass().add("custom-textfield");
+        em.getStyleClass().add("custom-textfield");
+        us.getStyleClass().add("custom-textfield");
+        pas.getStyleClass().add("custom-textfield");
         GridPane root = new GridPane();
         root.add(l1,0,0);
         root.add(l2,0,1);
@@ -1896,6 +1936,7 @@ private void guestcreate(Stage nested){
     Background bg=new Background(bgi);
     root.setBackground(bg);
         nested.setTitle("Guest Sign Up");
+        s.getStylesheets().add("/restaurant/styles.css");
         nested.setScene(s);
         nested.show();
     }
@@ -1945,6 +1986,7 @@ rateBookingScene(nested,current);}});
     Background bg=new Background(bgi);
     root.setBackground(bg);   
        nested.setScene(s);
+       s.getStylesheets().add("/restaurant/styles.css");
        nested.show();
         
     }
@@ -1968,6 +2010,7 @@ private void ViewReservationScene(Stage nested,Guest current) {
        bt1.setOnAction(e->{mainScene(nested,current);});
         ViewReservationLayout.setAlignment(Pos.CENTER);
         nested.setScene(s);
+        s.getStylesheets().add("/restaurant/styles.css");
         nested.show();
 }
 private void rateBookingScene(Stage nested,Guest current) {
@@ -2008,6 +2051,7 @@ ad.show();
     Background bg=new Background(bgi);
     root.setBackground(bg);
         nested.setScene(s);
+        s.getStylesheets().add("/restaurant/styles.css");
         nested.show();
     }
 private void submitRating(String rating) {

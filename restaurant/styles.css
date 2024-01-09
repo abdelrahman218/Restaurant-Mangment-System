@@ -150,13 +150,13 @@
 }
 .label{
     -fx-background-color:transparent;
-    -fx-text-fill:white;
+    -fx-text-fill:#01D1E8;
     -fx-font-size:14px;
     -fx-font-weight: bold;
     -fx-border-color: blue;
     -fx-padding: 10px 10px 10px 30px;       
     -fx-border-width: 2;
-    -fx-pref-width: 130px;
+    -fx-pref-width: 150px;
     -fx-pref-height: 50px;
     -fx-background-radius: 15; 
     -fx-border-radius: 15;
@@ -164,18 +164,14 @@
 .combo-box {
     -fx-background-color:transparent;
     -fx-border-color: blue;
-    -fx-border-width:0.5;
-    -fx-border-radius:50px;
-    -fx-background-radius:50px;
+    -fx-border-radius:10px;
+    -fx-background-radius:5px;
     -fx-text-fill:blue;
-    -fx-border-width: 1px;
-    -fx-padding: 3px;
     -fx-font-size:15px;
     -fx-font-weight:bold;
 }
 .combo-box .arrow-button {
     -fx-background-color: transparent;
-    -fx-text-fill:blue;
 }
 
 .combo-box .list-cell {
@@ -185,4 +181,43 @@
     -fx-padding: 3px;
     -fx-font-size:15px;
     -fx-font-weight:bold;
+}
+
+
+
+.list-view{
+    -fx-background-color:transparent;
+    -fx-text-fill:blue;
+    -fx-font-size:15px;
+    -fx-border-color: blue;
+    -fx-border-radius:5px;
+    -fx-font-weight:bold;
+
+}
+.list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: blue;
+    -fx-font-weight:bold;
+
+}
+/* styles.css */
+
+.date-picker {
+    -fx-text-fill: black; /* Text color */
+}
+
+.date-picker-popup > * {
+    -fx-background-color: transparent;
+    -fx-text-fill:black;
+}
+
+.date-picker-popup .day-cell {
+    -fx-text-fill: blue; /* Text color for day cells */
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #e0e0e0; /* Background color on hover */
+}
+.date-picker-popup .month-year-panel {
+    -fx-text-fill: black; /* Text color for month and year labels */
 }
