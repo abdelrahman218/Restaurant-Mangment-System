@@ -1,0 +1,223 @@
+.Button{
+    -fx-background-color: #3381D9;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 20;
+}
+
+.custom-button {
+    -fx-background-color: #5487DF; 
+    -fx-text-fill: white;         
+    -fx-font-size: 13px;          
+    -fx-padding: 10px 10px 10px 10px;       
+    -fx-border-radius: 2px;       
+    -fx-cursor: hand;             
+}
+
+.custom-button:hover {
+    -fx-background-color: #2067E2; 
+    -fx-font-size: 14px;
+    -fx-text-fill: black;
+}
+
+.admin-button{
+    -fx-background-image: url('file:E://admin.jpg');
+    -fx-background-size: 450px,250px; /* Adjust the size based on your needs */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 380px; /* Set a minimum width for the button */
+    -fx-min-height: 210px; /* Set a minimum height for the button */
+    -fx-border-radius: 100,100,100,100;
+    -fx-cursor: hand; /* Show a hand cursor on hover */
+    
+    /* Transition for smooth hover effect */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+
+    /* Add scaling effect on hover */
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 50px;
+    -fx-padding: 10;
+    -fx-text-fill: white;
+    
+}
+
+.admin-button:hover{
+     -fx-scale-x: 1.1; /* Scale factor on hover */
+    -fx-scale-y: 1.1;
+}
+
+
+.receptionist-button{
+    -fx-background-image: url('file:E://receptionist.png');
+    -fx-background-size: 450px,250px; /* Adjust the size based on your needs */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 450px; /* Set a minimum width for the button */
+    -fx-min-height: 210px; /* Set a minimum height for the button */
+    -fx-border-radius: 100,100,100,100;
+    -fx-cursor: hand; /* Show a hand cursor on hover */
+    
+    /* Transition for smooth hover effect */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+
+    /* Add scaling effect on hover */
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 50px;
+    -fx-padding: 10;
+    -fx-text-fill: white;
+    
+}
+
+.receptionist-button:hover{
+     -fx-scale-x: 1.1; /* Scale factor on hover */
+    -fx-scale-y: 1.1;
+}
+
+
+
+.guest-button{
+    -fx-background-image: url('file:E://guest.png');
+    -fx-background-size: 450px,250px; /* Adjust the size based on your needs */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 450px; /* Set a minimum width for the button */
+    -fx-min-height: 210px; /* Set a minimum height for the button */
+    -fx-border-radius: 100,100,100,100;
+    -fx-cursor: hand; /* Show a hand cursor on hover */
+    
+    /* Transition for smooth hover effect */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+
+    /* Add scaling effect on hover */
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 50px;
+    -fx-padding: 10;
+    -fx-text-fill: white;
+    
+}
+
+.guest-button:hover{
+     -fx-scale-x: 1.1; /* Scale factor on hover */
+     -fx-scale-y: 1.1;
+}
+.custom-textfield{
+    -fx-background-color: transparent;
+    -fx-text-fill: White;
+
+    -fx-border-color: blue;
+    -fx-border-width: 2;
+    -fx-background-radius: 15; 
+    -fx-border-radius: 15;
+}
+.custom-textfield .text{
+    -fx-fill: #CA3A23;
+    -fx-color:#CA3A23;
+/*    -fx-font-size: 14px;*/
+        -fx-text-color:#CA3A23;
+}
+
+.custom-passwordfield{
+    -fx-background-color: transparent;
+    -fx-text-fill: White;
+    -fx-border-color: blue;
+    -fx-border-width: 2;
+    -fx-background-radius: 15; 
+    -fx-border-radius: 15;
+    
+}
+.custom-passwordfield .text{
+    -fx-fill: red;
+}
+
+.text{
+    
+    -fx-text-fill:white;
+
+    
+    
+}
+.colored-text {
+    -fx-fill: blue; /* Default color for the entire text */
+}
+
+.colored-word {
+    -fx-fill: red; /* Color for the specific word */
+}
+.label{
+    -fx-background-color:transparent;
+    -fx-text-fill:#01D1E8;
+    -fx-font-size:14px;
+    -fx-font-weight: bold;
+    -fx-border-color: blue;
+    -fx-padding: 10px 10px 10px 30px;       
+    -fx-border-width: 2;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 50px;
+    -fx-background-radius: 15; 
+    -fx-border-radius: 15;
+}
+.combo-box {
+    -fx-background-color:transparent;
+    -fx-border-color: blue;
+    -fx-border-radius:10px;
+    -fx-background-radius:5px;
+    -fx-text-fill:blue;
+    -fx-font-size:15px;
+    -fx-font-weight:bold;
+}
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill:blue;
+    -fx-border-width: 1px;
+    -fx-padding: 3px;
+    -fx-font-size:15px;
+    -fx-font-weight:bold;
+}
+
+
+
+.list-view{
+    -fx-background-color:transparent;
+    -fx-text-fill:blue;
+    -fx-font-size:15px;
+    -fx-border-color: blue;
+    -fx-border-radius:5px;
+    -fx-font-weight:bold;
+
+}
+.list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: blue;
+    -fx-font-weight:bold;
+
+}
+/* styles.css */
+
+.date-picker {
+    -fx-text-fill: black; /* Text color */
+}
+
+.date-picker-popup > * {
+    -fx-background-color: transparent;
+    -fx-text-fill:black;
+}
+
+.date-picker-popup .day-cell {
+    -fx-text-fill: blue; /* Text color for day cells */
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #e0e0e0; /* Background color on hover */
+}
+.date-picker-popup .month-year-panel {
+    -fx-text-fill: black; /* Text color for month and year labels */
+}
