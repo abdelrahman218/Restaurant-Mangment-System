@@ -42,10 +42,15 @@ public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, S
     super(Name,Address,DateOfBirth,PhoneNum,Email,UserName, Password);
     Admins.add(this);
 }
-public void addTable(int numofseats){
- Table table=new Table(numofseats);
- ArrayList<Table>Tables=Table.getlist();
- Tables.add(table);
+public void addTable(int numofseats,String categ){
+    if(categ.equals("Standard")){
+        new Table(numofseats,Category.Standard);}
+    else if(categ.equals("Couples")){
+        new Table(numofseats,Category.Couples);}
+    else if(categ.equals("Family")){
+        new Table(numofseats,Category.Family);}
+    else if(categ.equals("Private")){
+        new Table(numofseats,Category.Private);}
 }
 public void editTable(int tableNum,Category tableCategory,double newcost,int newnoseats){
     Table.getlist().get(tableNum).setCateg(tableCategory);
@@ -83,11 +88,18 @@ public void addMenu(){
 }
 public void addMenu(int x){
     switch (x){
-        case 1: Menu.getlist().add(new Menu(MenuCategory.Breakfast));
-        case 2: Menu.getlist().add(new Menu(MenuCategory.Lunch));
-        case 3: Menu.getlist().add(new Menu(MenuCategory.Dinner));
-        case 4: Menu.getlist().add(new Menu(MenuCategory.Beverages));
-        case 5: Menu.getlist().add(new Menu(MenuCategory.Dessert));
+        case 0:
+        break;
+        case 1: new Menu(MenuCategory.Breakfast);
+        break;
+        case 2: new Menu(MenuCategory.Lunch);
+        break;
+        case 3: new Menu(MenuCategory.Dinner);
+        break;
+        case 4: new Menu(MenuCategory.Beverages);
+        break;
+        case 5: new Menu(MenuCategory.Dessert);
+        break;
     }
 }
 public void editMenu(int menuId,MenuCategory Menucategory){Menu.getlist().get(menuId).setCateg(Menucategory);}
@@ -238,4 +250,8 @@ public static Admin search(String userName){
     }
     return null;
 }
+@Override
+    public String toString(){
+        return ("Admin Details:\n"+"Name: "+getName()+"\nID: "+getId()+"\nDate Of Birth: "+getDateOfBirth()+"\nAddress: "+getAddress()+"\nEmail: "+getEmail()+"\nPhone Number: "+getPhoneNum());
+    }
 }

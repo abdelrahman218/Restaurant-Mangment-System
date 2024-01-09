@@ -20,12 +20,13 @@ public class Meal implements Serializable {
         Menu_ID = menu_ID;
     }
     private int noOfOrders=0;
-    public Meal(int Menu_ID, int meal_ID, String Name, double Price,int noOfOrders) {
+    public Meal(int Menu_ID, int meal_ID, String Name, double Price) {
         this.Menu_ID=Menu_ID;
         this.meal_ID = meal_ID;
         this.Name = Name;
         this.Price = Price;
-        this.noOfOrders = noOfOrders;
+        this.noOfOrders = 0;
+        Meals.add(this);
     }
     public int getMeal_ID() {
         return meal_ID;
@@ -46,6 +47,15 @@ public class Meal implements Serializable {
         for (int i = 0; i < Meals.size(); i++) {
             Meal meal = Meals.get(i);
             if (meal.getMeal_ID() == id) {
+                return meal;
+            }
+        }
+        return null;
+    }
+    public static Meal getMealByNames(String name) {
+        for (int i = 0; i < Meals.size(); i++) {
+            Meal meal = Meals.get(i);
+            if (meal.getName().equals(name)) {
                 return meal;
             }
         }

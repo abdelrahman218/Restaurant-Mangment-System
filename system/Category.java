@@ -1,2 +1,2 @@
 package system;
-public enum Category {Standard,Couples,Family,Private}
+public enum Category {Standard,Couples,Family,Private};
