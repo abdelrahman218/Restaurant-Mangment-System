@@ -106,6 +106,8 @@ private void adminlogin(Stage nested){
         PasswordField pfPW=new PasswordField();
         pfPW.getStyleClass().add("custom-passwordfield");
         Label lbUN=new Label("Username: "),lbPW=new Label("Password: ");
+        lbUN.getStyleClass().add("custom-label");
+        lbPW.getStyleClass().add("custom-label");
         Button btLogIn=new Button("Log In"),btCancel=new Button("Cancel");
         Button btBack=new Button("Back");
         btLogIn.getStyleClass().add("custom-button");
@@ -518,7 +520,7 @@ private void changeTable(Stage nested,Admin current){
     Label Categ=new Label("Category");
     Label Cost =new Label("Cost" );
     l1.setStyle("-fx-background-color:transparent;\n" +
-"    -fx-text-fill:white;\n" +
+"    -fx-text-fill:black;\n" +
 "    -fx-font-size:14px;\n" +
 "    -fx-font-weight: bold;\n" +
 "    -fx-border-color: blue;\n" +
@@ -529,7 +531,7 @@ private void changeTable(Stage nested,Admin current){
 "    -fx-background-radius: 15; \n" +
 "    -fx-border-radius: 15;" ); 
     NoOfSeats.setStyle("-fx-background-color:transparent;\n" +
-"    -fx-text-fill:white;\n" +
+"    -fx-text-fill:black;\n" +
 "    -fx-font-size:14px;\n" +
 "    -fx-font-weight: bold;\n" +
 "    -fx-border-color: blue;\n" +
@@ -540,7 +542,7 @@ private void changeTable(Stage nested,Admin current){
 "    -fx-background-radius: 15; \n" +
 "    -fx-border-radius: 15;" ); 
     l3.setStyle("-fx-background-color:transparent;\n" +
-"    -fx-text-fill:white;\n" +
+"    -fx-text-fill:black;\n" +
 "    -fx-font-size:14px;\n" +
 "    -fx-font-weight: bold;\n" +
 "    -fx-border-color: blue;\n" +
@@ -551,7 +553,7 @@ private void changeTable(Stage nested,Admin current){
 "    -fx-background-radius: 15; \n" +
 "    -fx-border-radius: 15;" ); 
     Cost.setStyle("-fx-background-color:transparent;\n" +
-"    -fx-text-fill:white;\n" +
+"    -fx-text-fill:black;\n" +
 "    -fx-font-size:14px;\n" +
 "    -fx-font-weight: bold;\n" +
 "    -fx-border-color: blue;\n" +
@@ -604,7 +606,9 @@ private void changeTable(Stage nested,Admin current){
                          int id =Integer.parseInt(getmenu);
                          String getcat=(String)b2.getValue();
                          int NoSeats=spin.getValue();
-                         int price = Integer.parseInt(cost.getText());
+                         String ll=cost.getText();
+                         if(checknumber(cost.getText())){
+                         double price = Double.parseDouble(ll);
                          if(getcat.equals("Standard")){
                              current.editTable(id-1, Category.Standard, price, NoSeats);
                          }
@@ -614,7 +618,16 @@ private void changeTable(Stage nested,Admin current){
                          current.editTable(id-1, Category.Family, price, NoSeats);}
                          else if(getcat.equals("Private")){
                          current.editTable(id-1, Category.Private, price, NoSeats); 
-                         }});
+                         }
+                         }
+                         else{
+                             Alert a = new Alert(Alert.AlertType.ERROR);
+                             a.setTitle("Error");
+                             a.setHeaderText("Invalid Cost!");
+                             a.show();
+                             changeTable(nested,current);
+                         }   
+                            });
     remove.setOnAction(e->{String getmenu=(String)b3.getValue();
                          int idd =Integer.parseInt(getmenu);
                          current.removeTable(idd-1);
@@ -1077,7 +1090,7 @@ private void admincreate(Stage nested,Admin current){
         root.setHgap(10);
         root.setVgap(10);
         root.setAlignment(Pos.TOP_LEFT);
-        bt1.setOnAction(e->{String name=na.getText();
+        bt1.setOnAction(e->{String name=na.getText();  //@gmail.com
                             String Address=ad.getText();
                             String date= da.getEditor().getText();
                             String phone =ph.getText();
@@ -1085,6 +1098,7 @@ private void admincreate(Stage nested,Admin current){
                             String user=us.getText();
                             String password=pas.getText();
                             Boolean check=true;
+                            if(checkdata(user,password,Address,name)&&checkName(name)&&checkPhoneNum(phone)&&checkEmail(email)){
                             for(int i=0;i<Admin.getAdmins().size();i++){
                             if(Admin.getAdmins().get(i).getUserName().equals(user)){
                             check=false;
@@ -1104,6 +1118,10 @@ private void admincreate(Stage nested,Admin current){
                             a.setTitle("Error");
                             a.setHeaderText("UserName already used");
                             a.show();
+                            }
+                            }
+                            else{
+                            admincreate(nested,current);
                             }
                             
                                });
@@ -1178,6 +1196,7 @@ private void receptionistcreate(Stage nested,Admin current){
                             String user=us.getText();
                             String password=pas.getText();
                             Boolean check=true;
+                            if(checkdata(user,password,Address,name)&&checkName(name)&&checkPhoneNum(phone)&&checkEmail(email)){
                             for(int i=0;i<Receptionist.getList().size();i++){
                             if(Receptionist.getList().get(i).getUserName().equals(user)){
                             check=false;
@@ -1197,6 +1216,10 @@ private void receptionistcreate(Stage nested,Admin current){
                             a.setTitle("Error");
                             a.setHeaderText("UserName already used");
                             a.show();
+                            }
+                            }
+                            else{
+                            receptionistcreate(nested,current);
                             }
                             
                                });
@@ -1660,6 +1683,8 @@ private void recepLogin(Stage mainWindow){
         PasswordField pfPW=new PasswordField();
         pfPW.getStyleClass().add("custom-passwordfield");
         Label lbUN=new Label("Username: "),lbPW=new Label("Password: ");
+        lbUN.getStyleClass().add("custom-label");
+        lbPW.getStyleClass().add("custom-label");
         Button btLogIn=new Button("Log In"),btCancel=new Button("Cancel");
         Button btBack=new Button("Back");
         btLogIn.getStyleClass().add("custom-button");
@@ -1755,6 +1780,8 @@ private void guestlogin(Stage nested){
         PasswordField pfPW=new PasswordField();
         pfPW.getStyleClass().add("custom-passwordfield");
         Label lbUN=new Label("Username: "),lbPW=new Label("Password: ");
+        lbUN.getStyleClass().add("custom-label");
+        lbPW.getStyleClass().add("custom-label");
         Button btLogIn=new Button("Log In"),btCancel=new Button("Cancel");
         Button btBack=new Button("Back");
         Button btsignUp=new Button("Sign Up");
@@ -1902,6 +1929,7 @@ private void guestcreate(Stage nested){
                             String user=us.getText();
                             String password=pas.getText();
                             Boolean check=true;
+                            if(checkdata(user,password,Address,name)&&checkName(name)&&checkPhoneNum(phone)&&checkEmail(email)){
                             for(int i=0;i<Guest.getList().size();i++){
                             if(Guest.getList().get(i).getUserName().equals(user)){
                             check=false;
@@ -1922,7 +1950,10 @@ private void guestcreate(Stage nested){
                             a.setHeaderText("UserName already used");
                             a.show();
                             }
-                            
+                            }
+                            else{
+                            guestcreate(nested);
+                            }
                                });
         bt2.setOnAction(e->{guestlogin(nested);});
         Scene s =new Scene(root,1000,500);
@@ -2073,6 +2104,85 @@ ad.setTitle("Try agin ");
 ad.setHeaderText("Enter a valid Rating");
 ad.show();
   }
+}
+private boolean checkName(String name){
+    name=name.toLowerCase();
+    for(int i=0;i<name.length();i++){
+                                if(name.charAt(i)!=' '&&(name.charAt(i)<'a'||name.charAt(i)>'z')){
+                                    Alert a = new Alert(Alert.AlertType.ERROR);
+                                    a.setTitle("Error");
+                                    a.setHeaderText("Invalid Name");
+                                    a.show();
+                                    return false;
+                                }   
+                            }
+    return true;
+}
+private boolean checkEmail(String Email){
+    boolean check=false;
+    for(int i=1;i<Email.length();i++){
+        if(Email.charAt(i)=='@'){
+            check=true;
+            break;
+        }
+    }
+    if(check){
+    String data=Email.substring(Email.indexOf("@"), Email.length());
+    if(data.equals("@gmail.com")||data.equals("@hotmail.com")||data.equals("@outlook.com")||data.equals("@yahoo.com"))
+        return true;
+    }
+    Alert a = new Alert(Alert.AlertType.ERROR);
+    a.setTitle("Error");
+    a.setHeaderText("Invalid E-Mail");
+    a.show();
+    return false;
+}
+private boolean checkPhoneNum(String pho){
+    boolean check=true;
+    if(pho.length()==11&&(pho.charAt(0)=='0'&&pho.charAt(1)=='1'&&(pho.charAt(2)=='0'||pho.charAt(2)=='1'||pho.charAt(2)=='2'||pho.charAt(2)=='5'))){
+           for(int i=3;i<pho.length();i++)
+                if(pho.charAt(i)<'0'&&pho.charAt(i)>'9')
+                    check= false;  
+    }
+    if(check==false){
+    Alert a = new Alert(Alert.AlertType.ERROR);
+    a.setTitle("Error");
+    a.setHeaderText("Invalid Phone Number");
+    a.show();
+    return false;
+    }
+    else{
+    return true;
+    }
+}
+private boolean checkdata(String user,String pass,String Address,String name){
+    if(user.equals("")||pass.equals("")||Address.equals("")||name.equals("")){
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setTitle("Error");
+        a.setHeaderText("Data Not complete!");
+        a.show();
+        return false;
+    }
+    return true;
+}
+private boolean checknumber(String number){
+    boolean checkk=true;
+    for(int i=0;i<number.length();i++){
+    if(number.charAt(i)<'0' || number.charAt(i)>'9'){
+        if(number.charAt(i)=='.'){
+        continue;
+        }
+        else{
+        checkk= false; 
+    }
+    }
+    }
+    if(checkk==false){  
+    return false;
+    }
+    else{
+    return true;
+    }
 }
 public static void main(String[] args) {
         new Menu(MenuCategory.Beverages);
