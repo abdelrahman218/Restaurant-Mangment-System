@@ -36,7 +36,6 @@ import java.util.Collections;
 public class Reservation implements Comparable<Reservation>,Serializable{
     //Static array list which have all reservations
     private static ArrayList<Reservation> history=new ArrayList<>();
-    private static int idgenerator=0;
     //Object-related member variables 
     private int reservationNum;
     private int tableNum;
@@ -128,7 +127,14 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             throw new InvalidAttributeValueException("Rating must be (0->10)");
         }
     }
-    public void setReservationNum(){ reservationNum=++idgenerator; }
+    public void setReservationNum(){ 
+        if(history.isEmpty()){
+           reservationNum=1;
+        } 
+        else{
+           reservationNum=history.get(history.size()-1).getReservationNumber()+1;
+        }
+    }
    
     //Functions
     public void takeOrder(ArrayList<Meal> orderOfMeals) throws NullPointerException{
@@ -166,7 +172,12 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     }
     
     //Getters
-    public int getReservationNumber(){return reservationNum;}
+    
+    public byte getRating(){return rating;}
+
+    public int getReservationNumber() {
+        return reservationNum;
+    }
     public Date getDate(){return date;}
     public LocalTime getStartTime(){return startTime;}
     public LocalTime getEndTime(){return endTime;}
@@ -242,7 +253,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }catch(ClassNotFoundException e){
             System.out.println("Error in class Reservation reading compatibility");
         }
-        idgenerator=history.get(history.size()-1).getReservationNumber();
+        
     }
     public static void saveRecords(){
         try{

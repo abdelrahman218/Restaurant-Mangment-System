@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.scene.image.Image;
@@ -88,6 +90,13 @@ public void start(Stage primaryStage) {
     bt1.setOnAction(e->{adminlogin(primaryStage);});
     bt2.setOnAction(e->{recepLogin(primaryStage);});
     bt3.setOnAction(e->{guestlogin(primaryStage);});
+    primaryStage.setOnCloseRequest(e->{Admin.saveRecords();
+                                       Receptionist.saveRecords();
+                                        Reservation.saveRecords();
+                                        Table.saveRecords();
+                                        Menu.WriteInMenuFile();
+                                        Meal.WriteInFile();
+                                        Guest.saveRecords();}); 
     primaryStage.setScene(start);
 //    primaryStage.setMaximized(true);
     primaryStage.setTitle("Restaurant");
@@ -204,13 +213,20 @@ private void adminlogin(Stage nested){
         nested.setResizable(false);
     }
 private void adminmenu(Stage nested,Admin current){
-    Button create = new Button("Users");
-    Button Tab = new Button("Table details");
-    Button Recep = new Button("Receptionist details");
-    Button Menues = new Button("Menu details");
-    Button Guests =new Button("Guest details");
-    Button logs = new Button("View Logs");
+    Button create = new Button();
+    Button Tab = new Button();
+    Button Recep = new Button();
+    Button Menues = new Button();
+    Button Guests =new Button();
+//    Button logs = new Button("View Logs");
     Button signOut = new Button("Sign out");
+    create.getStyleClass().add("udet-button");
+    Tab.getStyleClass().add("tdet-button");
+    Recep.getStyleClass().add("rdet-button");
+    Menues.getStyleClass().add("mdet-button");
+    Guests.getStyleClass().add("gdet-button");
+//    logs.getStyleClass().add("custom-button");
+    signOut.getStyleClass().add("custom-button");
     create.setPrefHeight(30);
     create.setPrefWidth(120);
     Tab.setPrefHeight(30);
@@ -221,18 +237,18 @@ private void adminmenu(Stage nested,Admin current){
     Menues.setPrefWidth(120);
     Guests.setPrefHeight(30);
     Guests.setPrefWidth(120);
-    logs.setPrefHeight(30);
-    logs.setPrefWidth(120);
+//    logs.setPrefHeight(30);
+//    logs.setPrefWidth(120);
     signOut.setPrefHeight(30);
     signOut.setPrefWidth(120);
     GridPane root=new GridPane();
-    root.add(logs,2,0);
+//    root.add(logs,2,0);
     root.add(create,0,1);
     root.add(Tab,1,1);
     root.add(Recep,2,1);
     root.add(Menues,3,1);
     root.add(Guests,4,1);
-    root.add(signOut,2,2);
+    root.add(signOut,5,2);
     root.setHgap(10);
     root.setVgap(10);
     root.setAlignment(Pos.CENTER);
@@ -252,6 +268,7 @@ private void adminmenu(Stage nested,Admin current){
     Guests.setOnAction(e->{Guest_details(nested,current);});
     Menues.setOnAction(e->{menudetails(nested,current);});
     signOut.setOnAction(e->{adminlogin(nested);});
+    s.getStylesheets().add("/restaurant/styles.css");
     nested.setTitle("Admin Menu");
     nested.setScene(s);
     nested.show();
@@ -266,15 +283,17 @@ private void Recep_details(Stage nested,Admin current){
     }
     data.setItems(items);
     Label recepNo = new Label("Receptionist ID");
-    ListView<String> viewData = new ListView();
+    ListView<String> l = new ListView();
+    l.setPrefWidth(300);
+    l.setPrefHeight(500);
     Button back=new Button("Back");
     Button remove=new Button("Remove");
-    viewData.setPrefWidth(150);
-    viewData.setPrefHeight(250);
+    back.getStyleClass().add("custom-button");
+    remove.getStyleClass().add("custom-button");
     GridPane root= new GridPane();
     root.add(recepNo,0,0);
     root.add(data,1,0);
-    root.add(viewData,0,1);
+    root.add(l,0,1);
     root.add(back,1,2);
     root.add(remove,0,2);
     root.setHgap(10);
@@ -284,7 +303,7 @@ private void Recep_details(Stage nested,Admin current){
                         int id =Integer.parseInt(get);
                         ObservableList<String> itemss = FXCollections.observableArrayList();
                         itemss.add(Receptionist.getList().get(id-1).toString());
-                        viewData.setItems(itemss);});
+                        l.setItems(itemss);});
     back.setOnAction(e->{adminmenu(nested,current);});
     remove.setOnAction(e->{try{
                            String get=(String)data.getValue();
@@ -303,7 +322,7 @@ private void Recep_details(Stage nested,Admin current){
         new BackgroundSize(1,1,true,true,false,false));
     Background bg=new Background(bgi);
     root.setBackground(bg);
-    Scene s= new Scene(root);
+    Scene s= new Scene(root,1000,500);
     s.getStylesheets().add("/restaurant/styles.css");  
     nested.setScene(s);
     nested.setTitle("View Receptionist");
@@ -324,8 +343,10 @@ private void Guest_details(Stage nested,Admin current){
     ListView<String> viewData = new ListView();
     Button back=new Button("Back");
     Button remove=new Button("Remove");
-    viewData.setPrefWidth(150);
-    viewData.setPrefHeight(250);
+    back.getStyleClass().add("custom-button");
+    remove.getStyleClass().add("custom-button");
+    viewData.setPrefWidth(300);
+    viewData.setPrefHeight(500);
     GridPane root= new GridPane();
     root.add(recepNo,0,0);
     root.add(data,1,0);
@@ -372,6 +393,11 @@ private void tb_details(Stage nested, Admin current){
         Button add=new Button("Add Table");
         Button search=new Button("Search Table");
         Button back=new Button("Back");
+        view.getStyleClass().add("custom-button");
+        change.getStyleClass().add("custom-button");
+        add.getStyleClass().add("custom-button");
+        search.getStyleClass().add("custom-button");
+        back.getStyleClass().add("custom-button");
         GridPane root=new GridPane();
         root.add(view,0,0);
         root.add(change,1,0);
@@ -471,8 +497,8 @@ private void viewTable(Stage nested,Admin current){
     Label l1 = new Label("Table Number");
     ListView<String> l = new ListView();
     Button bt2=new Button("Back");
-    l.setPrefWidth(200);
-    l.setPrefHeight(350);
+    l.setPrefWidth(300);
+    l.setPrefHeight(500);
     GridPane root= new GridPane();
     root.add(l1,0,0);
     root.add(b1,1,0);
@@ -619,6 +645,7 @@ private void changeTable(Stage nested,Admin current){
                          else if(getcat.equals("Private")){
                          current.editTable(id-1, Category.Private, price, NoSeats); 
                          }
+                         changeTable(nested,current);
                          }
                          else{
                              Alert a = new Alert(Alert.AlertType.ERROR);
@@ -663,20 +690,19 @@ private void searchTable(Stage nested,Admin current){
     Category.setItems(itemss);
     Button search=new Button("Search");
     Button exit=new Button("Back");
-    data.setPrefWidth(150);
-    data.setPrefHeight(250);
+    data.setPrefWidth(300);
+    data.setPrefHeight(500);
     GridPane root=new GridPane();
     root.add(Categ, 0, 0);
     root.add(Category, 1, 0);
     root.add(data, 0, 1);
-    root.add(search, 0, 2);
     root.add(exit, 1, 2);
     root.setHgap(10);
     root.setVgap(10);
     root.setAlignment(Pos.CENTER);
     root.setPadding(new Insets(20));
    
-    search.setOnAction(e->{
+    Category.setOnAction(e->{
                              ArrayList<Table> TablesData = new ArrayList<>() ;
                         String getcat=(String)Category.getValue();
                         if(getcat.equals("Standard")){
@@ -779,12 +805,20 @@ private void addmeal(Stage nested,Admin current){
     root.setAlignment(Pos.CENTER);
     root.setPadding(new Insets(20));
     add.setOnAction(e->{String getmenu=(String)b1.getValue();
+                        if(checknumber(mealPrice.getText())&&checkName(mealName.getText())&&checknumber(mealid.getText())){
                          int id =(Integer.parseInt(getmenu));
                          int Mealid=Integer.parseInt(mealid.getText());
                          String name=mealName.getText();
                          double price=Double.parseDouble(mealPrice.getText());
                          new Meal(id, Mealid, name, price);
-    });
+                         addmeal(nested,current);
+                        }else{
+                        Alert a = new Alert(Alert.AlertType.ERROR);
+                        a.setTitle("Error");
+                        a.setHeaderText("(nvalid Input!");
+                        a.show();
+                        addmeal(nested,current);
+                        }  });
     Back.setOnAction(e->{menudetails(nested, current);});
     Scene s=new Scene(root,1000,500);
     Image im = new Image("file:D:\\open.jpg");
@@ -861,10 +895,12 @@ private void changemenu(Stage nested,Admin current){
                          }
                          else if(getcat.equals("Beverages")){
                          current.editMenu(id-1, MenuCategory.Beverages);}
+                         changemenu(nested,current);
                          });
     remove.setOnAction(e->{String getmenu=(String)b3.getValue();
                          int idd =Integer.parseInt(getmenu);
-                         current.removeMenu(idd-1);});
+                         current.removeMenu(idd-1);
+                         changemenu(nested,current);});
     create.setOnAction(e->{String categ=(String)b4.getValue();
                             if(categ.equals("Lunch")){
                             current.addMenu(2);} 
@@ -875,7 +911,8 @@ private void changemenu(Stage nested,Admin current){
                             else if(categ.equals("Dessert")){
                             current.addMenu(5);}
                             else if(categ.equals("Beverages")){
-                            current.addMenu(4);}   
+                            current.addMenu(4);}
+                            changemenu(nested,current);
                             });
     exit.setOnAction(e->{menudetails(nested,current);});
     root.setHgap(30);
@@ -908,15 +945,13 @@ private void viewmenu(Stage nested,Admin current){
     b1.setItems(items);
     Label l1 = new Label("Menu Id");
     ListView<String> l = new ListView();
-    Button bt1=new Button("View");
     Button bt2=new Button("Back");
-    l.setPrefWidth(150);
-    l.setPrefHeight(250);
+    l.setPrefWidth(300);
+    l.setPrefHeight(500);
     GridPane root= new GridPane();
     root.add(l1,0,0);
     root.add(b1,1,0);
     root.add(l,0,1);
-    root.add(bt1,0,2);
     root.add(bt2,1,2);
     root.setHgap(10);
     root.setVgap(10);
@@ -1004,8 +1039,8 @@ private void usercreate(Stage nested,Admin current){
 private void viewUsers(Stage nested,Admin current){
     ListView<String> l = new ListView();
     Button bt2=new Button("Back");
-    l.setPrefWidth(150);
-    l.setPrefHeight(250);
+    l.setPrefWidth(300);
+    l.setPrefHeight(500);
     GridPane root= new GridPane();
     Button receptionist=new Button ("Receptionist");
     Button admin=new Button ("Admin");
@@ -1517,6 +1552,7 @@ private void createReservationMenu(Stage mainWindow,Receptionist current){
                 }
                 try {
                     current.createReservation(guestId,tableNum,numOfGuests,day.getEditor().getText(),startTime,endTime,actualMeals);
+                    Guest.getGuest(guestId).setHasRating(false);
                     btCancel.fire();
                 } catch (InvalidAttributeValueException | ParseException ex) {
                     Alert warning=new Alert(Alert.AlertType.ERROR);
@@ -1972,7 +2008,6 @@ private void guestcreate(Stage nested){
         nested.show();
     }
 private void mainScene(Stage nested,Guest current) {
-        
         Button viewReservationButton = new Button("View Reservations");
         Button rateBookingButton = new Button("Rate Booking");
         rateBookingButton.setOnAction(e->{ 
@@ -1984,7 +2019,7 @@ private void mainScene(Stage nested,Guest current) {
             ad.show();
             }
             else{
-rateBookingScene(nested,current);}});
+rateBookingScene(nested,current);}}); 
         viewReservationButton.setOnAction(e->{
             if("[]".equals(current.ViewReservation())){
                 Alert ad = new Alert(
@@ -1996,9 +2031,10 @@ rateBookingScene(nested,current);}});
             else{
             ViewReservationScene(nested,current);
             }});
+         rateBookingButton.setDisable(current.isHasRating());
          Button back= new Button("Back");
          back.setOnAction(e->{guestlogin(nested);});
-        VBox root=new VBox(10,viewReservationButton,rateBookingButton,back);
+        VBox root=new VBox(10,viewReservationButton,rateBookingButton,back,samples);
 //        root.add(viewReservationButton,0,0);
 //        root.add(rateBookingButton,0,1);
 //        root.add(back,0,2);
@@ -2051,7 +2087,7 @@ private void rateBookingScene(Stage nested,Guest current) {
         TextField ratingTextField = new TextField();
         Button submitRatingButton = new Button("Submit");
             Button Back= new Button("Back");
-Back.setOnAction(e->{nested.setScene(start);});
+Back.setOnAction(e->{mainScene(nested, current);});
        Button Exit= new Button("Exit");
        Exit.setOnAction(e->{
           javafx. application. Platform. exit();
@@ -2064,7 +2100,7 @@ ad.setHeaderText("Enter a Rating");
 ad.show();
         }
         else{
-            submitRating(ratingTextField.getText());
+            submitRating(ratingTextField.getText(),current);
                 }});
         VBox rateBookingLayout = new VBox(10);
         rateBookingLayout.getChildren().addAll(ratingLabel, ratingTextField, submitRatingButton,Back,Exit);
@@ -2085,16 +2121,19 @@ ad.show();
         s.getStylesheets().add("/restaurant/styles.css");
         nested.show();
     }
-private void submitRating(String rating) {
-        int Rating= Integer.parseInt(rating);
+private void submitRating(String rating,Guest current) {
+      byte Rating= Byte.parseByte(rating);
+        current.RateBooking(Rating);
+        
   if(Rating>=0&&Rating<=10){
- 
-Alert ad = new Alert(
-AlertType.INFORMATION);
-ad.setTitle("Thank You");
+    current.setHasRating(true); 
+    Alert ad = new Alert(
+    AlertType.INFORMATION);
+       ad.setTitle("Thank You");
 ad.setHeaderText("Rating Submitted Successfully");
 ad.setContentText(rating);
 ad.show();
+
 //Back();
   }
   else{
@@ -2104,6 +2143,7 @@ ad.setTitle("Try agin ");
 ad.setHeaderText("Enter a valid Rating");
 ad.show();
   }
+  
 }
 private boolean checkName(String name){
     name=name.toLowerCase();
@@ -2185,40 +2225,48 @@ private boolean checknumber(String number){
     }
 }
 public static void main(String[] args) {
-        new Menu(MenuCategory.Beverages);
-        new Menu(MenuCategory.Breakfast);
-        new Menu(MenuCategory.Lunch);
-        new Menu(MenuCategory.Dinner);
-        new Menu(MenuCategory.Dessert);
-        new Meal(1,1,"Spiro spats",15);
-        new Meal(1,2,"Mango juice",15);
-        new Meal(1,3,"Strawberry",15);
-        new Meal(2,4,"Eggs",15);
-        new Meal(2,5,"French Toast",15);
-        new Meal(2,6,"Croissant",15);
-        new Meal(3,7,"Steak",15);
-        new Meal(3,8,"rice",15);
-        new Meal(3,9,"Shawerma",15);
-        new Meal(4,10,"la vache quere",15);
-        new Meal(4,11,"salad",15);
-        new Meal(4,12,"honey",15);
-        new Meal(5,13,"Molten Cake",15);
-        new Meal(5,14,"Cheese Cake",15);
-        new Meal(5,15,"Carrot Cake",15);
-        new Table(3);
-        new Table(4);
-        new Table(10);
-        new Table(20);
-        new Admin("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "A", "A");
-        new Admin("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","B","B");
-        new Guest("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "E", "E");
-        new Guest("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","F","F");
-        new Guest("Ayman","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
-        new Guest("Zakaria","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
-        new Guest("Mahmoud","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
-        new Receptionist("Nehad","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
-        new Receptionist("David", "NewZealand", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "C", "C");
-        new Receptionist("Mark","China","8-5-1962","01200588939","johnwhite@gmail.com","D","D");
+    Admin.getRecord();
+    Receptionist.getRecord();
+    Guest.getRecord();
+    Menu.ReadFromMenuFile();
+    Meal.ReadFromFile();
+    Table.getRecord();
+    Reservation.getRecord();
+    
+//        new Menu(MenuCategory.Beverages);
+//        new Menu(MenuCategory.Breakfast);
+//        new Menu(MenuCategory.Lunch);
+//        new Menu(MenuCategory.Dinner);
+//        new Menu(MenuCategory.Dessert);
+//        new Meal(1,1,"Spiro spats",15);
+//        new Meal(1,2,"Mango juice",15);
+//        new Meal(1,3,"Strawberry",15);
+//        new Meal(2,4,"Eggs",15);
+//        new Meal(2,5,"French Toast",15);
+//        new Meal(2,6,"Croissant",15);
+//        new Meal(3,7,"Steak",15);
+//        new Meal(3,8,"rice",15);
+//        new Meal(3,9,"Shawerma",15);
+//        new Meal(4,10,"la vache quere",15);
+//        new Meal(4,11,"salad",15);
+//        new Meal(4,12,"honey",15);
+//        new Meal(5,13,"Molten Cake",15);
+//        new Meal(5,14,"Cheese Cake",15);
+//        new Meal(5,15,"Carrot Cake",15);
+//        new Table(3);
+//        new Table(4);
+//        new Table(10);
+//        new Table(20);
+//        new Admin("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "A", "A");
+//        new Admin("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","B","B");
+//        new Guest("Frank", "Paris", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "E", "E");
+//        new Guest("John","Chicago","8-5-1962","01200588939","johnwhite@gmail.com","F","F");
+//        new Guest("Ayman","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
+//        new Guest("Zakaria","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
+//        new Guest("Mahmoud","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
+//        new Receptionist("Nehad","Zahraa El-maadi","21/08/2004","01211665660","asdfnmje@gmail.com","abc","abcd");
+//        new Receptionist("David", "NewZealand", "19-2-2001", "01069856960", "frank.heisenberg@gmail.com", "C", "C");
+//        new Receptionist("Mark","China","8-5-1962","01200588939","johnwhite@gmail.com","D","D");
         launch(args);
     } 
 }
