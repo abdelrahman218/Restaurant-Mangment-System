@@ -41,6 +41,11 @@ public abstract class Person implements Serializable{
     public void setPassword(String Password) {
         this.Password = encreptPassword(Password);
     }
+
+    public static void setIdGenerator(int idGenerator) {
+        Person.idGenerator = idGenerator;
+    }
+    
     public String getName() {
         return Name;
     }

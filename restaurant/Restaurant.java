@@ -901,7 +901,7 @@ private void changemenu(Stage nested,Admin current){
                          int idd =Integer.parseInt(getmenu);
                          current.removeMenu(idd-1);
                          changemenu(nested,current);});
-    create.setOnAction(e->{String categ=(String)b4.getValue();
+    create.setOnAction(e->{String categ=(String)b4.getSelectionModel().getSelectedItem();
                             if(categ.equals("Lunch")){
                             current.addMenu(2);} 
                             else if(categ.equals("Dinner")){
@@ -912,7 +912,7 @@ private void changemenu(Stage nested,Admin current){
                             current.addMenu(5);}
                             else if(categ.equals("Beverages")){
                             current.addMenu(4);}
-                            changemenu(nested,current);
+                            //changemenu(nested,current);
                             });
     exit.setOnAction(e->{menudetails(nested,current);});
     root.setHgap(30);
@@ -939,7 +939,7 @@ private void viewmenu(Stage nested,Admin current){
     ObservableList<String> items = FXCollections.observableArrayList();
     for(int i=0;i<system.Menu.getlist().size();i++){
     String it="";
-    it+=(i+1);
+    it+=Menu.getlist().get(i).getMenu_ID();
     items.add(it);
     }
     b1.setItems(items);
@@ -966,7 +966,7 @@ private void viewmenu(Stage nested,Admin current){
                             a.setHeaderText("Menu not found");
                             a.show();
                         }else{
-                        ArrayList<Meal> m=Admin.searchMenu(id-1);
+                        ArrayList<Meal> m=Meal.getMealsByMenuId(id);
                         ObservableList<String> itemss = FXCollections.observableArrayList();
                         itemss.add(system.Menu.getlist().get(id-1).toString());
                         for(int i =0;i<m.size();i++){
@@ -999,10 +999,14 @@ private void viewmenu(Stage nested,Admin current){
     nested.show();
     }
 private void usercreate(Stage nested,Admin current){
-    Button bt1=new Button ("Admin Create");
+    Button bt1=new Button ("Admin add");
     Button view=new Button("View Users");
-    Button bt2=new Button("Receptionist Create");
+    Button bt2=new Button("Receptionist add");
     Button bt3=new Button("Back");
+    bt1.getStyleClass().add("custom-button");
+    view.getStyleClass().add("custom-button");
+    bt2.getStyleClass().add("custom-button");
+    bt3.getStyleClass().add("custom-button");
     GridPane root = new GridPane();
     root.add(bt1,0,0);
     root.add(bt2,1,0);
@@ -1032,7 +1036,8 @@ private void usercreate(Stage nested,Admin current){
     Background bg=new Background(bgi);
     root.setBackground(bg);
     Scene s =new Scene(root,1000,500);
-    nested.setTitle("User");
+    nested.setTitle("User");        
+    s.getStylesheets().add("/restaurant/styles.css");
     nested.setScene(s);
     nested.show();
     }
@@ -1124,7 +1129,7 @@ private void admincreate(Stage nested,Admin current){
         root.setPadding(new Insets(20));
         root.setHgap(10);
         root.setVgap(10);
-        root.setAlignment(Pos.TOP_LEFT);
+        root.setAlignment(Pos.CENTER);
         bt1.setOnAction(e->{String name=na.getText();  //@gmail.com
                             String Address=ad.getText();
                             String date= da.getEditor().getText();
@@ -1191,7 +1196,7 @@ private void receptionistcreate(Stage nested,Admin current){
         Label l7= new Label("Password");
         TextField na = new TextField();
         TextField ad = new TextField();
-        TextField da = new TextField();
+        DatePicker da = new DatePicker(LocalDate.now());
         TextField ph = new TextField();
         TextField em = new TextField();
         TextField us = new TextField();
@@ -1222,10 +1227,10 @@ private void receptionistcreate(Stage nested,Admin current){
         root.setPadding(new Insets(20));
         root.setHgap(10);
         root.setVgap(10);
-        root.setAlignment(Pos.TOP_LEFT);
+        root.setAlignment(Pos.CENTER);
         bt1.setOnAction(e->{String name=na.getText();
                             String Address=ad.getText();
-                            String date= da.getText();
+                            String date= da.getEditor().getText();
                             String phone =ph.getText();
                             String email=em.getText();
                             String user=us.getText();
@@ -1239,7 +1244,8 @@ private void receptionistcreate(Stage nested,Admin current){
                             }
                             }
                             if(check==true){
-                            new Receptionist(name,Address,date,phone,email,user,password);
+                                
+                            current.addReceptionist(name,Address,date,phone,email,user,password);
                             Alert a = new Alert(Alert.AlertType.INFORMATION);
                             a.setTitle("Success");
                             a.setHeaderText("Account created");
@@ -2034,7 +2040,7 @@ rateBookingScene(nested,current);}});
          rateBookingButton.setDisable(current.isHasRating());
          Button back= new Button("Back");
          back.setOnAction(e->{guestlogin(nested);});
-        VBox root=new VBox(10,viewReservationButton,rateBookingButton,back,samples);
+        VBox root=new VBox(10,viewReservationButton,rateBookingButton,back);
 //        root.add(viewReservationButton,0,0);
 //        root.add(rateBookingButton,0,1);
 //        root.add(back,0,2);
@@ -2232,6 +2238,13 @@ public static void main(String[] args) {
     Meal.ReadFromFile();
     Table.getRecord();
     Reservation.getRecord();
+    int adid=Admin.getAdmins().get(Admin.getAdmins().size()-1).getId();
+    int adrecep=Receptionist.getList().get(Receptionist.getList().size()-1).getId();
+    int adguest=Guest.getList().get(Guest.getList().size()-1).getId();
+    int large=Math.max(adid, Math.max(adguest, adrecep));
+    Person.setIdGenerator(large); 
+    
+    
     
 //        new Menu(MenuCategory.Beverages);
 //        new Menu(MenuCategory.Breakfast);

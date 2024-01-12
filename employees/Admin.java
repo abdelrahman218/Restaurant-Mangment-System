@@ -1,13 +1,19 @@
 package employees;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import system.*;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import user.Guest;
 public class Admin extends Person implements Comparable<Admin>,Serializable{
 private static ArrayList<Admin>Admins=new ArrayList<>();
@@ -43,22 +49,59 @@ public Admin(String Name, String Address, String DateOfBirth, String PhoneNum, S
     Admins.add(this);
 }
 public void addTable(int numofseats,String categ){
+    try{
+        FileWriter f=new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
     if(categ.equals("Standard")){
-        new Table(numofseats,Category.Standard);}
+        new Table(numofseats,Category.Standard);
+        p.write("Admin: "+getName()+"\n Created Table\n NO Of Seats: "+numofseats+"\n Category: "+categ+"\n");
+    }
     else if(categ.equals("Couples")){
-        new Table(numofseats,Category.Couples);}
+        new Table(numofseats,Category.Couples);
+        p.write("Admin: "+getName()+"\n Created Table\n NO Of Seats: "+numofseats+"\n Category: "+categ+"\n");
+    }
     else if(categ.equals("Family")){
-        new Table(numofseats,Category.Family);}
+        new Table(numofseats,Category.Family); 
+        p.write("Admin: "+getName()+"\n Created Table\n NO Of Seats: "+numofseats+"\n Category: "+categ+"\n");
+    }
     else if(categ.equals("Private")){
-        new Table(numofseats,Category.Private);}
+        new Table(numofseats,Category.Private);
+        p.write("Admin: "+getName()+"\n Created Table\n NO Of Seats: "+numofseats+"\n Category: "+categ+"\n");
+    }
+    p.close();
+    }
+    catch(FileNotFoundException ex){
+    } catch (IOException ex) {
+        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+    }
 }
 public void editTable(int tableNum,Category tableCategory,double newcost,int newnoseats){
+    try{
+        FileWriter f=new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Changed Table ID : "+tableNum+"\n Category from : "+Table.getlist().get(tableNum).getcateg()+" to: "+tableCategory+"\n Cost from: "+Table.getlist().get(tableNum).getCost()+" to: "+newcost+"\n No of Seats from: "+Table.getlist().get(tableNum).getNoOfSeats()+"to: "+newnoseats+"\n");
     Table.getlist().get(tableNum).setCateg(tableCategory);
     Table.getlist().get(tableNum).setCost(newcost);
     Table.getlist().get(tableNum).setNoOfSeats(newnoseats);
+    p.close();
+    }
+    catch(FileNotFoundException ex){
+    
+    } catch (IOException ex) {
+        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+    }
 }
 public void removeTable(int tableNum){
-    Table.getlist().remove(Table.getTable(tableNum));
+    
+    try {
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Removed Table Number: "+tableNum+"\n");
+        p.close();
+        Table.getlist().remove(Table.getTable(tableNum));
+    } catch (IOException ex) {
+            }
+        
 }
 public static ArrayList<Table> searchTable(Category tableCategory){
     ArrayList<Table> Tables=new ArrayList<Table>();
@@ -69,50 +112,52 @@ public static ArrayList<Table> searchTable(Category tableCategory){
     }
     return Tables;
 }
-public static String viewTableReports( int tableNum,Date StartDate,Date EndDate){
-   ArrayList<Table> Tables=Table.getlist();
-   String list="";
-   list+="The table Category is : ";
-   list+= Tables.get(tableNum).getcateg();
-   list+="\n";
-   list+="The number of times this table got reserved between time : "+StartDate.toString()+" and "+EndDate.toString()+Tables.get(tableNum).ReservationsInSpecificTime(StartDate, EndDate);
-   list+="\n";
-   list+="Table with the highest revenue is : "+Table.highestRevenue(StartDate, EndDate)+"\n";
-   list+="Table that is most reserved is : "+Table.mostReservedTable(StartDate, EndDate)+"\n";    
-   list+="The table most number of seats is : "+Tables.get(tableNum).getNoOfSeats()+"\n";
-   list+="The table's cost : "+Tables.get(tableNum).getCost()+"\n";
-return list;
-}
-public void addMenu(){
-    Menu.getlist().add(new Menu());
-}
 public void addMenu(int x){
+    try{
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
     switch (x){
-        case 0:
-        break;
         case 1: new Menu(MenuCategory.Breakfast);
+        p.write("Admin: "+getName()+"\n Admin Created Menu \n Category: Breakfast \n"); 
         break;
         case 2: new Menu(MenuCategory.Lunch);
+        p.write("Admin: "+getName()+"\n Admin Created Menu \n Category: Lunch \n");
         break;
         case 3: new Menu(MenuCategory.Dinner);
+        p.write("Admin: "+getName()+"\n Admin Created Menu \n Category: Dinner \n");
         break;
         case 4: new Menu(MenuCategory.Beverages);
+        p.write("Admin: "+getName()+"\n Admin Created Menu \n Category: Beverages \n");
         break;
         case 5: new Menu(MenuCategory.Dessert);
+        p.write("Admin: "+getName()+"\n Admin Created Menu \n Category: Dessert \n");
         break;
+        }
+    }
+    catch (IOException ex) {
+        System.out.println("menuuu");}
+}
+public void editMenu(int menuId,MenuCategory Menucategory){
+    try{
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Changed Menu id: "+menuId+"\n Category from: "+Menu.getlist().get(menuId).getCateg()+" to:"+Menucategory+"\n");
+    Menu.getlist().get(menuId).setCateg(Menucategory);
+    }
+    catch(IOException ex){
     }
 }
-public void editMenu(int menuId,MenuCategory Menucategory){Menu.getlist().get(menuId).setCateg(Menucategory);}
-public void removeMenu(int menuId){Menu.getlist().remove(Menu.getlist().get(menuId));}
-public static String searchMenu(int menuId,Date Start,Date End){
-    String list="";
- list+="This menu's category is : ";
- list+=Menu.getlist().get(menuId).getCateg();
- list+="\n";
- list+="This menu's most ordered meal is : ";
- list+=Meal.getList().get(menuId).mostOrderedMeal(Start, End);
-return list;
+public void removeMenu(int menuId){
+    try{
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Removed Menu Id: "+menuId+"\n");
+    Menu.getlist().remove(Menu.getlist().get(menuId));
+    }
+    catch(IOException ex){
+    }
 }
+
 public static ArrayList<Meal> searchMenu(int menuId){return Menu.getlist().get(menuId).getMeals();}
 public void createMeal(int Menu_ID, int meal_ID, String Name, double Price){
 Meal.getList().add(new Meal(Menu_ID, meal_ID, Name, Price));
@@ -121,15 +166,15 @@ public static MenuCategory viewMenuReportsCateg(int menuId){
 ArrayList<Menu>Menues=Menu.getlist();
 return Menues.get(menuId).getCateg();
 }
-public static Meal viewMenuReportsMostOrderedMeal(int menuId,Date Start,Date End){
-ArrayList<Meal>Meals=Meal.getList();
-return Meals.get(menuId).mostOrderedMeal(Start, End);
-}
 public void addUsers(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
-Guest guest=new Guest(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
-ArrayList<Guest>guests=Guest.getList();
-guests.add(guest);
-
+    try{
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Created User \n User Details \n Name: "+Name+"\n Address: "+Address+"\n Date of Birth: "+DateOfBirth+"\n PhoneNum: "+PhoneNum+"\n Email: "+Email+"\n UserName: "+UserName+"\n Password: "+Password+"\n");
+    new Guest(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
+    }
+    catch(IOException ex){
+    }
 }
 public void editCategory(int UserId,String Categorys){
 if(Categorys.equalsIgnoreCase("couples")){
@@ -146,10 +191,35 @@ else if(Categorys.equalsIgnoreCase("private")){
 }
 }
 public void removeGuest(int UserId) throws Throwable{
-Guest.getList().remove(UserId);
+    try{
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Removed Guest Id:"+UserId+"\n");
+        Guest.getList().remove(UserId);
+    }
+    catch(IOException ex){
+    }
+
+}
+public void addReceptionist(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
+    try{
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Created Receptionist \n Receptionist Details \n Name: "+Name+"\n Address: "+Address+"\n Date of Birth: "+DateOfBirth+"\n PhoneNum: "+PhoneNum+"\n Email: "+Email+"\n UserName: "+UserName+"\n Password: "+Password+"\n");
+    new Receptionist(Name,Address,DateOfBirth,PhoneNum,Email,UserName,Password);
+    }
+    catch(IOException ex){
+    }
 }
 public void removeReceptionist(int UserId) throws Throwable{
-Receptionist.getList().remove(UserId);
+    try{
+        FileWriter f = new FileWriter("Adminedit.txt",true);
+        PrintWriter p=new PrintWriter(f);
+        p.write("Admin: "+getName()+"\n Removed Receptionist Id:"+UserId+"\n");
+        Receptionist.getList().remove(UserId);
+    }
+    catch(IOException ex){
+    }
 }
 public static String viewUsers(int UserID){
 Reservation r = new Reservation();
@@ -200,56 +270,8 @@ name=recep.get(j).getName();
     list+="Receptionist whoese "+name +"with max number of reservation is "+maxreserve+"\n";
     return list;
 }
-public static String viewReservationOfGuest(int GuestId){
-Reservation r = new Reservation();
-Guest guests =Guest.getGuest(GuestId);
-ArrayList<Reservation> G=r.search(guests);
-    String list="";
-    list+="The guest whose id is :"+GuestId+" his reservation history is : \n";
-for(int i=0;i<G.size();i++){
-    list+="Reservation number "+G.get(i).getReservationNumber()+"\n";
-    list+="whose date is "+G.get(i).getDate()+"\n";
-    list+="whose receptionist is "+G.get(i).getReceptionistId()+"\n";
-    list+="whose reservation number"+G.get(i).getReservationNumber()+"\n";
-    list+="Table number  is "+G.get(i).getTableNum()+"\n";
-    list+="whose price is "+G.get(i).getPrice()+"\n";
-    list+="whose start time is "+G.get(i).getStartTime()+"\n";
-    list+="whose end time is "+G.get(i).getEndTime()+"\n";
-}
-return list;
-}
-public static String viewReservationdetails(int guestId,int reservationNO){
-    
-    Reservation r = new Reservation();
-Guest guests =Guest.getGuest(guestId);
-ArrayList<Reservation> G=r.search(guests);
-    String list="";
-   
-    for(int i=0;i<G.size();i++){
-    if(reservationNO==G.get(i).getReservationNumber()){
-        list+="The reservation cost is : "+G.get(i).getPrice()+"\n";
-    }
-    }
-    double sum=0;
-    double average;
-    list+="Their total : ";
-  for(int i=0;i<G.size();i++){
-  sum=G.get(i).getPrice();
-  
-  }
-  list+=sum+"\n";
-  average=sum/G.size();
-    list+="The average cost of all reservations is : "+average+"\n";
-return list;
-}
-public static Admin search(String userName){
-    for(int i=0;i<Admins.size();i++){
-    if(Admins.get(i).getUserName()==userName){
-        return Admins.get(i);
-    }
-    }
-    return null;
-}
+
+
 @Override
     public String toString(){
         return ("Admin Details:\n"+"Name: "+getName()+"\nID: "+getId()+"\nDate Of Birth: "+getDateOfBirth()+"\nAddress: "+getAddress()+"\nEmail: "+getEmail()+"\nPhone Number: "+getPhoneNum());

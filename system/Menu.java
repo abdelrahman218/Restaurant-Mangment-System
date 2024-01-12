@@ -15,10 +15,6 @@ public class Menu implements Serializable {
         this.Categ = data;
         Menues.add(this);
     }
-    public Menu(){
-        this.Categ=MenuCategory.Breakfast;
-        Menues.add(this);
-    }
     public static ArrayList<Menu> getlist() {
         return Menues;
     }
@@ -29,6 +25,7 @@ public class Menu implements Serializable {
             Menues = (ArrayList<Menu>) o.readObject();
             i.close();
             o.close();
+            idGenerator=Menues.get(Menues.size()-1).getMenu_ID();
         } catch (IOException e) {
             System.out.println(e);
         }catch(ClassNotFoundException e){
@@ -55,6 +52,11 @@ public class Menu implements Serializable {
         }
         return Meals;
     }
+
+    public int getMenu_ID() {
+        return Menu_ID;
+    }
+    
     public MenuCategory getCateg() {
         return Categ;
     }

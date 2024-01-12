@@ -99,6 +99,6 @@ public class Guest extends Person {
     @Override
     public String toString() {
         String history=ViewReservation();
-        return "Guest{history= " + history + ", PreferredCategory=" + PreferredCategory + '}';
+        return ("Guest Details:\n"+"Name: "+getName()+"\nID: "+getId()+"\nDate Of Birth: "+getDateOfBirth()+"\nAddress: "+getAddress()+"\nEmail: "+getEmail()+"\nPhone Number: "+getPhoneNum()+"\nHistory: "+history+"\nPrefered Category: "+PreferredCategory);
     }
 }            

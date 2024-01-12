@@ -140,7 +140,7 @@
      -fx-scale-y: 1.1;
 }
 .custom-textfield{
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-text-fill: Red;
 
     -fx-border-color: blue;
@@ -156,7 +156,7 @@
 }
 
 .custom-passwordfield{
-    -fx-background-color: transparent;
+    -fx-background-color: white;
     -fx-text-fill: Red;
     -fx-border-color: blue;
     -fx-border-width: 2;
@@ -181,7 +181,7 @@
 .label{
     -fx-background-color:transparent;
 /*    -fx-text-fill:#01D1E8;*/
-    -fx-text-fill:black;
+    -fx-text-fill:Red;
     -fx-font-size:14px;
     -fx-font-weight: bold;
     -fx-border-color: blue;
@@ -194,7 +194,8 @@
 }
 .custom-label{
     -fx-background-color:transparent;
-    -fx-text-fill:#01D1E8;
+/*    -fx-text-fill:#01D1E8;*/
+    -fx-text-fill:Red;
     -fx-font-size:14px;
     -fx-font-weight: bold;
     -fx-border-color: blue;
@@ -210,8 +211,6 @@
     -fx-border-color: blue;
     -fx-border-radius:10px;
     -fx-background-radius:5px;
-    -fx-pref-width: 100px;
-    -fx-pref-height: 50px;
     -fx-text-fill:Red;
     -fx-font-size:15px;
     -fx-font-weight:bold;
