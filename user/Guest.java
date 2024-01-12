@@ -11,6 +11,7 @@ import system.Category;
 import system.Reservation;
 public class Guest extends Person {
     private static ArrayList<Guest> Guests=new ArrayList<Guest>();
+    private boolean hasRating=false;
     Category PreferredCategory;
     int numOfReservations=0;
    public Guest(String Name, String Address, String DateOfBirth, String PhoneNum, String Email,String UserName,String Password){
@@ -20,6 +21,7 @@ public class Guest extends Person {
       public  String ViewReservation(){
        String List=Reservation.search(this).toString();
        return List;
+       
     }
     public void incrementReservation(){
         numOfReservations++;
@@ -75,13 +77,28 @@ public class Guest extends Person {
             System.out.println(e);
         }
     }
-    public void RateBooking(byte Rating) throws InvalidAttributeValueException{
-    Reservation.search(this).getLast().setRating(Rating);
+    public void RateBooking(byte Rating) {
+    try{
+        ArrayList<Reservation>reserve=Reservation.search(this);
+        reserve.get(reserve.size()-1).setRating(Rating);
+        
+        hasRating=true;
+    }catch(InvalidAttributeValueException e){
+    System.out.println(e);
+}
 }    
+
+    public void setHasRating(boolean hasRating) {
+        this.hasRating = hasRating;
+    }
+
+    public boolean isHasRating() {
+        return hasRating;
+    }
+    
     @Override
     public String toString() {
         String history=ViewReservation();
-        return "Guest{history= " + history + ", PreferredCategory=" + PreferredCategory + '}';
+        return ("Guest Details:\n"+"Name: "+getName()+"\nID: "+getId()+"\nDate Of Birth: "+getDateOfBirth()+"\nAddress: "+getAddress()+"\nEmail: "+getEmail()+"\nPhone Number: "+getPhoneNum()+"\nHistory: "+history+"\nPrefered Category: "+PreferredCategory);
     }
 }            
-

@@ -16,12 +16,12 @@ import system.Reservation;
 import system.Table;
 import system.Meal;
 import user.Guest;
-import Employees.Receptionist;
+import employees.Receptionist;
 
-//Formater Classes
+//Formatter Classes
 import java.text.SimpleDateFormat;
 
-//Exeception Classes
+//Exception Classes
 import java.lang.IndexOutOfBoundsException;
 import java.text.ParseException;
 import java.time.format.DateTimeParseException;
@@ -36,7 +36,6 @@ import java.util.Collections;
 public class Reservation implements Comparable<Reservation>,Serializable{
     //Static array list which have all reservations
     private static ArrayList<Reservation> history=new ArrayList<>();
-    private static int idgenerator=0;
     //Object-related member variables 
     private int reservationNum;
     private int tableNum;
@@ -52,12 +51,10 @@ public class Reservation implements Comparable<Reservation>,Serializable{
 
     //Constructor
     public Reservation(){
-       reservationNum=++idgenerator;
        date=new Date();
        order=new ArrayList<>();
        startTime=LocalTime.MIDNIGHT;
        endTime=LocalTime.MIDNIGHT;
-       history.add(this);
     }
     
     //Setters
@@ -81,7 +78,8 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     }
     public void setTableNum(int tableNumber) throws InvalidAttributeValueException{
         try{
-            Table.getTable(tableNum);
+            Table.getTable(tableNumber);
+            tableNum=tableNumber;
         }catch(IndexOutOfBoundsException e){
             throw new InvalidAttributeValueException("Table not found!");
         }
@@ -90,10 +88,12 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         Table reserved=Table.getTable(tableNum);
         if(num>reserved.getNoOfSeats()){
             throw new InvalidAttributeValueException("Guests can't be more than "+reserved.getNoOfSeats());
-        }
+        }else{
+            numOfGuests=num;
+        }    
     }
     public void setDate(String input) throws ParseException{
-        SimpleDateFormat sf=new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sf=new SimpleDateFormat("MM/dd/yyyy");
         try{
             date=sf.parse(input);
         }catch(ParseException e){
@@ -114,7 +114,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             throw e;
         }
         if(endTime.compareTo(startTime)<0){
-            throw new InvalidAttributeValueException("----------Invalid Time input-------------");
+            throw new InvalidAttributeValueException("End Time is  invalid");
         }else if(isReserved()){
             throw new InvalidAttributeValueException("Table is reserved in the specified time.");
         }  
@@ -127,12 +127,20 @@ public class Reservation implements Comparable<Reservation>,Serializable{
             throw new InvalidAttributeValueException("Rating must be (0->10)");
         }
     }
-    
+    public void setReservationNum(){ 
+        if(history.isEmpty()){
+           reservationNum=1;
+        } 
+        else{
+           reservationNum=history.get(history.size()-1).getReservationNumber()+1;
+        }
+    }
+   
     //Functions
     public void takeOrder(ArrayList<Meal> orderOfMeals) throws NullPointerException{
         for(int i=0;i<orderOfMeals.size();i++){
             if(orderOfMeals.get(i)!=null){
-                order.add(orderOfMeals.get(i).getMeal_ID());
+                order.add(Integer.valueOf(orderOfMeals.get(i).getMeal_ID()));
                 orderOfMeals.get(i).incrementedOrders();
             }
             else{
@@ -154,7 +162,7 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     private String orderNames(){
         String orderList="[ ";
         for(int i=0;i<order.size();i++){
-            orderList+=(Meal.getMealById(order.get(i)));
+            orderList+=(Meal.getMealById(order.get(i).intValue()).getName());
             if(i!=order.size()-1){
                 orderList+=" , ";
             }
@@ -164,7 +172,12 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     }
     
     //Getters
-    public int getReservationNumber(){return reservationNum;}
+    
+    public byte getRating(){return rating;}
+
+    public int getReservationNumber() {
+        return reservationNum;
+    }
     public Date getDate(){return date;}
     public LocalTime getStartTime(){return startTime;}
     public LocalTime getEndTime(){return endTime;}
@@ -238,9 +251,9 @@ public class Reservation implements Comparable<Reservation>,Serializable{
         }catch(IOException e){
             System.out.println("Error happened reading the file: Reservation archive");
         }catch(ClassNotFoundException e){
-            System.out.println("Error in class Reservation reading compatiability");
+            System.out.println("Error in class Reservation reading compatibility");
         }
-        idgenerator=history.size();
+        
     }
     public static void saveRecords(){
         try{
@@ -258,8 +271,8 @@ public class Reservation implements Comparable<Reservation>,Serializable{
     @Override
     public String toString(){
         return("Receptionist Name: "+Receptionist.search(receptionistId).getName()+"\nGuest Name: "+Guest.getGuest(guestId).getName()
-        +"\nReservation No.: "+reservationNum+"\nTable No.: "+tableNum+"\nNo. of Guests: "+numOfGuests+
-        "\nDate: "+date+"\nFrom: "+startTime+" To: "+endTime+"\nOrder: "+orderNames()+"\nCost: "+price+"\nGuests rating: "+rating);
+        +"\nReservation No.: "+getReservationNumber()+"\nTable No.: "+getTableNum()+"\nNo. of Guests: "+getNumOfGuests()+
+        "\nDate: "+getDate()+"\nFrom: "+getStartTime()+" To: "+getEndTime()+"\nOrder: "+orderNames()+"\nCost: "+getPrice()+" LE\nGuests rating: "+rating);
     }
     @Override
     public int compareTo(Reservation right){

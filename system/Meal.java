@@ -52,6 +52,15 @@ public class Meal implements Serializable {
         }
         return null;
     }
+    public static Meal getMealByNames(String name) {
+        for (int i = 0; i < Meals.size(); i++) {
+            Meal meal = Meals.get(i);
+            if (meal.getName().equals(name)) {
+                return meal;
+            }
+        }
+        return null;
+    }
     public static void ReadFromFile() {
         try {
             FileInputStream i = new FileInputStream("Meal.dat");
@@ -86,11 +95,11 @@ public class Meal implements Serializable {
         }
         return mostOrdered;
     }
-  public ArrayList<Meal> getMealsByMenuId(int menuId) {
+  public static ArrayList<Meal> getMealsByMenuId(int menuId) {
         ArrayList<Meal> mealsInMenu = new ArrayList<>();
         for (int i = 0; i < Meals.size(); i++) {
             Meal meal = Meals.get(i);
-            if (meal.getMeal_ID() == menuId) {
+            if (meal.getMenu_ID() == menuId) {
                 mealsInMenu.add(meal);
             }
         }

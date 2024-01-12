@@ -7,15 +7,12 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 public class Menu implements Serializable {
+    private static int idGenerator=0;
     private static ArrayList<Menu> Menues = new ArrayList<Menu>();
     private MenuCategory Categ;
-    private int Menu_ID;
+    private int Menu_ID=++idGenerator;
     public Menu(MenuCategory data) {
         this.Categ = data;
-        Menues.add(this);
-    }
-    public Menu(){
-        this.Categ=MenuCategory.Breakfast;
         Menues.add(this);
     }
     public static ArrayList<Menu> getlist() {
@@ -28,6 +25,7 @@ public class Menu implements Serializable {
             Menues = (ArrayList<Menu>) o.readObject();
             i.close();
             o.close();
+            idGenerator=Menues.get(Menues.size()-1).getMenu_ID();
         } catch (IOException e) {
             System.out.println(e);
         }catch(ClassNotFoundException e){
@@ -54,6 +52,11 @@ public class Menu implements Serializable {
         }
         return Meals;
     }
+
+    public int getMenu_ID() {
+        return Menu_ID;
+    }
+    
     public MenuCategory getCateg() {
         return Categ;
     }
